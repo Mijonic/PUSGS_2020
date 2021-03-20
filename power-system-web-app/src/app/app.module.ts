@@ -7,18 +7,27 @@ import { FrontPageComponent } from './front-page/front-page.component';
 import { ParticlesComponent } from './particles/particles.component';
 
 import {NgParticlesModule} from "ng-particles";
+import {MatIconModule} from '@angular/material/icon';
+import { RegisterLoginNavbarComponent } from './register-login-navbar/register-login-navbar.component';
+import { RegistrationComponent } from './registration/registration.component'
+
 
 
 @NgModule({
   declarations: [
     AppComponent,
     FrontPageComponent,
-    ParticlesComponent
+    ParticlesComponent,
+    RegisterLoginNavbarComponent,
+    RegistrationComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgParticlesModule   
+    NgParticlesModule,
+    MatIconModule
+
+    
   ],
   providers: [],
   bootstrap: [AppComponent]
