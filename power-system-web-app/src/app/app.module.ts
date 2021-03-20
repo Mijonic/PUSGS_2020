@@ -8,8 +8,9 @@ import { ParticlesComponent } from './particles/particles.component';
 
 import {NgParticlesModule} from "ng-particles";
 import {MatIconModule} from '@angular/material/icon';
-import { RegisterLoginNavbarComponent } from './register-login-navbar/register-login-navbar.component';
-import { RegistrationComponent } from './registration/registration.component'
+import { RegistrationComponent } from './registration/registration.component';
+import { MainNavbarComponent } from './navigation-bars/main-navbar/main-navbar.component'
+import { RegisterLoginNavbarComponent } from './navigation-bars/register-login-navbar/register-login-navbar.component';
 
 
 
@@ -19,7 +20,8 @@ import { RegistrationComponent } from './registration/registration.component'
     FrontPageComponent,
     ParticlesComponent,
     RegisterLoginNavbarComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    MainNavbarComponent
   ],
   imports: [
     BrowserModule,
