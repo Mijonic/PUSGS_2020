@@ -29,6 +29,7 @@ export class ParticlesComponent implements OnInit {
      
       fpsLimit: 60,
       interactivity: {
+          
           detectsOn: "canvas",
           events: {
               onClick: {
@@ -63,6 +64,11 @@ export class ParticlesComponent implements OnInit {
               }
           }
       },
+
+      backgroundMode: {
+        enable: true,
+        zIndex: -1
+    } ,
       particles: {
         
           color: {
@@ -110,11 +116,16 @@ export class ParticlesComponent implements OnInit {
               value: 25
           }
       },
-      detectRetina: true
+
+      
+      
+      detectRetina: true,
+      
   };
 
   particlesLoaded(container: any): void {
       console.log(container);
+    
   }
   
   particlesInit(main: Main): void {
@@ -123,6 +134,8 @@ export class ParticlesComponent implements OnInit {
       // Starting from 1.19.0 you can add custom presets or shape here, using the current tsParticles instance (main)
   }
 
+
+ 
   
 
   constructor() { }
