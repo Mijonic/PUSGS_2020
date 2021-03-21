@@ -6,7 +6,7 @@ import { RegistrationComponent } from './registration/registration.component';
 
 const routes: Routes = [
   { path: 'register', component: RegistrationComponent },
-  //{ path: '', component: FrontPageComponent  }
+  //{ path: '', component: FrontPageComponent  },
   { path: '', component: MainNavbarComponent }
 
 ];

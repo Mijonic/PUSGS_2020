@@ -1,29 +1,27 @@
-<nav class="navbar  navbar-light bg-light">
-    <span class="navbar-brand mb-0 h1">Smart energy</span>
-    <ul class="nav navbar-nav navbar-right">
-        <!-- Avatar -->
-      <li class="nav-item dropdown">
-        <a
-          class="nav-link dropdown-toggle d-flex align-items-center"
-          href="#"
-          id="navbarDropdownMenuLink"
-          role="button"
-          data-mdb-toggle="dropdown"
-          aria-expanded="false"
-        >
-          <img
-            src="https://mdbootstrap.com/img/Photos/Avatars/img (31).jpg"
-            class="rounded-circle"
-            height="50"
-            alt=""
-            loading="lazy"
-          />
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <li><a class="dropdown-item" href="#">My profile</a></li>
-          <li><a class="dropdown-item" href="#">Settings</a></li>
-          <li><a class="dropdown-item" href="#">Logout</a></li>
-        </ul>
+
+<nav class="navbar navbar-dark bg-dark navbar-expand-sm">
+  <a class="navbar-brand d-flex align-items-center justify-content-center">
+    <img src="../../assets/Images/smart-energy-logo.png" width="50" height="50" alt="logo">
+    Smart Energy
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-list-4" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbar-list-4">
+    <ul class="navbar-nav ml-auto d-flex align-items-center justify-content-center">
+      <li class="nav-item user-name">
+        Ivan Ivanovic
       </li>
+        <li class="nav-item dropleft">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg" width="40" height="40" class="rounded-circle">
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item d-flex align-items-center justify-content-center" ><mat-icon>dashboard</mat-icon> Dashboard</a>
+          <a class="dropdown-item d-flex align-items-center justify-content-center" ><mat-icon>account_circle</mat-icon> Edit Profile</a>
+          <a class="dropdown-item d-flex align-items-center justify-content-center" ><mat-icon>arrow_right_alt</mat-icon> Log Out</a>
+        </div>
+      </li>   
     </ul>
+  </div>
 </nav>

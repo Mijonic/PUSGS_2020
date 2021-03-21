@@ -27,9 +27,7 @@ import { RegisterLoginNavbarComponent } from './navigation-bars/register-login-n
     BrowserModule,
     AppRoutingModule,
     NgParticlesModule,
-    MatIconModule
-
-    
+    MatIconModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
