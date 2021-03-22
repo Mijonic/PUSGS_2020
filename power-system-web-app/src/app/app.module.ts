@@ -11,6 +11,7 @@ import {MatIconModule} from '@angular/material/icon';
 import { RegistrationComponent } from './registration/registration.component';
 import { MainNavbarComponent } from './navigation-bars/main-navbar/main-navbar.component'
 import { RegisterLoginNavbarComponent } from './navigation-bars/register-login-navbar/register-login-navbar.component';
+import { LoginComponent } from './login/login.component';
 
 
 
@@ -21,13 +22,14 @@ import { RegisterLoginNavbarComponent } from './navigation-bars/register-login-n
     ParticlesComponent,
     RegisterLoginNavbarComponent,
     RegistrationComponent,
-    MainNavbarComponent
+    MainNavbarComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgParticlesModule,
-    MatIconModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]
