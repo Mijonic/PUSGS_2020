@@ -101,3 +101,12 @@ a.socialIcon:hover,
   margin-bottom: 10px;
   text-align: center;
 }
+
+.home_return{
+  text-align: center;
+}
+
+.phone_icon {
+  font-size: 1.5vw;
+  margin-left: 5px;
+}
