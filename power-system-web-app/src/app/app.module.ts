@@ -12,6 +12,7 @@ import { RegistrationComponent } from './registration/registration.component';
 import { MainNavbarComponent } from './navigation-bars/main-navbar/main-navbar.component'
 import { RegisterLoginNavbarComponent } from './navigation-bars/register-login-navbar/register-login-navbar.component';
 import { LoginComponent } from './login/login.component';
+import { WorkPlansComponent } from './documents/work-plans/work-plans.component';
 
 
 
@@ -23,7 +24,8 @@ import { LoginComponent } from './login/login.component';
     RegisterLoginNavbarComponent,
     RegistrationComponent,
     MainNavbarComponent,
-    LoginComponent
+    LoginComponent,
+    WorkPlansComponent
   ],
   imports: [
     BrowserModule,

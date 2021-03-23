@@ -1,3 +1,4 @@
+import { WorkPlansComponent } from './documents/work-plans/work-plans.component';
 import { MainNavbarComponent } from './navigation-bars/main-navbar/main-navbar.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -8,7 +9,8 @@ import { LoginComponent } from './login/login.component';
 const routes: Routes = [
   { path: 'register', component: RegistrationComponent },
   { path: '', component: FrontPageComponent  },
-  { path: 'login', component: LoginComponent }
+  { path: 'login', component: LoginComponent },
+  { path: 'work-plans', component: WorkPlansComponent }
   //{ path: '', component: MainNavbarComponent }
 
 ];
