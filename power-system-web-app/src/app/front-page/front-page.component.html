@@ -2,6 +2,9 @@
 
 <app-particles></app-particles>
 <app-register-login-navbar></app-register-login-navbar>
+<ng-template [ngIf]="showLogin">
+	<app-login></app-login>
+</ng-template>
 <div class="site-title">SMART ENERGY</div>
 <button class="button">
 	Report Outage<mat-icon class="phone_icon">phone</mat-icon>

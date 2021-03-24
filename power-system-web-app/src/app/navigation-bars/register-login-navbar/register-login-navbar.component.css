@@ -13,3 +13,7 @@
     margin-right: 10px;
   }
 }
+
+.nav-item:hover{
+  cursor:pointer;
+}
