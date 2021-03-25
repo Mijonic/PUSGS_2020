@@ -1,3 +1,4 @@
+import { SteeperServiceService } from './../../steeper-wizard/steeper-service/steeper-service.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WorkPlansComponent implements OnInit {
 
-  constructor() { }
+  constructor(public stepsService:SteeperServiceService) { }
 
   ngOnInit(): void {
   }

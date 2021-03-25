@@ -1,0 +1,6 @@
+<mat-horizontal-stepper #stepper>
+  <mat-step *ngFor='let step of steps'>
+    <ng-template matStepLabel></ng-template>
+    <app-step-page-wrapper [item]='step' ></app-step-page-wrapper>
+  </mat-step>     
+</mat-horizontal-stepper>
