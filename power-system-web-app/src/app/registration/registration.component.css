@@ -1,13 +1,30 @@
 .registration_form_div {
   background-color: #333333;
   background-color: #1a1a1a;
-  opacity: 0.8;
+  opacity: 1;
   padding-bottom: 30px;
   padding-top: 70px;
   padding: 50px;
   top: 8%;
-  position: absolute;
   width: 100%;
+}
+
+.modal-lg {
+  max-width: 80%;
+}
+
+.sign_in_header {
+  position: relative;
+  text-align: center;
+  color: white;
+  background-color: #1a1a1a;
+  padding-top: 20px;
+}
+
+.modal-background {
+  background-color: #1a1a1a;
+  opacity: 1;
+  color: white;
   border: solid white 5px;
 }
 
@@ -30,4 +47,22 @@
   font-weight: bold;
   font-size: 15px;
   color: #1aff1a;
+}
+
+.registration_image {
+  width: 150px;
+  height: 150px;
+  margin-left: 0px;
+}
+
+@media only screen and (max-width: 780px) {
+  .registration_image {
+    margin-left: 32%;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .registration_image {
+    margin-left: 25%;
+  }
 }
