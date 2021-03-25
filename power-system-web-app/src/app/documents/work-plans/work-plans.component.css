@@ -1,22 +1,23 @@
-.content-container{
-    padding: 10px;
-    margin-left: 20%;
-    height: 600px;
-    position: relative;
+.content-container {
+  padding: 10px;
+  margin-left: 20%;
+  height: 600px;
+  position: relative;
+}
+
+.color-correction {
+  background: rgba(0, 0, 0, 0.5); /* Black background with 0.5 opacity */
 }
 
 @media only screen and (max-width: 1600px) {
-    .content-container {
-      margin-left: 200px;
-      margin-right:auto;
-    } 
-  
+  .content-container {
+    margin-left: 200px;
+    margin-right: auto;
   }
+}
 
 @media only screen and (max-width: 990px) {
-.content-container {
-    margin:auto;
-
-} 
-
+  .content-container {
+    margin: auto;
+  }
 }
