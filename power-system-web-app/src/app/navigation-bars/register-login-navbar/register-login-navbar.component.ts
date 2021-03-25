@@ -18,4 +18,9 @@ export class RegisterLoginNavbarComponent implements OnInit {
     this.navbarMessaging.activateLogin();
   }
 
+  activateRegister()
+  {
+    this.navbarMessaging.activateRegister();
+  }
+
 }

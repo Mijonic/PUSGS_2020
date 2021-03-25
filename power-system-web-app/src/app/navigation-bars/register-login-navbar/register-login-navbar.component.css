@@ -5,7 +5,7 @@
   margin-right: 30px;
 }
 
-@media (max-width:450px) {    
+@media (max-width: 450px) {
   .navbar_li_link {
     color: rgba(255, 255, 255, 0.8);
     font-size: 20px;
@@ -14,6 +14,6 @@
   }
 }
 
-.nav-item:hover{
-  cursor:pointer;
+.nav-item:hover {
+  cursor: pointer;
 }
