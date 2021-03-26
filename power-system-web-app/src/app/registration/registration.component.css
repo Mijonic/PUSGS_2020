@@ -39,13 +39,13 @@
 
 .invalid-feedback {
   font-weight: bold;
-  font-size: 15px;
+  font-size: 14px;
   color: #ff4d4d;
 }
 
 .valid-feedback {
   font-weight: bold;
-  font-size: 15px;
+  font-size: 14px;
   color: #1aff1a;
 }
 
