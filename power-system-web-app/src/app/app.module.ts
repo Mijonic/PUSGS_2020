@@ -1,3 +1,4 @@
+import { DashboardModule } from './dashboard/dashboard.module';
 import { SteeperWizardModule } from './steeper-wizard/steeper-wizard.module';
 import { RegisterLoginNavbarComponent } from './navigation-bars/register-login-navbar/register-login-navbar.component';
 import { MainNavbarComponent } from './navigation-bars/main-navbar/main-navbar.component';
@@ -38,7 +39,8 @@ import { WorkRequestsComponent } from './documents/work-requests/work-requests/w
     AppRoutingModule,
     NgParticlesModule,
     MatIconModule,
-    SteeperWizardModule
+    SteeperWizardModule,
+    DashboardModule
     /*MatStepperModule,
     BrowserAnimationsModule*/
   ],

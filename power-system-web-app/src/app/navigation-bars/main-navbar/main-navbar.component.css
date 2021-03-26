@@ -4,7 +4,7 @@
   padding-right: 10px;
 }
 
-.border-li-style {
+/*.border-li-style {
   border-right: 2px solid white;
 }
 
@@ -17,11 +17,13 @@
 .add-border {
   border-left: 2px solid white;
 }
+*/
+
 
 @media (min-width: 992px) {
   .vertical-nav {
     position: fixed;
-    top: 48px;
+    top: 60px;
     left: 0;
     width: 200px;
     height: 100%;
@@ -30,7 +32,7 @@
     padding-top: 30px;
   }
 }
-
+/*
 @media (max-width: 992px) {
   .border-li-style {
     border-right: 0px solid white;
@@ -45,4 +47,4 @@
   .add-border {
     border-left: 0px solid white;
   }
-}
+}*/
