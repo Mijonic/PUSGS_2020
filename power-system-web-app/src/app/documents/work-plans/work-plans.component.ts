@@ -1,5 +1,5 @@
-import { SteeperServiceService } from './../../steeper-wizard/steeper-service/steeper-service.service';
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-work-plans',
@@ -7,9 +7,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./work-plans.component.css'] 
 })
 export class WorkPlansComponent implements OnInit {
-
-  constructor(public stepsService:SteeperServiceService) { }
-
+  filtersControl = new FormControl();
+  filters: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
+  constructor() { }
+ 
   ngOnInit(): void {
   }
 

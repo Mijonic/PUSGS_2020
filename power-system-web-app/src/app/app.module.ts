@@ -15,7 +15,8 @@ import { LoginComponent } from './login/login.component';
 import { WorkPlansComponent } from './documents/work-plans/work-plans.component';
 import { StepOneComponent } from './step-one/step-one.component';
 import { WorkRequestsComponent } from './documents/work-requests/work-requests/work-requests.component';
-
+import {MatSelectModule} from '@angular/material/select';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 
 
@@ -40,9 +41,10 @@ import { WorkRequestsComponent } from './documents/work-requests/work-requests/w
     NgParticlesModule,
     MatIconModule,
     SteeperWizardModule,
-    DashboardModule
-    /*MatStepperModule,
-    BrowserAnimationsModule*/
+    DashboardModule,
+    MatSelectModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

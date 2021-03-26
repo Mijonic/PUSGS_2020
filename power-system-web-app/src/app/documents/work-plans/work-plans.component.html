@@ -4,26 +4,43 @@
   <div class="container-fluid">
     <div class="row mt-3" style="color: white;">
       <div class="col-3 d-flex flex-row">
-        <div class="btn-group mr-0">
+        <!--<div class="btn-group mr-0">
           <button type="button" class="btn btn-secondary dropdown-toggle " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <mat-icon>sort_by_alpha</mat-icon>
           </button>
           <div class="dropdown-menu">
-            <a class="dropdown-item">This</a>
-            <a class="dropdown-item">That</a>
-            <a class="dropdown-item">Something else here</a>
+            <a class="dropdown-item">No sorting</a>
+            <a class="dropdown-item">Start date ascending</a>
+            <a class="dropdown-item">Start date descending</a>
+            <a class="dropdown-item">End date ascending</a>
+            <a class="dropdown-item">End date descending</a>
+            <a class="dropdown-item">Creation date ascending</a>
+            <a class="dropdown-item">Creation date descending</a>
           </div>
+         
         </div>
         <div class="btn-group ml-n1" style="color: white;">
           <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <mat-icon>filter_list</mat-icon>
           </button>
           <div class="dropdown-menu">
-            <a class="dropdown-item">This</a>
-            <a class="dropdown-item">That</a>
-            <a class="dropdown-item">Something else here</a>
+            <a class="dropdown-item">Planned work</a>
+            <a class="dropdown-item">Unplanned work</a>
+            <a class="dropdown-item">Drafts</a>
+            <a class="dropdown-item">Submitted documents</a>
+            <a class="dropdown-item">Emergency work</a>
+            <a class="dropdown-item">Normal work</a>
           </div>
-        </div>
+        </div>-->
+
+        <div style="background-color: rgba(230, 230, 230)"> 
+        <mat-form-field appearance="fill">
+          <mat-label>Filter</mat-label>
+          <mat-select [formControl]="filtersControl" multiple>
+            <mat-option *ngFor="let filterCriteria of filters" [value]="filterCriteria">{{filterCriteria}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
       </div>
 
       <div class="col-6 d-flex justify-content-center"  style="color: white;">
@@ -53,9 +70,11 @@
             <span class="sr-only">Toggle Dropdown</span>
           </button>
           <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">Search</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
+            <a class="dropdown-item" href="#">Incident</a>
+            <a class="dropdown-item" href="#">Address</a>
+            <a class="dropdown-item" href="#">Author name</a>
+            <a class="dropdown-item" href="#">Company</a>
+            <a class="dropdown-item" href="#">Phone number</a>
           </div>
         </div>
       </div>
