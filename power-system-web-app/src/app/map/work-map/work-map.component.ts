@@ -10,11 +10,14 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
   private map!: L.Map;
   public innerWidth: any;
   public containerLen!:number;
+  public innerHeight: any;
+  public containerHeight!:number;
 
   
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.innerWidth = window.innerWidth;
+    this.innerHeight = window.innerHeight;
     if(this.innerWidth <= 990)
     {
       this.containerLen = this.innerWidth -20;
@@ -23,7 +26,9 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
     {
       this.containerLen = this.innerWidth - 220; 
     }
-    
+    this.containerHeight = this.innerHeight - 76;
+    console.log(this.innerHeight);
+    console.log(this.innerWidth);
   }
 
   constructor() { } 
@@ -34,8 +39,7 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.initMap();
-    this.innerWidth = window.innerWidth;
-    this.containerLen = this.innerWidth - 220; 
+    window.dispatchEvent(new Event('resize'));
   }
 
   private initMap(): void {

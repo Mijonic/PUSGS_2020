@@ -31,7 +31,7 @@
 @media only screen and (max-width: 1350px) {
   .content-container {
     margin-left: 200px;
-    max-width: 800px;
+    max-width: 800px; 
   }
 }
 

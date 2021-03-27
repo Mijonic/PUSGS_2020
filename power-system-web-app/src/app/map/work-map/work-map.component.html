@@ -1,8 +1,6 @@
 <div class="container-fluid page-wrapper">
     <app-main-navbar></app-main-navbar>
-    <div class="container content-container" >
-      <div class="container-fluid map-container" [style.width.px]="containerLen">
-            <div id="map" [style.width.px]="containerLen"></div>
-      </div>
+    <div class="content-container" [style.width.px]="containerLen" [style.height.px]="containerHeight">
+        <div id="map"></div>
     </div>
 </div>

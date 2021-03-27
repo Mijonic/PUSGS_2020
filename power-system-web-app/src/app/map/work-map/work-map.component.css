@@ -1,16 +1,7 @@
-.map-container {
-    height:800px;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-  }
-  
-  .map-frame {
-    height: 100%;
-  }
-  
+
   #map {
     height: 100%;
+    width: 100%;
   }
 
   @media only screen and (min-width: 990px) {
