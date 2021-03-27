@@ -13,14 +13,14 @@ import { AreaChartComponent } from './area-chart/area-chart.component';
 
 
 const routes: Routes = [
-  { path: 'register', component: RegistrationComponent },
-  { path: '', component: FrontPageComponent  },
+  { path: 'register', component: RegistrationComponent,  outlet:"primary"  },
+  { path: '', component: FrontPageComponent,  outlet:"front" },
   //{ path: 'login', component: LoginComponent },
-  { path: 'work-plans', component: WorkPlansComponent },
-  { path: 'work-requests', component: WorkRequestsComponent },
+  { path: 'work-plans', component: WorkPlansComponent,  outlet:"primary"  },
+  { path: 'work-requests', component: WorkRequestsComponent,  outlet:"primary"  },
   //{ path: '', component: MainNavbarComponent }
-  { path: 'dashboard', component: DashboardComponent},
-  { path: 'map', component: WorkMapComponent}
+  { path: 'dashboard', component: DashboardComponent,  outlet:"primary" },
+  { path: 'map', component: WorkMapComponent,  outlet:"primary" }
 
 ];
 

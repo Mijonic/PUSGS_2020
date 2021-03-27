@@ -4,31 +4,18 @@ import * as L from 'leaflet';
 @Component({
   selector: 'app-work-map',
   templateUrl: './work-map.component.html',
-  styleUrls: ['./work-map.component.css']
+  styleUrls: ['./work-map.component.css'],
 })
 export class WorkMapComponent implements OnInit, AfterViewInit {
   private map!: L.Map;
-  public innerWidth: any;
-  public containerLen!:number;
   public innerHeight: any;
   public containerHeight!:number;
 
   
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    this.innerWidth = window.innerWidth;
     this.innerHeight = window.innerHeight;
-    if(this.innerWidth <= 990)
-    {
-      this.containerLen = this.innerWidth -20;
-    }
-    else
-    {
-      this.containerLen = this.innerWidth - 220; 
-    }
     this.containerHeight = this.innerHeight - 76;
-    console.log(this.innerHeight);
-    console.log(this.innerWidth);
   }
 
   constructor() { } 

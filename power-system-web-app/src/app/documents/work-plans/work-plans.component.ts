@@ -44,6 +44,10 @@ export class WorkPlansComponent implements  AfterViewInit {
     this.dataSource = new MatTableDataSource(users);
   }
 
+  ngOnInit(): void {
+    window.dispatchEvent(new Event('resize'));
+  }
+
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;

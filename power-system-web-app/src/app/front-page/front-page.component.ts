@@ -16,7 +16,8 @@ export class FrontPageComponent implements OnInit, OnDestroy {
   constructor(private navbarMessaging:NavbarMessagingService) { }
 
   ngOnDestroy(): void {
-    this.navbarMessagingSubscription.unsubscribe();
+    if(this.navbarMessagingSubscription)
+      this.navbarMessagingSubscription.unsubscribe();
   }
 
   ngOnInit(): void {
