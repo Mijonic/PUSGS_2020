@@ -1,3 +1,4 @@
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { SteeperWizardModule } from './steeper-wizard/steeper-wizard.module';
 import { RegisterLoginNavbarComponent } from './navigation-bars/register-login-navbar/register-login-navbar.component';
@@ -17,7 +18,11 @@ import { StepOneComponent } from './step-one/step-one.component';
 import { WorkRequestsComponent } from './documents/work-requests/work-requests/work-requests.component';
 import {MatSelectModule} from '@angular/material/select';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatTableModule} from '@angular/material/table';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import { MatSortModule } from '@angular/material/sort';
 
 
 
@@ -44,9 +49,17 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     DashboardModule,
     MatSelectModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSlideToggleModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSortModule
+    
+
   ],
-  providers: [],
+  providers: [], 
   bootstrap: [AppComponent]
 })
 export class AppModule { }
