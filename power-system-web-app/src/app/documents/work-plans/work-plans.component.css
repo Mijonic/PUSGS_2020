@@ -1,10 +1,3 @@
-::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
-    background-color: black; 
-}
-
-::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
-    background-color: white 
-}
 
 table {
     width: 100%;
@@ -16,6 +9,34 @@ table {
   }
   
   td, th {
-    width: 25%;
+    width: 9%;
+  }
+
+  @media only screen and (max-width: 800px) {
+    .content-container {
+      overflow-x: scroll;
+    }
+
+    .page-wrapper{
+      min-width: 800px;
+    }
+  }
+
+  .button-add {
+    background-color: white;
+    border: 2px solid black;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    border-radius: 12px;
+    transition-duration: 0.4s;
+    width: 20%;
+  }
+
+  .button-add:hover {
+    background-color: black; /* Green */
+    color: white;
   }
 

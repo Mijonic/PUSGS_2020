@@ -27,7 +27,7 @@ const NAMES: string[] = [
   styleUrls: ['./work-plans.component.css'] 
 })
 export class WorkPlansComponent implements  AfterViewInit {
-  displayedColumns: string[] = ['id', 'type', 'status', 'incident'];
+  displayedColumns: string[] = ['id', 'type', 'status', 'incident', 'startdate', 'enddate', 'createdby', 'emergency','company', 'phoneno', 'creationdate'];
   dataSource: MatTableDataSource<UserData>;
   toppings = new FormControl();
   toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato']; 

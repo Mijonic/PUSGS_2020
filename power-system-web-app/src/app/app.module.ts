@@ -23,7 +23,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { MatSortModule } from '@angular/material/sort';
 import { DashboardComponent } from './dashboard/dashboard.component';
-
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatRadioModule} from '@angular/material/radio';
 
 
 @NgModule({
@@ -55,8 +56,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSortModule
-    
+    MatSortModule,
+    MatExpansionModule,
+    MatRadioModule
 
   ],
   providers: [], 
