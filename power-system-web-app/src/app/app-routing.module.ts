@@ -9,6 +9,9 @@ import { RegistrationComponent } from './registration/registration.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
+import { AreaChartComponent } from './area-chart/area-chart.component';
+
+
 const routes: Routes = [
   { path: 'register', component: RegistrationComponent },
   { path: '', component: FrontPageComponent  },
@@ -25,7 +28,7 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { 
+export class AppRoutingModule {
 
 
 }
