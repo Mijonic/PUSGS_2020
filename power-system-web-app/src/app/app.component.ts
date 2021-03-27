@@ -19,11 +19,11 @@ export class AppComponent {
     this.innerHeight = window.innerHeight;
     if(this.innerWidth <= 990)
     {
-      this.containerLen = this.innerWidth-5;
+      this.containerLen = this.innerWidth-10;
     }
     else
     {
-      this.containerLen = this.innerWidth - 205; 
+      this.containerLen = this.innerWidth - 210; 
     }
     this.containerHeight = this.innerHeight - 76;
   }
