@@ -47,8 +47,9 @@
       
           <!-- ID Column -->
           <ng-container matColumnDef="id" sticky>
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
-            <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+            <!--Change this-->
+            <td mat-cell *matCellDef="let row"><a [routerLink]="['']"><mat-icon>edit</mat-icon></a><a [routerLink]="['/dashboard']"><mat-icon>delete</mat-icon></a></td>
           </ng-container>
       
           <!-- Progress Column -->
