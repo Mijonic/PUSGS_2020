@@ -1,3 +1,4 @@
+import { MapModule } from './map/map.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { SteeperWizardModule } from './steeper-wizard/steeper-wizard.module';
 import { RegisterLoginNavbarComponent } from './navigation-bars/register-login-navbar/register-login-navbar.component';
@@ -25,6 +26,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatRadioModule} from '@angular/material/radio';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -58,8 +60,13 @@ import {MatRadioModule} from '@angular/material/radio';
     MatInputModule,
     MatSortModule,
     MatExpansionModule,
-    MatRadioModule
+    MatRadioModule,
+    MatProgressSpinnerModule
 
+  ],
+
+  exports: [
+    MainNavbarComponent,
   ],
   providers: [], 
   bootstrap: [AppComponent]

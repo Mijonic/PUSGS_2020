@@ -31,6 +31,7 @@ export class WorkPlansComponent implements  AfterViewInit {
   dataSource: MatTableDataSource<UserData>;
   toppings = new FormControl();
   toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato']; 
+  isLoading:boolean = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -46,6 +47,7 @@ export class WorkPlansComponent implements  AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    //this.isLoading = false;
   }
 
   applyFilter(event: Event) {

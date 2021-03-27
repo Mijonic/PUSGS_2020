@@ -1,3 +1,4 @@
+import { WorkMapComponent } from './map/work-map/work-map.component';
 import { WorkRequestsComponent } from './documents/work-requests/work-requests/work-requests.component';
 import { WorkPlansComponent } from './documents/work-plans/work-plans.component';
 import { MainNavbarComponent } from './navigation-bars/main-navbar/main-navbar.component';
@@ -15,7 +16,8 @@ const routes: Routes = [
   { path: 'work-plans', component: WorkPlansComponent },
   { path: 'work-requests', component: WorkRequestsComponent },
   //{ path: '', component: MainNavbarComponent }
-  { path: 'dashboard', component: DashboardComponent}
+  { path: 'dashboard', component: DashboardComponent},
+  { path: 'map', component: WorkMapComponent}
 
 ];
 
