@@ -1,5 +1,4 @@
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { DashboardModule } from './dashboard/dashboard.module';
 import { SteeperWizardModule } from './steeper-wizard/steeper-wizard.module';
 import { RegisterLoginNavbarComponent } from './navigation-bars/register-login-navbar/register-login-navbar.component';
 import { MainNavbarComponent } from './navigation-bars/main-navbar/main-navbar.component';
@@ -23,6 +22,7 @@ import {MatTableModule} from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { MatSortModule } from '@angular/material/sort';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 
@@ -38,6 +38,7 @@ import { MatSortModule } from '@angular/material/sort';
     RegisterLoginNavbarComponent,
     StepOneComponent,
     WorkRequestsComponent,
+    DashboardComponent,
     
   ],
   imports: [
@@ -46,7 +47,6 @@ import { MatSortModule } from '@angular/material/sort';
     NgParticlesModule,
     MatIconModule,
     SteeperWizardModule,
-    DashboardModule,
     MatSelectModule,
     FormsModule,
     ReactiveFormsModule,
