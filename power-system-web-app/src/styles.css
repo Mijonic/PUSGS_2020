@@ -2,41 +2,38 @@
 @import "~bootstrap/dist/css/bootstrap.css";
 
 .content-container {
-    padding: 10px;
-    margin-left: 20%;
-    display: flex;
-    position: relative;
-    width: 100%;
-  }
-  
-  .page-wrapper {
-    background: rgba(0, 0, 0, 0.5); 
-    margin: 0;
-    padding:0;
-    width:100%;
-    z-index: -1;
-    height: 1000px;
-  }
-  
-  @media only screen and (max-width: 1600px) {
-    .content-container {
-      margin-left: 200px;
-      margin-right: auto;
-    }
-  }
-  
-  @media only screen and (max-width: 1350px) {
-    .content-container {
-      margin-left: 200px;
-      max-width: 800px;
-    }
-  }
-  
-  
-  @media only screen and (max-width: 990px) {
-    .content-container {
-      margin: auto;
-    }
+  padding: 10px;
+  margin-left: 20%;
+  display: flex;
+  position: relative;
+  width: 100%;
 }
-  
 
+.page-wrapper {
+  background: rgba(0, 0, 0, 0.5);
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  z-index: -1;
+  height: 1000px;
+}
+
+@media only screen and (max-width: 1600px) {
+  .content-container {
+    margin-left: 200px;
+    margin-right: auto;
+  }
+}
+
+@media only screen and (max-width: 1350px) {
+  .content-container {
+    margin-left: 200px;
+    max-width: 800px;
+  }
+}
+
+@media only screen and (max-width: 990px) {
+  .content-container {
+    margin: auto;
+  }
+}

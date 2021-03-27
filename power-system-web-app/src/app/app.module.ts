@@ -1,4 +1,4 @@
-import { DashboardModule } from './dashboard/dashboard.module';
+
 import { SteeperWizardModule } from './steeper-wizard/steeper-wizard.module';
 import { RegisterLoginNavbarComponent } from './navigation-bars/register-login-navbar/register-login-navbar.component';
 import { MainNavbarComponent } from './navigation-bars/main-navbar/main-navbar.component';
@@ -17,6 +17,7 @@ import { StepOneComponent } from './step-one/step-one.component';
 import { WorkRequestsComponent } from './documents/work-requests/work-requests/work-requests.component';
 import {MatSelectModule} from '@angular/material/select';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 
@@ -33,6 +34,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     RegisterLoginNavbarComponent,
     StepOneComponent,
     WorkRequestsComponent,
+    DashboardComponent,
     
   ],
   imports: [
@@ -41,7 +43,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     NgParticlesModule,
     MatIconModule,
     SteeperWizardModule,
-    DashboardModule,
     MatSelectModule,
     FormsModule,
     ReactiveFormsModule
