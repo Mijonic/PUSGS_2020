@@ -20,7 +20,6 @@ const routes: Routes = [
   { path: 'work-requests', component: WorkRequestsComponent },
   //{ path: '', component: MainNavbarComponent }
   { path: 'dashboard', component: DashboardComponent},
-  { path: 'chart', component: AreaChartComponent}
   { path: 'map', component: WorkMapComponent}
 
 ];

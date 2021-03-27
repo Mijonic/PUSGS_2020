@@ -66,7 +66,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     MatSortModule,
     MatExpansionModule,
     MatRadioModule,
-    NgApexchartsModule
+    NgApexchartsModule,
     MatProgressSpinnerModule
 
   ],
