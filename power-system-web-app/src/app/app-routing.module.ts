@@ -1,3 +1,4 @@
+import { WorkMapComponent } from './map/work-map/work-map.component';
 import { WorkRequestsComponent } from './documents/work-requests/work-requests/work-requests.component';
 import { WorkPlansComponent } from './documents/work-plans/work-plans.component';
 import { MainNavbarComponent } from './navigation-bars/main-navbar/main-navbar.component';
@@ -20,6 +21,7 @@ const routes: Routes = [
   //{ path: '', component: MainNavbarComponent }
   { path: 'dashboard', component: DashboardComponent},
   { path: 'chart', component: AreaChartComponent}
+  { path: 'map', component: WorkMapComponent}
 
 ];
 
@@ -27,7 +29,7 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { 
+export class AppRoutingModule {
 
 
 }

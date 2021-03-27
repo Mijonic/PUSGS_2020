@@ -1,9 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~bootstrap/dist/css/bootstrap.css";
+@import "~leaflet/dist/leaflet.css";
 
 .content-container {
     padding: 10px;
-    margin-left: 20%;
+    margin-left: 25%; 
     margin-right: 2px; 
     display: flex;
     position: relative;
@@ -16,7 +17,7 @@
     padding:0;
     width:100%;
     z-index: -1;
-    height: 1000px;
+    height: 1400px;
   }
   
   @media only screen and (max-width: 1600px) {
@@ -39,3 +40,34 @@
     margin: auto;
   }
 }
+
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+}
+.table-responsive > .mat-table {
+      width: 100%;
+      max-width: 100%;
+      margin-bottom: 1rem;
+      display: table;
+      border-collapse: collapse;
+      margin: 0px;
+  }
+.table-responsive >  .mat-row,
+  .mat-header-row {
+      display: table-row;
+  }
+  
+  .table-responsive > .mat-cell,
+  .mat-header-cell {
+      word-wrap: initial;
+      display: table-cell;
+      padding: 0px 5px;
+      line-break: unset;
+      width: auto;
+      white-space: nowrap;
+      overflow: hidden;
+      vertical-align: middle;
+  }
+

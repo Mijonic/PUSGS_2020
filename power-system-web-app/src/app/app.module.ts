@@ -1,3 +1,4 @@
+import { MapModule } from './map/map.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { SteeperWizardModule } from './steeper-wizard/steeper-wizard.module';
 import { RegisterLoginNavbarComponent } from './navigation-bars/register-login-navbar/register-login-navbar.component';
@@ -28,6 +29,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { AreaChartComponent } from './area-chart/area-chart.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -45,7 +47,7 @@ import { AreaChartComponent } from './area-chart/area-chart.component';
     DashboardComponent,
     PieChartComponent,
     AreaChartComponent,
-    
+
   ],
   imports: [
     BrowserModule,
@@ -65,9 +67,14 @@ import { AreaChartComponent } from './area-chart/area-chart.component';
     MatExpansionModule,
     MatRadioModule,
     NgApexchartsModule
+    MatProgressSpinnerModule
 
   ],
-  providers: [], 
+
+  exports: [
+    MainNavbarComponent,
+  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
