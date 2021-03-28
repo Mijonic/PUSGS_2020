@@ -26,9 +26,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatRadioModule} from '@angular/material/radio';
-import { PieChartComponent } from './pie-chart/pie-chart.component';
+
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { AreaChartComponent } from './area-chart/area-chart.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
@@ -45,8 +44,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     StepOneComponent,
     WorkRequestsComponent,
     DashboardComponent,
-    PieChartComponent,
-    AreaChartComponent,
+   
 
   ],
   imports: [

@@ -64,11 +64,12 @@
         <div class="row">
 
             <div class="col-md-7 mt-5 dashboard-container">
-                <div><app-area-chart></app-area-chart></div>
+                <div>  <apx-chart [series]="chartOptionsArea.series" [chart]="chartOptionsArea.chart" [title]="chartOptionsArea.title" [labels]="chartOptionsArea.labels"  ></apx-chart></div>
             </div>
 
             <div class="col-md-5 mt-5 dashboard-container">
-                    <div><app-pie-chart></app-pie-chart></div>
+                
+                <div>  <apx-chart [series]="chartOptionsPie.series" [chart]="chartOptionsPie.chart" [title]="chartOptionsPie.title" [labels]="chartOptionsPie.labels"  ></apx-chart></div>
             </div>
 
         </div>
