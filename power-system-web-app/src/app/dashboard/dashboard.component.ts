@@ -34,13 +34,12 @@ export class DashboardComponent implements OnInit {
 
 
   constructor(private changeDetectorRef: ChangeDetectorRef) {
-    window.dispatchEvent(new Event('resize'));
+
    }
 
   
 
     resetCharts() {
-        //this.changeDetectorRef.detectChanges();
         this.initAreaChart("100%");
         this.initPieChar("100%");
 
@@ -175,6 +174,7 @@ export class DashboardComponent implements OnInit {
     if(this.shouldReset)
     {
       setTimeout(() => { this.resetCharts() }, 100);
+      setTimeout(() => { window.dispatchEvent(new Event('resize')); }, 300);
       this.shouldReset = false;
 
     }
