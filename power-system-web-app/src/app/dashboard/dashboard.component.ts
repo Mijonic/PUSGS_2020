@@ -68,8 +68,8 @@ export class DashboardComponent implements OnInit {
         chart: {
           width: width,
           type: "donut",
-          foreColor: 'white'
-          
+          foreColor: 'white',
+          height:350
         },
         dataLabels: {
           enabled: true,
