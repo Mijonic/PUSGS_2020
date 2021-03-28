@@ -22,6 +22,7 @@
     z-index: -1;
     height: max-content;
     overflow-x: hidden;
+    overflow-y:hidden;
   }
   
  /* @media only screen and (max-width: 1600px) {
