@@ -8,10 +8,11 @@ import { Component, OnInit } from '@angular/core';
 export class DashboardComponent implements OnInit {
 
   constructor() {
+    window.dispatchEvent(new Event('resize'));
    }
 
   ngOnInit(): void {
-    window.dispatchEvent(new Event('resize'));
+    //window.dispatchEvent(new Event('resize'));
   }
 
 }

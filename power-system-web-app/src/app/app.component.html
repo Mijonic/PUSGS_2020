@@ -2,7 +2,7 @@
 <ng-container *ngIf="isHomePage == false" >
     <div class="container-fluid page-wrapper">
         <app-main-navbar></app-main-navbar>
-        <div class="content-container" [style.width.px]="containerLen" >
+        <div class="content-container" [style.width.px]="containerLen" [style.min-width.px] = "containerHeight">
             <router-outlet name="primary"></router-outlet>
         </div>
     </div>
