@@ -42,7 +42,7 @@ export class WorkPlansComponent implements  AfterViewInit {
 
     // Assign the data to the data source for the table to render
     this.dataSource = new MatTableDataSource(users);
-    window.dispatchEvent(new Event('resize'));
+    //window.dispatchEvent(new Event('resize'));
   }
 
   ngOnInit(): void {
