@@ -15,17 +15,7 @@ table {
   td, th {
     width: 9%;
   }
-
- /* @media only screen and (max-width: 800px) {
-    .content-container {
-      overflow-x: scroll;
-    }
-
-    .page-wrapper{
-      min-width: 800px;
-    }
-  }*/
-
+  
   a { color: inherit; } 
 
   .button-add {

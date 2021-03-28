@@ -1,0 +1,13 @@
+a { 
+    color: inherit; 
+} 
+
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+  
+  .button-add {
+    width: 20%;
+    max-width: 80px;
+  }

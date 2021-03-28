@@ -1,3 +1,4 @@
+import { CrewsComponent } from './crews/crews.component';
 import { WorkMapComponent } from './map/work-map/work-map.component';
 import { WorkRequestsComponent } from './documents/work-requests/work-requests/work-requests.component';
 import { WorkPlansComponent } from './documents/work-plans/work-plans.component';
@@ -20,7 +21,8 @@ const routes: Routes = [
   { path: 'work-requests', component: WorkRequestsComponent,  outlet:"primary"  },
   //{ path: '', component: MainNavbarComponent }
   { path: 'dashboard', component: DashboardComponent,  outlet:"primary" },
-  { path: 'map', component: WorkMapComponent,  outlet:"primary" }
+  { path: 'map', component: WorkMapComponent,  outlet:"primary" },
+  { path: 'crews', component: CrewsComponent, outlet: "primary" }
 
 ];
 
