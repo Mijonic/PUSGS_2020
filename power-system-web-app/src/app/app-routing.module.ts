@@ -9,7 +9,7 @@ import { FrontPageComponent } from './front-page/front-page.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
 
 
@@ -22,7 +22,8 @@ const routes: Routes = [
   //{ path: '', component: MainNavbarComponent }
   { path: 'dashboard', component: DashboardComponent,  outlet:"primary" },
   { path: 'map', component: WorkMapComponent,  outlet:"primary" },
-  { path: 'crews', component: CrewsComponent, outlet: "primary" }
+  { path: 'crews', component: CrewsComponent, outlet: "primary" },
+  { path: 'edit-profile', component: EditProfileComponent, outlet: "primary"}
 
 ];
 
