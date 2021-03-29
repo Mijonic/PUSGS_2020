@@ -2,12 +2,10 @@ import { CrewsComponent } from './crews/crews.component';
 import { WorkMapComponent } from './map/work-map/work-map.component';
 import { WorkRequestsComponent } from './documents/work-requests/work-requests/work-requests.component';
 import { WorkPlansComponent } from './documents/work-plans/work-plans.component';
-import { MainNavbarComponent } from './navigation-bars/main-navbar/main-navbar.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FrontPageComponent } from './front-page/front-page.component';
 import { RegistrationComponent } from './registration/registration.component';
-import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CrewComponent } from './crews/crew/crew.component';
 

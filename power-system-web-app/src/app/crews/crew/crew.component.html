@@ -1,16 +1,62 @@
-<form class="container-fluid p-2 m-auto w-75 bg-white mt-5">
-    <div class="row">
-        <div class="col-md-10 mt-1 ">
-                <mat-form-field >
-                <mat-label>Email</mat-label>
-                <input class="w-100" type="email" matInput [formControl]="emailFormControl" placeholder="Ex. pat@example.com">
-                <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
-                    Please enter a valid email address
-                </mat-error>
-                <mat-error *ngIf="emailFormControl.hasError('required')">
-                    Email is <strong>required</strong>
-                </mat-error> 
-                </mat-form-field>
+
+<div class="container-fluid p-3 m-1">
+    <div class="row" >
+        <div class="container rounded bg-white mt-5">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="p-3 py-5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h1>Add crew</h1>
+                        </div>
+
+                        <div class="row mt-2">
+                            <div class="col-md-10">
+                                <mat-form-field class="w-100"> 
+                                    <mat-label>Crew name</mat-label>
+                                    <input matInput placeholder="Write a crew name" value="Neko ime">
+                                  </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="button-add w-100">Save Changes</button>                       
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-6"> 
+                                <h2>Crew members</h2>
+                                <div
+                                cdkDropList
+                                #crewMembers="cdkDropList"
+                                [cdkDropListData]="crew"
+                                [cdkDropListConnectedTo]="[availableCrew]"
+                                class="crew-list"
+                                (cdkDropListDropped)="drop($event)">
+                                    <div class="crew-member-box" *ngFor="let item of crew" cdkDrag>
+                                        {{item}}
+                                        <a class="interact-crew"><mat-icon>remove</mat-icon></a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <h2>Available crew members</h2>
+                                <div
+                                cdkDropList 
+                                #availableCrew="cdkDropList"
+                                [cdkDropListData]="allWorkers"
+                                [cdkDropListConnectedTo]="[crewMembers]"
+                                class="crew-list"
+                                (cdkDropListDropped)="drop($event)">
+                                    <div class="crew-member-box" *ngFor="let item of allWorkers" cdkDrag>
+                                        {{item}}
+                                        <a class="interact-crew"><mat-icon>person_add</mat-icon></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div> 
-</form>
+    </div>
+</div>

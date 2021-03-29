@@ -26,7 +26,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatRadioModule} from '@angular/material/radio';
-
+import {DragDropModule} from '@angular/cdk/drag-drop';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { CrewsComponent } from './crews/crews.component';
@@ -70,7 +70,8 @@ import { EditProfileComponent } from './edit-profile/edit-profile.component';
     MatExpansionModule,
     MatRadioModule,
     NgApexchartsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    DragDropModule
 
   ],
 

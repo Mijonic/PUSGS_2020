@@ -1,5 +1,5 @@
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-crew',
@@ -8,13 +8,33 @@ import { FormControl, Validators } from '@angular/forms';
 })
 export class CrewComponent implements OnInit {
 
-  constructor() { }
-
   ngOnInit(): void {
   }
-  emailFormControl = new FormControl('', [
-    Validators.required,
-    Validators.email,
-  ]);
+
+  crew = [
+    'Mika',
+    'Pera',
+    'Zika',
+    'Joca'
+  ];
+
+ allWorkers = [
+    'Mijonic',
+    'Glavas',
+    'Djox',
+    'Rodusek',
+    'Smaranje'
+  ];
+
+  drop(event: CdkDragDrop<string[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+                        event.container.data,
+                        event.previousIndex,
+                        event.currentIndex);
+    }
+  }
 
 }
