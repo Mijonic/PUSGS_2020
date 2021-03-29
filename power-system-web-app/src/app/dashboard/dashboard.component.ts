@@ -173,8 +173,8 @@ export class DashboardComponent implements OnInit {
 
     if(this.shouldReset)
     {
-      setTimeout(() => { this.resetCharts() }, 100);
-      setTimeout(() => { window.dispatchEvent(new Event('resize')); }, 300);
+      setTimeout(() => { this.resetCharts() }, 150);
+      //setTimeout(() => { window.dispatchEvent(new Event('resize')); }, 150);
       this.shouldReset = false;
 
     }

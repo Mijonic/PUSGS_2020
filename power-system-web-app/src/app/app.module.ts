@@ -30,6 +30,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { CrewsComponent } from './crews/crews.component';
+import { CrewComponent } from './crews/crew/crew.component';
 
 
 @NgModule({
@@ -46,6 +47,7 @@ import { CrewsComponent } from './crews/crews.component';
     WorkRequestsComponent,
     DashboardComponent,
     CrewsComponent,
+    CrewComponent,
    
 
   ],

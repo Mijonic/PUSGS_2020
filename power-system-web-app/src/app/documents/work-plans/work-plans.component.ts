@@ -47,12 +47,12 @@ export class WorkPlansComponent implements  AfterViewInit {
 
   ngOnInit(): void {
     window.dispatchEvent(new Event('resize'));
+    this.isLoading = false;
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    //this.isLoading = false;
   }
 
   applyFilter(event: Event) {
