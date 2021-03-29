@@ -11,6 +11,7 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CrewComponent } from './crews/crew/crew.component';
 
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
 
 
@@ -24,7 +25,8 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent,  outlet:"primary" },
   { path: 'map', component: WorkMapComponent,  outlet:"primary" },
   { path: 'crews', component: CrewsComponent, outlet: "primary" },
-  { path: 'crew', component: CrewComponent, outlet: "primary" } 
+  { path: 'crew', component: CrewComponent, outlet: "primary" } ,
+  { path: 'edit-profile', component: EditProfileComponent, outlet: "primary"}
 
 ];
 

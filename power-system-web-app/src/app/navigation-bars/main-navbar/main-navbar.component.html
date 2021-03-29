@@ -57,7 +57,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item d-flex align-items-center justify-content-left" ><mat-icon>dashboard</mat-icon> Dashboard</a>
-          <a class="dropdown-item d-flex align-items-center justify-content-left" ><mat-icon>account_circle</mat-icon> Edit Profile</a>
+          <a [routerLink]="['/edit-profile']" class="dropdown-item d-flex align-items-center justify-content-left" ><mat-icon>account_circle</mat-icon> Edit Profile</a>
           <a class="dropdown-item d-flex align-items-center justify-content-left" ><mat-icon>logout</mat-icon> Log Out</a>
         </div>
       </li>   

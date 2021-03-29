@@ -31,6 +31,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { CrewsComponent } from './crews/crews.component';
 import { CrewComponent } from './crews/crew/crew.component';
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
 
 @NgModule({
@@ -48,8 +49,8 @@ import { CrewComponent } from './crews/crew/crew.component';
     DashboardComponent,
     CrewsComponent,
     CrewComponent,
+    EditProfileComponent
    
-
   ],
   imports: [
     BrowserModule,
