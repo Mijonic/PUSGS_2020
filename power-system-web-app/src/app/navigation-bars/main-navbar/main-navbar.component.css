@@ -4,6 +4,16 @@
   padding-right: 10px;
 }
 
+.nav-username {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 15px;
+}
+
+.nav-div-username {
+  line-height: 15px;
+  text-align: center;
+}
+
 /*.border-li-style {
   border-right: 2px solid white;
 }
@@ -18,7 +28,6 @@
   border-left: 2px solid white;
 }
 */
-
 
 @media (min-width: 992px) {
   .vertical-nav {

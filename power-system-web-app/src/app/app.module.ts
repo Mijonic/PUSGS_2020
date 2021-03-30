@@ -32,6 +32,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { CrewsComponent } from './crews/crews.component';
 import { CrewComponent } from './crews/crew/crew.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
+import { IncidentsComponent } from './incidents/incidents.component';
 
 
 @NgModule({
@@ -49,7 +50,8 @@ import { EditProfileComponent } from './edit-profile/edit-profile.component';
     DashboardComponent,
     CrewsComponent,
     CrewComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    IncidentsComponent
    
   ],
   imports: [
