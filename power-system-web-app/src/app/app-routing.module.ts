@@ -11,6 +11,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { CrewComponent } from './crews/crew/crew.component';
 
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
+import { IncidentsComponent } from './incidents/incidents.component';
 
 
 
@@ -26,7 +27,8 @@ const routes: Routes = [
   { path: 'crews', component: CrewsComponent, outlet: "primary" },
   { path: 'crew', component: CrewComponent, outlet: "primary" } ,
   { path: 'edit-profile', component: EditProfileComponent, outlet: "primary"},
-  { path: 'users', component: UsersComponent, outlet: "primary"}
+  { path: 'users', component: UsersComponent, outlet: "primary"},
+  { path: 'incidents', component: IncidentsComponent, outlet: "primary"}
 
 ];
 

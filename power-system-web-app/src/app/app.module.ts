@@ -36,6 +36,7 @@ import { UsersComponent } from './users/users.component';
 import {MatCardModule} from '@angular/material/card';
 import { UserCardComponent } from './users/user-card/user-card.component';
 import { DatePipe } from '@angular/common';
+import { IncidentsComponent } from './incidents/incidents.component';
 
 
 @NgModule({
@@ -55,7 +56,8 @@ import { DatePipe } from '@angular/common';
     CrewComponent,
     EditProfileComponent,
     UsersComponent,
-    UserCardComponent
+    UserCardComponent,
+    IncidentsComponent
    
   ],
   imports: [
