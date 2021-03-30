@@ -32,6 +32,10 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { CrewsComponent } from './crews/crews.component';
 import { CrewComponent } from './crews/crew/crew.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
+import { UsersComponent } from './users/users.component';
+import {MatCardModule} from '@angular/material/card';
+import { UserCardComponent } from './users/user-card/user-card.component';
+import { DatePipe } from '@angular/common';
 
 
 @NgModule({
@@ -49,7 +53,9 @@ import { EditProfileComponent } from './edit-profile/edit-profile.component';
     DashboardComponent,
     CrewsComponent,
     CrewComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    UsersComponent,
+    UserCardComponent
    
   ],
   imports: [
@@ -71,14 +77,15 @@ import { EditProfileComponent } from './edit-profile/edit-profile.component';
     MatRadioModule,
     NgApexchartsModule,
     MatProgressSpinnerModule,
-    DragDropModule
+    DragDropModule,
+    MatCardModule
 
   ],
 
   exports: [
     MainNavbarComponent,
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

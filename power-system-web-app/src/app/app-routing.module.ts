@@ -1,3 +1,4 @@
+import { UsersComponent } from './users/users.component';
 import { CrewsComponent } from './crews/crews.component';
 import { WorkMapComponent } from './map/work-map/work-map.component';
 import { WorkRequestsComponent } from './documents/work-requests/work-requests/work-requests.component';
@@ -24,7 +25,8 @@ const routes: Routes = [
   { path: 'map', component: WorkMapComponent,  outlet:"primary" },
   { path: 'crews', component: CrewsComponent, outlet: "primary" },
   { path: 'crew', component: CrewComponent, outlet: "primary" } ,
-  { path: 'edit-profile', component: EditProfileComponent, outlet: "primary"}
+  { path: 'edit-profile', component: EditProfileComponent, outlet: "primary"},
+  { path: 'users', component: UsersComponent, outlet: "primary"}
 
 ];
 
