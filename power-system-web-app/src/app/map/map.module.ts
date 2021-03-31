@@ -1,4 +1,3 @@
-import { MainNavbarComponent } from './../navigation-bars/main-navbar/main-navbar.component';
 import { AppModule } from './../app.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';

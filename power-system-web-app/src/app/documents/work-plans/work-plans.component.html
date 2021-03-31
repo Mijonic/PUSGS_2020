@@ -1,7 +1,4 @@
 
-    <ng-container *ngIf="isLoading">
-      <mat-spinner></mat-spinner>
-    </ng-container>
   <div class="container-fluid p-3 m-1 pr-4" *ngIf="isLoading == false">
       <div class="mat-elevation-z8 mt-4">
         <mat-expansion-panel hideToggle>
@@ -47,7 +44,7 @@
         
             <!-- ID Column -->
             <ng-container matColumnDef="id" sticky>
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+              <th mat-header-cell *matHeaderCellDef> Action </th>
               <!--Change this-->
               <td mat-cell *matCellDef="let row"><a [routerLink]="['']"><mat-icon>edit</mat-icon></a><a [routerLink]="['/dashboard']"><mat-icon>delete</mat-icon></a></td>
             </ng-container>

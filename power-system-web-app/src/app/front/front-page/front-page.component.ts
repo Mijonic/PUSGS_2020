@@ -1,5 +1,6 @@
-import { NavbarMessagingService } from './../services/navbar-messaging.service';
+
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { NavbarMessagingService } from 'app/services/navbar-messaging.service';
 import { Subscription } from 'rxjs';
 
 
