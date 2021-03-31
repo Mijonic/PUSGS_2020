@@ -1,1 +1,221 @@
-<p>basic-information works!</p>
+
+<div class="container mt-2 p-2" >
+
+    
+    <div class="wrapper-incident ">
+        <div class="row m-5">
+            
+            <div class="col-md-6 mt-4" >
+                <div class="d-flex justify-content-center">
+                    <mat-form-field class="m-auto" appearance="fill">
+                        <mat-label>Type</mat-label>
+                        <mat-select>
+                            <mat-option value="planned">Planned Work</mat-option>
+                            <mat-option value="unplanned">Unplanned Work</mat-option>
+                        
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        
+            <div class="col-md-6  mt-4">
+                <div class="d-flex justify-content-center">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Affected customers</mat-label>
+                        <input matInput placeholder="Affected customers">
+                    </mat-form-field>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row m-5">
+            <div class="col-md-6">
+                <div class="d-flex justify-content-center">
+                    <mat-form-field class="m-auto" appearance="fill">
+                        <mat-label>Priority</mat-label>
+                        <mat-select>
+                            <mat-option value="0">0</mat-option>
+                            <mat-option value="1">1</mat-option>
+                            <mat-option value="2">2</mat-option>
+                            <mat-option value="3">3</mat-option>
+                            <mat-option value="4">4</mat-option>
+                            
+                        
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+
+
+
+            <div class="col-md-6">
+                <div class="d-flex justify-content-center">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Outage Time</mat-label>
+                        <input matInput [matDatepicker]="picker">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                      </mat-form-field>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row m-5">
+           
+
+            
+            <div class="col-md-6">
+                <div class="d-flex justify-content-center">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Scheduled Time</mat-label>
+                        <input matInput [matDatepicker]="picker">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                      </mat-form-field>
+                </div>
+            </div>
+
+
+
+            <div class="col-md-6">
+                <div class="d-flex justify-content-center">
+                    <mat-form-field appearance="fill">
+                        <mat-label>ETR</mat-label>
+                        <input matInput [matDatepicker]="picker">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                      </mat-form-field>
+                </div>
+            </div>
+
+        </div>
+
+        
+
+        <div class="row m-5">
+
+            <div class="col-md-6  mt-4">
+                <div class="d-flex justify-content-center">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Status</mat-label>
+                        <input matInput placeholder="Status">
+                    </mat-form-field>
+                </div>
+            </div>
+
+
+
+            <div class="col-md-6  mt-4">
+                <div class="d-flex justify-content-center">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Calls</mat-label>
+                        <input matInput placeholder="Calls">
+                    </mat-form-field>
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <div class="row m-5">
+
+            <div class="col-md-6  mt-4">
+                <div class="d-flex justify-content-center">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Description</mat-label>
+                        <input matInput placeholder="Description">
+                    </mat-form-field>
+                </div>
+            </div>
+
+
+
+            <div class="col-md-6  mt-4">
+                <div class="d-flex justify-content-center">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Voltage [kV]</mat-label>
+                        <input matInput placeholder="Voltage [kV]">
+                    </mat-form-field>
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <div class="row m-5">
+
+            <div class="col-md-6">
+                <div class="d-flex justify-content-center">
+                    <mat-form-field appearance="fill">
+                        <mat-label>ETA</mat-label>
+                        <input matInput [matDatepicker]="picker">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                      </mat-form-field>
+                </div>
+            </div>
+
+
+
+            <div class="col-md-6">
+                <div class="d-flex justify-content-center">
+                    <mat-form-field appearance="fill">
+                        <mat-label>ATA</mat-label>
+                        <input matInput [matDatepicker]="picker">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                      </mat-form-field>
+                </div>
+            </div>
+
+
+        </div>
+        
+        
+        <div class="row m-5 pb-5">
+
+            <div class="col-md-6">
+                <div class="d-flex justify-content-center">
+                    <div class="mt-3">
+                        <span class="label label-primary mt-1 mr-1">Confirmed &nbsp;</span>
+                        <mat-slide-toggle ></mat-slide-toggle>
+                    </div>
+                   
+    
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="d-flex ">
+                    <span class="material-icons  pl-4" style="font-size: 50px; color: #79ff4d">
+                        save
+                    </span>
+                    <span class="material-icons  pl-4" style="font-size: 50px; color: #ff3333">
+                        cancel
+                    </span>
+            
+            
+                   
+    
+                </div>
+            </div>
+
+           
+
+        </div>
+
+       
+
+
+
+
+
+
+    </div>
+
+</div>

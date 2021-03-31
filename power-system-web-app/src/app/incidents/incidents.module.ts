@@ -24,6 +24,9 @@ import { EquipmentComponent } from './equipment/equipment.component';
 import { MatButtonModule } from '@angular/material/button';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatFileUploadModule } from 'angular-material-fileupload';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 
 
@@ -60,7 +63,11 @@ import { MatFileUploadModule } from 'angular-material-fileupload';
     MatTabsModule,
     MatButtonModule,
     BrowserModule,
-    MatFileUploadModule
+    MatFileUploadModule,  
+    MatDatepickerModule,     
+    MatNativeDateModule,
+    MatSlideToggleModule
+   
   
   ]
 })
