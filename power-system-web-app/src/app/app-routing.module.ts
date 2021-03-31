@@ -11,6 +11,7 @@ import { WorkRequestsComponent } from './documents/work-requests/work-requests/w
 import { UsersComponent } from './users/users.component';
 import { IncidentsComponent } from './incidents/incidents.component';
 import { EditProfileComponent } from './settings/edit-profile/edit-profile.component';
+import { IncidentComponent } from './incidents/incident/incident.component';
 
 
 
@@ -25,7 +26,8 @@ const routes: Routes = [
   { path: 'crew', component: CrewComponent, outlet: "primary" } ,
   { path: 'edit-profile', component: EditProfileComponent, outlet: "primary"},
   { path: 'users', component: UsersComponent, outlet: "primary"},
-  { path: 'incidents', component: IncidentsComponent, outlet: "primary"}
+  { path: 'incidents', component: IncidentsComponent, outlet: "primary"},
+  { path: 'incident', component: IncidentComponent, outlet: "primary"}
 
 ];
 
