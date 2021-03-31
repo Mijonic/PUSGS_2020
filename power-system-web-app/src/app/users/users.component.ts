@@ -20,6 +20,9 @@ export class UsersComponent implements OnInit {
 
   getUsers()
   {
+    let i = 0;
+    for( i = 0; i < 5; i++)
+    {
     this.users.push({id:'1',
                     name: 'Predrag',
                     lastName: 'Glavas',
@@ -51,7 +54,8 @@ export class UsersComponent implements OnInit {
                     role:'admin',
                     address:"Bulevar Dusana Bajatovica 69",
                     birthday: new Date('11.24.1998.')
-                    });           
+                    });       
+      }    
   }
 
 }
