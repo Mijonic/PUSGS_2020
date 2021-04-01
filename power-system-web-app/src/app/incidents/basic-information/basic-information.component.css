@@ -1,6 +1,55 @@
 .wrapper-incident {
-  background: #e6e6e6;
-  box-shadow: 5px 5px 5px 0px;
-  width: 80%;
-  margin-left: 10%;
+  background: white;
+  width: 70%;
+  margin-left: 15%;
+}
+
+.date-picker-image {
+  font-size: 25px;
+}
+
+.button-add {
+  background-color: white;
+  border: 2px solid black;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  border-radius: 12px;
+  transition-duration: 0.4s;
+  width: 100%;
+  padding: 4pt 0 4pt 0;
+  margin-left: 20px;
+}
+
+.save-button {
+  text-align: right;
+}
+
+.button-add:hover {
+  background-color: black; /* Green */
+  color: white;
+}
+
+@media only screen and (max-width: 1080px) {
+  .button-add {
+    width: 30%;
+  }
+}
+
+@media only screen and (max-width: 780px) {
+  .save-button {
+    text-align: center;
+  }
+
+  .button-add {
+    width: 30%;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .save-button {
+    text-align: center;
+  }
 }
