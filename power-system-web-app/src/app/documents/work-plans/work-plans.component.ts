@@ -1,3 +1,5 @@
+import { WorkPlansControlService } from './../../services/work-plans-control.service';
+import { TableControlOptions } from './../../shared/options/table-control-options.model';
 import { FormControl } from '@angular/forms';
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
@@ -32,11 +34,27 @@ export class WorkPlansComponent implements  AfterViewInit {
   toppings = new FormControl();
   toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato']; 
   isLoading:boolean = true;
+  tableControlOptions:TableControlOptions = {
+    shouldInitFilter:true,
+    shouldInitRadio:true,
+    shouldInitSaveButton:true,
+    shouldInitSearch:true,
+    filterValues: ['Neki plan', 'Nekiji plan', 'Jos nekiji plan'],
+    isMultiFilter:true,
+    buttonNaviLink:'/',
+    radioOptions:{
+      value1:'all',
+      value2:'mine',
+      label1:'All',
+      label2:'Mine'
+    },
+    controlService: this.controlService,
+  }
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor() {
+  constructor(private controlService:WorkPlansControlService) {
     // Create 100 users
     const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
 

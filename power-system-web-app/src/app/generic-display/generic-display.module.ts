@@ -1,32 +1,27 @@
-import { GenericDisplayModule } from './../generic-display/generic-display.module';
+import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
-import { WorkRequestsComponent } from './work-requests/work-requests/work-requests.component';
-import { WorkPlansComponent } from './work-plans/work-plans.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TableControlComponent } from './table-control/table-control.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatSelectModule } from '@angular/material/select';
-import { MatPaginatorModule} from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import { MatInputModule} from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatExpansionModule } from '@angular/material/expansion';
+import { MatInputModule } from '@angular/material/input';
 import { MatSortModule } from '@angular/material/sort';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatRadioModule } from '@angular/material/radio';
 import { RouterModule } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 
-
 @NgModule({
   declarations: [
-    WorkPlansComponent,
-    WorkRequestsComponent
+    TableControlComponent
   ],
-  exports: [
-    WorkPlansComponent,
-    WorkRequestsComponent
+  exports:[
+    TableControlComponent
   ],
   imports: [
     CommonModule,
@@ -42,9 +37,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatExpansionModule,
     MatRadioModule,
     RouterModule,
-    MatProgressSpinnerModule,  
-    GenericDisplayModule 
+    MatProgressSpinnerModule,   
   ]
 })
-export class DocumentsModule {
-}
+export class GenericDisplayModule { }

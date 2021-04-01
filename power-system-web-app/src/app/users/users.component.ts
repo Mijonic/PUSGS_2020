@@ -1,6 +1,8 @@
+import { WorkPlansControlService } from './../services/work-plans-control.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { User } from 'app/shared/models/user.model';
+import { TableControlOptions } from 'app/shared/options/table-control-options.model';
 
 @Component({
   selector: 'app-users',
@@ -11,8 +13,24 @@ export class UsersComponent implements OnInit {
   rolesControl = new FormControl();
   roles: string[] = ['Worker', 'Administrator', 'Disptacher', 'Crew member'];
   users:User[] = [];
+  tableControlOptions:TableControlOptions = {
+    shouldInitFilter:true,
+    shouldInitRadio:true,
+    shouldInitSaveButton:false,
+    shouldInitSearch:true,
+    filterValues: ['Worker', 'Administrator', 'Disptacher', 'Crew member'],
+    isMultiFilter:false,
+    buttonNaviLink:null,
+    radioOptions:{
+      value1:'all',
+      value2:'onlyUnapproved',
+      label1:'All',
+      label2:'Only unapproved'
+    },
+    controlService: this.controlService,
+  }
 
-  constructor() { }
+  constructor(private controlService:WorkPlansControlService) { }
 
   ngOnInit(): void {
     this.getUsers();

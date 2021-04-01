@@ -1,0 +1,45 @@
+<div class="mat-elevation-z8 mt-4">
+    <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <mat-icon>more_vert</mat-icon>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row" *ngIf="tableControlOptions.shouldInitSearch">
+            <div class="col-md-12">
+                <mat-form-field>
+                <mat-label>Search</mat-label>
+                <input matInput (keyup)="applyFilter($event)" #input> 
+                </mat-form-field>
+            </div>
+        </div> 
+        <div class="row">
+            <div [ngClass]="setFilterClasses()" *ngIf="tableControlOptions.shouldInitFilter">
+                <mat-form-field appearance="fill">
+                <mat-label>Filter</mat-label>
+
+                <!--Set multi filtering-->
+                <mat-select multiple *ngIf="tableControlOptions.isMultiFilter">
+                    <mat-option *ngFor="let value of tableControlOptions.filterValues" [value]="value">{{value}}</mat-option>
+                </mat-select>
+
+                <mat-select  *ngIf="tableControlOptions.isMultiFilter == false">
+                    <mat-option *ngFor="let value of tableControlOptions.filterValues" [value]="value">{{value}}</mat-option>
+                </mat-select>
+                <!---->
+
+                </mat-form-field>
+            </div>
+            <div [ngClass]="setRadioClasses()" *ngIf="tableControlOptions.shouldInitRadio">
+                <mat-radio-group aria-label="Select an option">
+                  <mat-radio-button value="tableControlOptions.radioOptions.value1">{{tableControlOptions.radioOptions.label1}}</mat-radio-button>&nbsp;&nbsp;&nbsp;
+                  <mat-radio-button value="tableControlOptions.radioOptions.value2">{{tableControlOptions.radioOptions.label2}}</mat-radio-button>
+                </mat-radio-group>
+            </div>
+
+            <div [ngClass]="setButtonClasses()" *ngIf="tableControlOptions.shouldInitSaveButton"> 
+                <button [routerLink]="tableControlOptions.buttonNaviLink" class="button-add pt-2 d-flex justify-content-center"><mat-icon>add</mat-icon></button> 
+            </div>
+        </div>
+    </mat-expansion-panel>
+</div>  

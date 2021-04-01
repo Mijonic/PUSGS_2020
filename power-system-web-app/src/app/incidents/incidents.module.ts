@@ -1,3 +1,4 @@
+import { GenericDisplayModule } from './../generic-display/generic-display.module';
 import { RouterModule } from '@angular/router';
 import { IncidentsComponent } from './incidents.component';
 import { NgModule } from '@angular/core';
@@ -60,7 +61,8 @@ import { MatFileUploadModule } from 'angular-material-fileupload';
     MatTabsModule,
     MatButtonModule,
     BrowserModule,
-    MatFileUploadModule
+    MatFileUploadModule,
+    GenericDisplayModule
   
   ]
 })

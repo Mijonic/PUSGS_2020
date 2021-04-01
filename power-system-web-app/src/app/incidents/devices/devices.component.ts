@@ -1,8 +1,10 @@
+import { WorkPlansControlService } from './../../services/work-plans-control.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { TableControlOptions } from 'app/shared/options/table-control-options.model';
 
 export interface UserData {
   id: string;
@@ -31,14 +33,22 @@ export class DevicesComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'type', 'coordinates', 'address'];
   dataSource: MatTableDataSource<UserData>;
-  toppings = new FormControl();
-  toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato']; 
-  isLoading:boolean = true;
+  tableControlOptions:TableControlOptions = {
+    shouldInitFilter:true,
+    shouldInitRadio:false,
+    shouldInitSaveButton:true,
+    shouldInitSearch:true,
+    filterValues: ['Incident Type', 'Confirmed'],
+    isMultiFilter:true,
+    buttonNaviLink:'/incident',
+    radioOptions: null,
+    controlService: this.controlService,
+  }
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor() {
+  constructor(private controlService:WorkPlansControlService) {
     // Create 100 users
     const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
 
@@ -48,7 +58,6 @@ export class DevicesComponent implements OnInit {
 
   ngOnInit(): void {
     window.dispatchEvent(new Event('resize'));
-    this.isLoading = false;
   }
 
   ngAfterViewInit() {
