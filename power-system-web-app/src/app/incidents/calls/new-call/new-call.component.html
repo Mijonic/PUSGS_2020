@@ -1,0 +1,120 @@
+<div class="container-fluid p-3 m-1">
+    <div class="row" >
+      <div class="container rounded bg-white mt-5">
+
+        <div class="row">
+            <div class="col-md-12 d-flex justify-content-start">
+                <h1 class="p-3 pb-5">New call</h1>
+            </div>
+         </div>
+
+        <div class="row" >
+          <div class="col-md-6">
+            <div class="p-3 py-5">
+              <mat-form-field >
+                <mat-label>Reason</mat-label>
+                <mat-select>
+                  <mat-option *ngFor="let reason of reasons" [value]="reason">{{reason}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+              <div class="p-3 py-5">
+                <mat-form-field class="w-100">
+                  <mat-label>hazard</mat-label>
+                  <input matInput placeholder="specify hazard" value="">
+                </mat-form-field>
+              </div>
+          </div>
+        </div>
+
+        
+        <div class="row" >
+          <div class="col-md-12">
+              <div class="p-3 py-5">
+                <mat-form-field class="w-100">
+                  <mat-label>Comment</mat-label>
+                  <textarea matInput placeholder="Explain in depth what caused the outage"></textarea>
+                </mat-form-field>
+              </div>
+          </div>
+        </div>
+
+        <div class="row">
+           <div class="col-md-12 d-flex justify-content-start">
+               <h2 class="p-3 pb-5">Customer info</h2>
+           </div>
+        </div>
+
+        <div class="row" >
+            <div class="col-md-6">
+                <div class="p-3 py-5">
+                  <mat-form-field class="w-100">
+                    <mat-label>Name</mat-label>
+                    <input matInput placeholder="Specify  name" value="">
+                  </mat-form-field>
+                </div>
+            </div>
+  
+            <div class="col-md-6">
+                <div class="p-3 py-5">
+                  <mat-form-field class="w-100">
+                    <mat-label>Last name</mat-label>
+                    <input matInput placeholder="Specify last name" value="">
+                  </mat-form-field>
+                </div>
+            </div>
+          </div>
+
+          <div class="row" >
+            <div class="col-md-6">
+                <div class="p-3 py-5">
+                  <mat-form-field class="w-100">
+                    <mat-label>Account</mat-label>
+                    <input matInput placeholder="Specify consumer account number" value="">
+                  </mat-form-field>
+                </div>
+            </div>
+  
+            <div class="col-md-6">
+                <div class="p-3 py-5">
+                  <mat-form-field class="w-100">
+                    <mat-label>Priority</mat-label>
+                    <input matInput placeholder="Specify consumer priority" value="">
+                  </mat-form-field>
+                </div>
+            </div>
+          </div>
+
+          <div class="row" >
+            <div class="col-md-6">
+                <div class="p-3 py-5">
+                  <mat-form-field class="w-100">
+                    <mat-label>Address</mat-label>
+                    <input matInput placeholder="Specify consumer address" value="">
+                  </mat-form-field>
+                </div>
+            </div>
+          </div>
+
+          <div class="row" >
+            <div class="col-md-6 ">
+                <div class="p-3 d-flex justify-content-start">
+                    <button class="button-add w-75" >Choose customer</button>                       
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="p-3 d-flex justify-content-end">
+                     <button (click)="onSave()" class="button-add w-75" >Save</button>                       
+                </div>
+            </div>
+          </div>
+  
+  
+
+      </div>
+    </div>
+  </div>

@@ -27,6 +27,7 @@ import { MatFileUploadModule } from 'angular-material-fileupload';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { NewCallComponent } from './calls/new-call/new-call.component';
 
 
 
@@ -41,7 +42,8 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     ResolutionComponent,
     CallsComponent,
     CrewComponent,
-    EquipmentComponent
+    EquipmentComponent,
+    NewCallComponent
   ],
   exports:[
     IncidentsComponent
