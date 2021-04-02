@@ -14,6 +14,11 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSortModule } from '@angular/material/sort';
 import { RouterModule } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { WorkPlanComponent } from './work-plans/work-plan/work-plan.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { WorkPlanBasicInformationComponent } from './work-plans/work-plan-basic-information/work-plan-basic-information.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 
@@ -21,11 +26,14 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @NgModule({
   declarations: [
     WorkPlansComponent,
-    WorkRequestsComponent
+    WorkRequestsComponent,
+    WorkPlanComponent,
+    WorkPlanBasicInformationComponent
   ],
   exports: [
     WorkPlansComponent,
-    WorkRequestsComponent
+    WorkRequestsComponent,
+    WorkPlanComponent
   ],
   imports: [
     CommonModule,
@@ -42,6 +50,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatRadioModule,
     RouterModule,
     MatProgressSpinnerModule,   
+    MatTabsModule,
+    MatDatepickerModule,     
+    MatNativeDateModule,
   ]
 })
 export class DocumentsModule {
