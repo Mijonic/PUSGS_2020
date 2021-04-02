@@ -1,0 +1,32 @@
+
+<table mat-table [dataSource]="genericTableOptions.dataSource" matSort> 
+  
+    <ng-content>
+        <!--Insert custom collumn definitions here-->
+    </ng-content>
+
+    
+    <!-- Action Column -->
+    <ng-container matColumnDef="action" sticky>
+    <th mat-header-cell *matHeaderCellDef> Action </th>
+    <!--Change this-->
+    <td mat-cell *matCellDef="let row">
+        <a class="clickable" (click)="onEdit(row.id)">
+            <mat-icon>edit</mat-icon>
+        </a>
+        <a class="clickable" (click)="onDelete(row.id)">
+            <mat-icon>delete</mat-icon>
+        </a>
+    </td>
+    </ng-container>
+
+    <!-- Custom row definitions to be provided to the wrapper table. -->
+    <tr mat-header-row *matHeaderRowDef="genericTableOptions.columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: genericTableOptions.columns;"></tr>
+
+    <!-- Row shown when there is no matching data that will be provided to the wrapper table. -->
+    <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No data</td>
+    </tr>
+    
+</table>

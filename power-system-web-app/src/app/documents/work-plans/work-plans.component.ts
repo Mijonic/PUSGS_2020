@@ -1,10 +1,10 @@
+import { GenericTableOptions } from './../../shared/options/generic-table-options.model';
 import { WorkPlansControlService } from './../../services/work-plans-control.service';
 import { TableControlOptions } from './../../shared/options/table-control-options.model';
-import { FormControl } from '@angular/forms';
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
+import { Component, OnInit, AfterContentInit, ViewChild, AfterViewInit } from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 export interface UserData {
   id: string;
@@ -28,59 +28,64 @@ const NAMES: string[] = [
   templateUrl: './work-plans.component.html',
   styleUrls: ['./work-plans.component.css'] 
 })
-export class WorkPlansComponent implements  AfterViewInit {
-  displayedColumns: string[] = ['id', 'type', 'status', 'incident', 'startdate', 'enddate', 'createdby', 'emergency','company', 'phoneno', 'creationdate'];
+export class WorkPlansComponent implements OnInit, AfterViewInit{
+  displayedColumns: string[] = ['action', 'type', 'id',  'status', 'incident', 'startdate', 'enddate',  'createdby', 'company', 'phoneno', 'creationdate'];
   dataSource: MatTableDataSource<UserData>;
-  toppings = new FormControl();
-  toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato']; 
-  isLoading:boolean = true;
-  tableControlOptions:TableControlOptions = {
-    shouldInitFilter:true,
-    shouldInitRadio:true,
-    shouldInitSaveButton:true,
-    shouldInitSearch:true,
-    filterValues: ['Neki plan', 'Nekiji plan', 'Jos nekiji plan'],
-    isMultiFilter:true,
-    buttonNaviLink:'/',
-    radioOptions:{
-      value1:'all',
-      value2:'mine',
-      label1:'All',
-      label2:'Mine'
-    },
-    controlService: this.controlService,
-  }
-
+  tableControlOptions:TableControlOptions;
+  genericTableOptions:GenericTableOptions<UserData>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('sort') sort!: MatSort;
+
 
   constructor(private controlService:WorkPlansControlService) {
     // Create 100 users
     const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
 
-    // Assign the data to the data source for the table to render
     this.dataSource = new MatTableDataSource(users);
-    //window.dispatchEvent(new Event('resize'));
+    this.initTableControlOptions();
+    this.initTableOptions();
+
+  }
+  ngAfterViewInit(): void {
+
+    this.genericTableOptions.dataSource.paginator = this.paginator;
+    this.genericTableOptions.dataSource.sort = this.sort;
   }
 
   ngOnInit(): void {
-    window.dispatchEvent(new Event('resize'));
-    this.isLoading = false;
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+  initTableControlOptions()
+  {
+    this.tableControlOptions = {
+      shouldInitFilter:true,
+      shouldInitRadio:true,
+      shouldInitSaveButton:true,
+      shouldInitSearch:true,
+      filterValues: ['Neki plan', 'Nekiji plan', 'Jos nekiji plan'],
+      isMultiFilter:true,
+      buttonNaviLink:'/',
+      radioOptions:{
+        value1:'all',
+        value2:'mine',
+        label1:'All',
+        label2:'Mine'
+      },
+      controlService: this.controlService,
     }
   }
+
+  initTableOptions(){
+    this.genericTableOptions={
+      columns:this.displayedColumns,
+      dataSource:this.dataSource,
+      editLink:'/',
+      deleteService:this.controlService
+  
+    }
+  
+  }
+
 }
 
 /** Builds and returns a new User. */

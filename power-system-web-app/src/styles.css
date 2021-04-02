@@ -24,6 +24,10 @@
     overflow-x: hidden;
     overflow-y:hidden;
   }
+
+  .clickable{
+    cursor: pointer;
+  }
   
  
 @media only screen and (min-width: 990px) {

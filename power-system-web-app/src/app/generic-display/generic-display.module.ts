@@ -13,15 +13,18 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatRadioModule } from '@angular/material/radio';
 import { RouterModule } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { GenericTableComponent } from './generic-table/generic-table.component';
 
 
 
 @NgModule({
   declarations: [
-    TableControlComponent
+    TableControlComponent,
+    GenericTableComponent,
   ],
   exports:[
-    TableControlComponent
+    TableControlComponent,
+    GenericTableComponent,
   ],
   imports: [
     CommonModule,
