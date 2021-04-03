@@ -27,6 +27,10 @@ import { WorkPlanStateChangesComponent } from './work-plans/work-plan-state-chan
 import { WorkPlanSwitchingInstructionsComponent } from './work-plans/work-plan-switching-instructions/work-plan-switching-instructions.component';
 import { SwitchingInstructionComponent } from './switching-instruction/switching-instruction.component';
 import { NewSwitchingInstructionDialogComponent } from './dialogs/new-switching-instruction-dialog/new-switching-instruction-dialog.component';
+import { DocumentsMultimediaAttachmentComponent } from './documents-multimedia-attachment/documents-multimedia-attachment.component';
+import { MatFileUploadModule } from 'angular-material-fileupload';
+import { WorkPlanEquipmentComponent } from './work-plans/work-plan-equipment/work-plan-equipment.component';
+import { ChooseEquipmentDialogComponent } from './dialogs/choose-equipment-dialog/choose-equipment-dialog.component';
 
 
 
@@ -43,7 +47,10 @@ import { NewSwitchingInstructionDialogComponent } from './dialogs/new-switching-
     WorkPlanStateChangesComponent,
     WorkPlanSwitchingInstructionsComponent,
     SwitchingInstructionComponent,
-    NewSwitchingInstructionDialogComponent
+    NewSwitchingInstructionDialogComponent,
+    DocumentsMultimediaAttachmentComponent,
+    WorkPlanEquipmentComponent,
+    ChooseEquipmentDialogComponent
   ],
   exports: [
     WorkPlansComponent,
@@ -68,7 +75,8 @@ import { NewSwitchingInstructionDialogComponent } from './dialogs/new-switching-
     MatTabsModule,
     MatDatepickerModule,     
     MatNativeDateModule,
-    MatDialogModule
+    MatDialogModule,
+    MatFileUploadModule
   ]
 })
 export class DocumentsModule {
