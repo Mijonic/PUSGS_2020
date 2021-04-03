@@ -24,6 +24,8 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { ChooseIncidentDialogComponent } from './dialogs/choose-incident-dialog/choose-incident-dialog.component';
 import { StateChangeComponent } from './state-change/state-change.component';
 import { WorkPlanStateChangesComponent } from './work-plans/work-plan-state-changes/work-plan-state-changes.component';
+import { WorkPlanSwitchingInstructionsComponent } from './work-plans/work-plan-switching-instructions/work-plan-switching-instructions.component';
+import { SwitchingInstructionComponent } from './switching-instruction/switching-instruction.component';
 
 
 
@@ -37,7 +39,9 @@ import { WorkPlanStateChangesComponent } from './work-plans/work-plan-state-chan
     ChooseIncidentDialogComponent,
     ChooseWorkRequestDialogComponent,
     StateChangeComponent,
-    WorkPlanStateChangesComponent
+    WorkPlanStateChangesComponent,
+    WorkPlanSwitchingInstructionsComponent,
+    SwitchingInstructionComponent
   ],
   exports: [
     WorkPlansComponent,
