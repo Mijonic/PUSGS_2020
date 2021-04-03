@@ -77,7 +77,7 @@ export class DevicesComponent implements OnInit {
 
   onAddDevice()
   {
-    const dialogRef = this.dialog.open(SelectDeviceDialogComponent);
+    const dialogRef = this.dialog.open(SelectDeviceDialogComponent, {width: "70%"});
 
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log(`The dialog was closed and choosen id is ${result}`);

@@ -102,3 +102,7 @@ a {
   background-color: black; /* Green */
   color: white;
 }
+
+::ng-deep .cdk-overlay-container {
+  z-index: 9999;
+}
