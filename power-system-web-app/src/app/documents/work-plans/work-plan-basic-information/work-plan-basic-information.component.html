@@ -32,25 +32,27 @@
 
         
         <div class="row" >
-            <div class="col-md-6">
-              <div class="p-3">
-                <mat-form-field >
-                  <mat-label>Incident ID</mat-label>
-                  <mat-select>
-                    <mat-option *ngFor="let documentType of documentTypes" [value]="documentType">{{documentType}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
+          <div class="col-md-6">
+            <div class="p-3 d-flex flex-row">
+              <mat-form-field >
+                <mat-label>Incident</mat-label>
+                <input matInput disabled value="33234361">
+              </mat-form-field>
+              <a (click)="onChooseIncident()" class="clickable pl-1 pt-3">
+                <mat-icon >more_horiz</mat-icon>
+              </a>
             </div>
+          </div>
   
             <div class="col-md-6">
-              <div class="p-3">
+              <div class="p-3 d-flex flex-row">
                 <mat-form-field >
-                    <mat-label>Work request ID</mat-label>
-                    <mat-select>
-                      <mat-option *ngFor="let documentType of documentTypes" [value]="documentType">{{documentType}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
+                  <mat-label>Work request</mat-label>
+                  <input matInput disabled value="234345">
+                </mat-form-field>
+                <a (click)="onChooseWorkRequest()" class="clickable pl-1 pt-3">
+                  <mat-icon >more_horiz</mat-icon>
+                </a>
               </div>
             </div>
         </div>
@@ -129,7 +131,7 @@
                 <div class="p-3">
                     <mat-form-field class="w-100">
                         <mat-label>Created by</mat-label>
-                        <input matInput placeholder="" value="Pedjurda Glavasurda">
+                        <input matInput disabled value="Pedjurda Glavasurda">
                     </mat-form-field>
                 </div>
             </div>

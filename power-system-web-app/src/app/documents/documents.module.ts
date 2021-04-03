@@ -1,3 +1,4 @@
+import { ChooseWorkRequestDialogComponent } from 'app/documents/dialogs/choose-work-request-dialog/choose-work-request-dialog.component';
 import { MatIconModule } from '@angular/material/icon';
 import { WorkRequestsComponent } from './work-requests/work-requests/work-requests.component';
 import { WorkPlansComponent } from './work-plans/work-plans.component';
@@ -19,6 +20,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { WorkPlanBasicInformationComponent } from './work-plans/work-plan-basic-information/work-plan-basic-information.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import {MatDialogModule} from '@angular/material/dialog';
+import { ChooseIncidentDialogComponent } from './dialogs/choose-incident-dialog/choose-incident-dialog.component';
 
 
 
@@ -28,12 +31,14 @@ import { MatNativeDateModule } from '@angular/material/core';
     WorkPlansComponent,
     WorkRequestsComponent,
     WorkPlanComponent,
-    WorkPlanBasicInformationComponent
+    WorkPlanBasicInformationComponent,
+    ChooseIncidentDialogComponent,
+    ChooseWorkRequestDialogComponent
   ],
   exports: [
     WorkPlansComponent,
     WorkRequestsComponent,
-    WorkPlanComponent
+    WorkPlanComponent 
   ],
   imports: [
     CommonModule,
@@ -53,6 +58,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatTabsModule,
     MatDatepickerModule,     
     MatNativeDateModule,
+    MatDialogModule
   ]
 })
 export class DocumentsModule {
