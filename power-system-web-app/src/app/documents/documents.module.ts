@@ -26,6 +26,7 @@ import { StateChangeComponent } from './state-change/state-change.component';
 import { WorkPlanStateChangesComponent } from './work-plans/work-plan-state-changes/work-plan-state-changes.component';
 import { WorkPlanSwitchingInstructionsComponent } from './work-plans/work-plan-switching-instructions/work-plan-switching-instructions.component';
 import { SwitchingInstructionComponent } from './switching-instruction/switching-instruction.component';
+import { NewSwitchingInstructionDialogComponent } from './dialogs/new-switching-instruction-dialog/new-switching-instruction-dialog.component';
 
 
 
@@ -41,7 +42,8 @@ import { SwitchingInstructionComponent } from './switching-instruction/switching
     StateChangeComponent,
     WorkPlanStateChangesComponent,
     WorkPlanSwitchingInstructionsComponent,
-    SwitchingInstructionComponent
+    SwitchingInstructionComponent,
+    NewSwitchingInstructionDialogComponent
   ],
   exports: [
     WorkPlansComponent,
