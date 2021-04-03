@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { SelectDeviceDialogComponent } from '../incident-dialogs/select-device-dialog/select-device-dialog.component';
 
 export interface UserData {
   id: string;
@@ -24,14 +23,16 @@ const NAMES: string[] = [
 ];
 
 
-@Component({
-  selector: 'app-devices',
-  templateUrl: './devices.component.html',
-  styleUrls: ['./devices.component.css']
-})
-export class DevicesComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'type', 'coordinates', 'address', 'map', 'remove'];
+@Component({
+  selector: 'app-select-device-dialog',
+  templateUrl: './select-device-dialog.component.html',
+  styleUrls: ['./select-device-dialog.component.css']
+})
+export class SelectDeviceDialogComponent implements OnInit {
+
+ 
+  displayedColumns: string[] = ['id', 'name', 'type', 'coordinates', 'address', 'map'];
   dataSource: MatTableDataSource<UserData>;
   toppings = new FormControl();
   toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato']; 
@@ -40,21 +41,18 @@ export class DevicesComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  constructor(public dialogRef: MatDialogRef<SelectDeviceDialogComponent>) {
 
+     // Create 100 users
+     const users = Array.from({length: 30}, (_, k) => createNewUser(k + 1));
 
- 
- 
- 
+     // Assign the data to the data source for the table to render
+     this.dataSource = new MatTableDataSource(users);
 
-  constructor(public dialog:MatDialog) {
-    // Create 100 users
-    const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
+   }
 
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(users);
-  }
-
-  ngOnInit(): void {
+  
+   ngOnInit(): void {
     window.dispatchEvent(new Event('resize'));
     this.isLoading = false;
   }
@@ -73,18 +71,15 @@ export class DevicesComponent implements OnInit {
     }
   }
 
-
-
-  onAddDevice()
-  {
-    const dialogRef = this.dialog.open(SelectDeviceDialogComponent);
-
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log(`The dialog was closed and choosen id is ${result}`);
-    });
+  onCancelClick(): void {
+    this.dialogRef.close();
   }
 
+
+  
+
 }
+
 
 /** Builds and returns a new User. */
 function createNewUser(id: number): UserData {

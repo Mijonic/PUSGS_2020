@@ -28,6 +28,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { NewCallComponent } from './calls/new-call/new-call.component';
+import { SelectDeviceDialogComponent } from './incident-dialogs/select-device-dialog/select-device-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 
@@ -43,7 +45,8 @@ import { NewCallComponent } from './calls/new-call/new-call.component';
     CallsComponent,
     CrewComponent,
     EquipmentComponent,
-    NewCallComponent
+    NewCallComponent,
+    SelectDeviceDialogComponent
   ],
   exports:[
     IncidentsComponent
@@ -68,7 +71,8 @@ import { NewCallComponent } from './calls/new-call/new-call.component';
     MatFileUploadModule,  
     MatDatepickerModule,     
     MatNativeDateModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatDialogModule
    
   
   ]
