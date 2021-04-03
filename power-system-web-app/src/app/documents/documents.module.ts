@@ -22,6 +22,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import {MatDialogModule} from '@angular/material/dialog';
 import { ChooseIncidentDialogComponent } from './dialogs/choose-incident-dialog/choose-incident-dialog.component';
+import { StateChangeComponent } from './state-change/state-change.component';
+import { WorkPlanStateChangesComponent } from './work-plans/work-plan-state-changes/work-plan-state-changes.component';
 
 
 
@@ -33,7 +35,9 @@ import { ChooseIncidentDialogComponent } from './dialogs/choose-incident-dialog/
     WorkPlanComponent,
     WorkPlanBasicInformationComponent,
     ChooseIncidentDialogComponent,
-    ChooseWorkRequestDialogComponent
+    ChooseWorkRequestDialogComponent,
+    StateChangeComponent,
+    WorkPlanStateChangesComponent
   ],
   exports: [
     WorkPlansComponent,
