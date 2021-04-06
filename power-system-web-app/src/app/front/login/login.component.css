@@ -24,6 +24,10 @@ p {
   color: rgba(255, 255, 255, 0.9);
 }
 
+.forgot_password {
+  color: rgba(255, 255, 255, 0.9);
+}
+
 .modal-background {
   padding-top: 5%;
   background-color: #333333;

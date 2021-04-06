@@ -7,6 +7,19 @@
                     <div class="d-flex flex-column align-items-center text-center p-3 py-5">
                         <img class="rounded-circle mt-5" src="../../assets/Images/Person.jpg" width="90">
                         <button class="button-add upload">Upload</button>   
+
+                        <div class="account-status-div"> <!--*ngIf="accountStatus == 'approved'"-->
+                            <mat-icon class="icon-approved" [inline]="true">check_circle</mat-icon>&nbsp;&nbsp; Approved account
+                        </div>
+
+                        <div class="account-status-div"> <!--*ngIf="accountStatus == 'rejected'"-->
+                            <mat-icon class="icon-rejected" [inline]="true">cancel</mat-icon>&nbsp;&nbsp; Rejected account
+                        </div>
+
+                        <div class="account-status-div"> <!--*ngIf="accountStatus == 'under-process'"-->
+                            <mat-icon class="icon-under-process" [inline]="true">warning</mat-icon>&nbsp;&nbsp; Account under process
+                        </div>
+
                     </div>
                 </div>
 
