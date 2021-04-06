@@ -13,6 +13,8 @@ import { IncidentsComponent } from './incidents/incidents.component';
 import { EditProfileComponent } from './settings/edit-profile/edit-profile.component';
 import { IncidentComponent } from './incidents/incident/incident.component';
 import { WorkPlanComponent } from './documents/work-plans/work-plan/work-plan.component';
+import { SafetyDocumentsComponent } from './documents/safety-documents/safety-documents/safety-documents.component';
+import { SafetyDocumentComponent } from './documents/safety-documents/safety-document/safety-document.component';
 
 
 
@@ -29,7 +31,9 @@ const routes: Routes = [
   { path: 'users', component: UsersComponent, outlet: "primary"},
   { path: 'incidents', component: IncidentsComponent, outlet: "primary"},
   { path: 'incident', component: IncidentComponent, outlet: "primary"},
-  { path: 'work-plan', component: WorkPlanComponent, outlet: "primary"}
+  { path: 'work-plan', component: WorkPlanComponent, outlet: "primary"},
+  { path: 'safety-documents', component: SafetyDocumentsComponent, outlet: "primary"},
+  { path: 'safety-document', component: SafetyDocumentComponent, outlet: "primary"},
 
 ];
 
