@@ -1,6 +1,5 @@
 import { ChooseWorkRequestDialogComponent } from 'app/documents/dialogs/choose-work-request-dialog/choose-work-request-dialog.component';
 import { MatIconModule } from '@angular/material/icon';
-import { WorkRequestsComponent } from './work-requests/work-requests/work-requests.component';
 import { WorkPlansComponent } from './work-plans/work-plans.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -38,7 +37,12 @@ import { SafetyDocumentStateChangesComponent } from './safety-documents/safety-d
 import { SafetyDocumentEquipmentComponent } from './safety-documents/safety-document-equipment/safety-document-equipment.component';
 import { SafetyDocumentChecklistComponent } from './safety-documents/safety-document-checklist/safety-document-checklist.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-
+import { WorkRequestsComponent } from './work-requests/work-requests.component';
+import { WorkRequestComponent } from './work-requests/work-request/work-request.component';
+import { WorkRequestBasicInformationComponent } from './work-requests/work-request/work-request-basic-information/work-request-basic-information.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import { WorkRequestStateChangesComponent } from './work-requests/work-request/work-request-state-changes/work-request-state-changes.component';
+import { WorkRequestEquipmentComponent } from './work-requests/work-request/work-request-equipment/work-request-equipment.component';
 
 
 @NgModule({
@@ -62,7 +66,11 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     SafetyDocumentBasicInformationComponent,
     SafetyDocumentStateChangesComponent,
     SafetyDocumentEquipmentComponent,
-    SafetyDocumentChecklistComponent
+    SafetyDocumentChecklistComponent,
+    WorkRequestComponent,
+    WorkRequestBasicInformationComponent,
+    WorkRequestStateChangesComponent,
+    WorkRequestEquipmentComponent
   ],
   exports: [
     WorkPlansComponent,
@@ -89,7 +97,8 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     MatNativeDateModule,
     MatDialogModule,
     MatFileUploadModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatCheckboxModule
   ]
 })
 export class DocumentsModule {

@@ -19,12 +19,12 @@
       <p class="m-0"><mat-icon [inline]="true">location_on</mat-icon>&nbsp;{{user.address}}</p>
     </div>
     <hr class="mt-1 mb-1">
-    <div class="card-body pt-2 pb-2 d-flex flex-row" *ngIf="user.status === 'pending'">
+    <div class="card-body pt-2 pb-2 d-flex flex-row justify-content-between" *ngIf="user.status === 'pending'">
       <div class="mr-auto" *ngIf="user.status === 'pending'">
-        <button class="card-link button-user-card approve">Approve</button>
+        <button class="card-link button-add">Approve</button>
       </div>
       <div *ngIf="user.status === 'pending'">
-        <button class="card-link button-user-card deny">Deny</button>
+        <button class="card-link button-add">Deny</button>
       </div>
     </div>
   </div>

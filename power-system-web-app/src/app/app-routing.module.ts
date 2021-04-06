@@ -1,3 +1,4 @@
+import { NotificationsComponent } from './notifications/notifications.component';
 import { CrewsComponent } from './crews/crews.component';
 import { WorkMapComponent } from './map/work-map/work-map.component';
 import { NgModule } from '@angular/core';
@@ -7,7 +8,6 @@ import { RegistrationComponent } from './front/registration/registration.compone
 import { FrontPageComponent } from './front/front-page/front-page.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { WorkPlansComponent } from './documents/work-plans/work-plans.component';
-import { WorkRequestsComponent } from './documents/work-requests/work-requests/work-requests.component';
 import { UsersComponent } from './users/users.component';
 import { IncidentsComponent } from './incidents/incidents.component';
 import { EditProfileComponent } from './settings/edit-profile/edit-profile.component';
@@ -15,6 +15,8 @@ import { IncidentComponent } from './incidents/incident/incident.component';
 import { WorkPlanComponent } from './documents/work-plans/work-plan/work-plan.component';
 import { SafetyDocumentsComponent } from './documents/safety-documents/safety-documents/safety-documents.component';
 import { SafetyDocumentComponent } from './documents/safety-documents/safety-document/safety-document.component';
+import { WorkRequestsComponent } from './documents/work-requests/work-requests.component';
+import { WorkRequestComponent } from './documents/work-requests/work-request/work-request.component';
 
 
 
@@ -33,7 +35,9 @@ const routes: Routes = [
   { path: 'incident', component: IncidentComponent, outlet: "primary"},
   { path: 'work-plan', component: WorkPlanComponent, outlet: "primary"},
   { path: 'safety-documents', component: SafetyDocumentsComponent, outlet: "primary"},
-  { path: 'safety-document', component: SafetyDocumentComponent, outlet: "primary"}
+  { path: 'safety-document', component: SafetyDocumentComponent, outlet: "primary"},
+  { path: 'notifications', component: NotificationsComponent, outlet: "primary"},
+  { path: 'work-request', component: WorkRequestComponent, outlet: "primary"}
 
 ];
 

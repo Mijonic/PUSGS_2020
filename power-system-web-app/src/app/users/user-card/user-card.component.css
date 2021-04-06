@@ -26,6 +26,10 @@
       color:white;
       transition-duration: 0.4s;
     }
+
+    .button-add{
+      width:80px;
+    }
   
     .approve{
       background-color: #4CAF50; 
