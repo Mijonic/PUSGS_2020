@@ -12,12 +12,14 @@ import { DatePipe } from '@angular/common';
 import { FrontModule } from './front/front.module';
 import { DocumentsModule } from './documents/documents.module';
 import { UsersModule } from './users/users.module';
+import { NotificationsModule } from './notifications/notifications.module';
+
+
 
 
 @NgModule({
   declarations: [
-    AppComponent,
-   
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -30,8 +32,9 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     CrewsModule,
     IncidentsModule,
-    SettingsModule
-
+    SettingsModule,
+    NotificationsModule
+    
   ],
 
   providers: [DatePipe],

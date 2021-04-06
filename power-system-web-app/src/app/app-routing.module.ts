@@ -33,7 +33,7 @@ const routes: Routes = [
   { path: 'incident', component: IncidentComponent, outlet: "primary"},
   { path: 'work-plan', component: WorkPlanComponent, outlet: "primary"},
   { path: 'safety-documents', component: SafetyDocumentsComponent, outlet: "primary"},
-  { path: 'safety-document', component: SafetyDocumentComponent, outlet: "primary"},
+  { path: 'safety-document', component: SafetyDocumentComponent, outlet: "primary"}
 
 ];
 

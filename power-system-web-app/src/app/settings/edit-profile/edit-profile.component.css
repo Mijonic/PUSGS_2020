@@ -12,7 +12,7 @@
     margin: 4px 2px;
     border-radius: 12px;
     transition-duration: 0.4s;
-    width: 100%; 
+    width: 30%; 
     padding: 4pt 0 4pt 0;
 }
 
@@ -29,6 +29,25 @@
     background-color: black; /* Green */
     color: white;
   }
+
+.account-status-div {
+    margin-top: 10px;
+}
+
+.icon-approved
+{
+    color: green;
+}
+
+.icon-rejected
+{
+    color: red;
+}
+
+.icon-under-process
+{
+    color: orange;
+}
 
 @media only screen and (max-width: 1080px) {
     .button-add {
