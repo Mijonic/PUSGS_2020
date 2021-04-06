@@ -1,0 +1,11 @@
+<div class="row">
+    <div class="col-md-12">
+        <mat-tab-group  animationDuration="1000ms"  mat-stretch-tabs>
+            <mat-tab label="Basic Information"><app-safety-document-basic-information></app-safety-document-basic-information></mat-tab>
+            <mat-tab label="History of state changes"><app-safety-document-state-changes></app-safety-document-state-changes></mat-tab>
+            <mat-tab label="Multimedia Attachments"><app-documents-multimedia-attachment [uploadApiUrl] ="'http://www.smaranje.com'"></app-documents-multimedia-attachment></mat-tab>
+            <mat-tab label="Equipment"><app-safety-document-equipment></app-safety-document-equipment></mat-tab>
+            <mat-tab label="Checklist"><app-safety-document-checklist></app-safety-document-checklist></mat-tab>
+        </mat-tab-group>
+    </div>
+</div>

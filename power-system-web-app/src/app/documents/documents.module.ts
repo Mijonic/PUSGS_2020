@@ -31,7 +31,13 @@ import { DocumentsMultimediaAttachmentComponent } from './documents-multimedia-a
 import { MatFileUploadModule } from 'angular-material-fileupload';
 import { WorkPlanEquipmentComponent } from './work-plans/work-plan-equipment/work-plan-equipment.component';
 import { ChooseEquipmentDialogComponent } from './dialogs/choose-equipment-dialog/choose-equipment-dialog.component';
-
+import { SafetyDocumentsComponent } from './safety-documents/safety-documents/safety-documents.component';
+import { SafetyDocumentComponent } from './safety-documents/safety-document/safety-document.component';
+import { SafetyDocumentBasicInformationComponent } from './safety-documents/safety-document-basic-information/safety-document-basic-information.component';
+import { SafetyDocumentStateChangesComponent } from './safety-documents/safety-document-state-changes/safety-document-state-changes.component';
+import { SafetyDocumentEquipmentComponent } from './safety-documents/safety-document-equipment/safety-document-equipment.component';
+import { SafetyDocumentChecklistComponent } from './safety-documents/safety-document-checklist/safety-document-checklist.component';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 
 
@@ -50,7 +56,13 @@ import { ChooseEquipmentDialogComponent } from './dialogs/choose-equipment-dialo
     NewSwitchingInstructionDialogComponent,
     DocumentsMultimediaAttachmentComponent,
     WorkPlanEquipmentComponent,
-    ChooseEquipmentDialogComponent
+    ChooseEquipmentDialogComponent,
+    SafetyDocumentsComponent,
+    SafetyDocumentComponent,
+    SafetyDocumentBasicInformationComponent,
+    SafetyDocumentStateChangesComponent,
+    SafetyDocumentEquipmentComponent,
+    SafetyDocumentChecklistComponent
   ],
   exports: [
     WorkPlansComponent,
@@ -76,7 +88,8 @@ import { ChooseEquipmentDialogComponent } from './dialogs/choose-equipment-dialo
     MatDatepickerModule,     
     MatNativeDateModule,
     MatDialogModule,
-    MatFileUploadModule
+    MatFileUploadModule,
+    MatButtonToggleModule
   ]
 })
 export class DocumentsModule {
