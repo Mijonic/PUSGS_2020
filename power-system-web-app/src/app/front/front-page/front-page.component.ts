@@ -13,6 +13,7 @@ export class FrontPageComponent implements OnInit, OnDestroy {
   navbarMessagingSubscription!:Subscription;
   showLogin:boolean = false;
   showRegister:boolean = false;
+  showReportOutage:boolean = false;
 
   constructor(private navbarMessaging:NavbarMessagingService) { }
 
@@ -37,12 +38,21 @@ export class FrontPageComponent implements OnInit, OnDestroy {
   { 
     this.showRegister = false;
     this.showLogin = true;
+    this.showReportOutage = false;
   }
 
   showRegistrationForm()
   { 
     this.showLogin = false; 
     this.showRegister = true;
+    this.showReportOutage = false;
+  }
+
+  activateReportOutage()
+  {
+    this.showLogin = false; 
+    this.showRegister = false;
+    this.showReportOutage = true;
   }
 
 }

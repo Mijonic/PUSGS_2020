@@ -8,9 +8,12 @@
 <ng-template [ngIf]="showRegister">
 	<app-registration></app-registration>
 </ng-template>
+<ng-template [ngIf]="showReportOutage">
+	<app-report-outage></app-report-outage>
+</ng-template>
 
 <div class="site-title">SMART ENERGY</div>
-<button class="button">
+<button (click)="activateReportOutage()" data-toggle="modal" data-target="#exampleModalCenter" class="button">
 	Report Outage<mat-icon class="phone_icon">phone</mat-icon>
 	<div class="button__horizontal"></div>
 	<div class="button__vertical"></div>

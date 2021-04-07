@@ -7,6 +7,8 @@ import { NgParticlesModule } from 'ng-particles';
 import { MatIconModule } from '@angular/material/icon';
 import { LoginComponent } from './login/login.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { ReportOutageComponent } from './report-outage/report-outage.component';
+import {MatSelectModule} from '@angular/material/select';
 
 
 
@@ -16,6 +18,7 @@ import { RegistrationComponent } from './registration/registration.component';
     ParticlesComponent,
     RegistrationComponent,
     LoginComponent,
+    ReportOutageComponent
 
   ],
   exports:[
@@ -27,7 +30,8 @@ import { RegistrationComponent } from './registration/registration.component';
     CommonModule,
     NgParticlesModule,
     MatIconModule,
-    NavigationModule
+    NavigationModule,
+    MatSelectModule
   ]
 })
 export class FrontModule { }
