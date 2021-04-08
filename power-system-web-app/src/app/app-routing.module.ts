@@ -17,6 +17,9 @@ import { SafetyDocumentsComponent } from './documents/safety-documents/safety-do
 import { SafetyDocumentComponent } from './documents/safety-documents/safety-document/safety-document.component';
 import { WorkRequestsComponent } from './documents/work-requests/work-requests.component';
 import { WorkRequestComponent } from './documents/work-requests/work-request/work-request.component';
+import { DevicesComponent } from './devices/devices.component';
+import { NewDeviceComponent } from './devices/new-device/new-device.component';
+
 
 
 
@@ -37,7 +40,10 @@ const routes: Routes = [
   { path: 'safety-documents', component: SafetyDocumentsComponent, outlet: "primary"},
   { path: 'safety-document', component: SafetyDocumentComponent, outlet: "primary"},
   { path: 'notifications', component: NotificationsComponent, outlet: "primary"},
-  { path: 'work-request', component: WorkRequestComponent, outlet: "primary"}
+  { path: 'work-request', component: WorkRequestComponent, outlet: "primary"},
+  { path: 'devices', component: DevicesComponent, outlet: "primary"},
+  { path: 'new-device', component: NewDeviceComponent, outlet: "primary"},
+
 
 ];
 

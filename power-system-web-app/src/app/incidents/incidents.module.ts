@@ -34,6 +34,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 
 
 
+
 @NgModule({
   declarations: [
     IncidentsComponent,
@@ -46,7 +47,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     CrewComponent,
     EquipmentComponent,
     NewCallComponent,
-    SelectDeviceDialogComponent
+    SelectDeviceDialogComponent,
+    
   ],
   exports:[
     IncidentsComponent

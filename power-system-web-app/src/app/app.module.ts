@@ -13,6 +13,7 @@ import { FrontModule } from './front/front.module';
 import { DocumentsModule } from './documents/documents.module';
 import { UsersModule } from './users/users.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { DevicesModule } from './devices/devices.module';
 
 
 
@@ -33,7 +34,8 @@ import { NotificationsModule } from './notifications/notifications.module';
     CrewsModule,
     IncidentsModule,
     SettingsModule,
-    NotificationsModule
+    NotificationsModule,
+    DevicesModule,
     
   ],
 
