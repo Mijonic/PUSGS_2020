@@ -1,0 +1,55 @@
+
+<div class="container-fluid p-3 m-1">
+    <div class="row" >
+        <div class="container rounded bg-white mt-5">
+            <div class="row">
+                <div class="col-md-6 border-right">
+                    <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                       <h1>Visible Notifications</h1>
+                       <h3 class="mt-3">Select which notificaitons you want to be visible.</h3>
+                        <div class="checkbox-div">
+                            <section class="example-section">
+                                <mat-checkbox class="example-margin" >Info</mat-checkbox>
+                                <mat-checkbox class="example-margin" >Error</mat-checkbox>
+                                <mat-checkbox class="example-margin" >Warning</mat-checkbox>
+                                <mat-checkbox class="example-margin" >Success</mat-checkbox>
+                            </section>
+                        </div>
+                    </div>
+                    <div class="save-button mb-5">
+                        <button class="button-add">Save Changes</button>                       
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                        <h1>Visible Documents</h1>
+                        <h3 class="mt-3">Choose type of documents</h3>
+                        <mat-form-field class="example-full-width mb-5" appearance="fill">
+                            <mat-label>Type</mat-label>
+                            <mat-select>
+                                <mat-option value="work-plan">Work plan</mat-option>
+                                <mat-option value="work-request">Work request</mat-option>
+                                <mat-option value="safety-documents">Safety documents</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <h3>Choose fields that you want to be visible</h3>
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Fields</mat-label>
+                            <mat-select multiple>
+                                <mat-option value="field1">Field 1</mat-option>
+                                <mat-option value="field2">Field 2</mat-option>
+                                <mat-option value="field3">Field 3</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                     </div>
+
+                    <div class="save-button mb-5">
+                        <button class="button-add">Save Changes</button>                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

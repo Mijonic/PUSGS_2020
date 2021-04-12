@@ -19,6 +19,7 @@ import { WorkRequestsComponent } from './documents/work-requests/work-requests.c
 import { WorkRequestComponent } from './documents/work-requests/work-request/work-request.component';
 import { DevicesComponent } from './devices/devices.component';
 import { NewDeviceComponent } from './devices/new-device/new-device.component';
+import { GlobalSettingsComponent } from './settings/global-settings/global-settings.component';
 
 
 
@@ -43,6 +44,7 @@ const routes: Routes = [
   { path: 'work-request', component: WorkRequestComponent, outlet: "primary"},
   { path: 'devices', component: DevicesComponent, outlet: "primary"},
   { path: 'new-device', component: NewDeviceComponent, outlet: "primary"},
+  { path: 'global-settings', component: GlobalSettingsComponent, outlet: "primary"}
 
 
 ];

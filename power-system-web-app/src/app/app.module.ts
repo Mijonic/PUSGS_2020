@@ -36,7 +36,6 @@ import { DevicesModule } from './devices/devices.module';
     SettingsModule,
     NotificationsModule,
     DevicesModule,
-    
   ],
 
   providers: [DatePipe],
