@@ -6,6 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./work-request.component.css']
 })
 export class WorkRequestComponent implements OnInit {
+  navLinks = [
+    { path: 'basic-info', label: 'Basic information' },
+    { path: 'state-changes', label: 'History of state changes' },
+    { path: 'multimedia', label: 'Multimedia attachments' },
+    { path: 'equipment', label: 'Equipment' },
+  ];
 
   constructor() { }
 

@@ -19,8 +19,7 @@ import { BasicInformationComponent } from './basic-information/basic-information
 import { DevicesComponent } from './devices/devices.component';
 import { ResolutionComponent } from './resolution/resolution.component';
 import { CallsComponent } from './calls/calls.component';
-import { CrewComponent } from './crew/crew.component';
-import { EquipmentComponent } from './equipment/equipment.component';
+import { IncidentCrewComponent } from './crew/crew.component';
 import { MatButtonModule } from '@angular/material/button';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatFileUploadModule } from 'angular-material-fileupload';
@@ -44,8 +43,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     DevicesComponent,
     ResolutionComponent,
     CallsComponent,
-    CrewComponent,
-    EquipmentComponent,
+    IncidentCrewComponent,
     NewCallComponent,
     SelectDeviceDialogComponent,
     

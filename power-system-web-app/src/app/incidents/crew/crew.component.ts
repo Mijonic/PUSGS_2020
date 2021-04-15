@@ -26,7 +26,7 @@ const NAMES: string[] = [
   templateUrl: './crew.component.html',
   styleUrls: ['./crew.component.css']
 })
-export class CrewComponent implements OnInit, AfterViewInit {
+export class IncidentCrewComponent implements OnInit, AfterViewInit {
 
   displayedColumns: string[] = ['id', 'name', 'members'];
   dataSource: MatTableDataSource<UserData>;

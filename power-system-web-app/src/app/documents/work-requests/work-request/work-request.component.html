@@ -1,11 +1,14 @@
 <div class="row">
     <div class="col-md-12">
-        <mat-tab-group  animationDuration="1000ms"  mat-stretch-tabs>
-            <mat-tab label="Basic Information"><app-work-request-basic-information></app-work-request-basic-information></mat-tab>
-            <mat-tab label="History of state changes"><app-work-request-state-changes></app-work-request-state-changes></mat-tab>
-            <mat-tab label="Multimedia Attachments"><app-documents-multimedia-attachment [uploadApiUrl] ="'http://www.smaranje.com'"></app-documents-multimedia-attachment></mat-tab>
-            <mat-tab label="Equipment"><app-work-request-equipment></app-work-request-equipment></mat-tab>
-        </mat-tab-group>
+        <nav mat-tab-nav-bar animationDuration="400ms"  mat-stretch-tabs>
+            <a mat-tab-link
+            *ngFor="let link of navLinks"
+            [routerLink]="link.path"
+            routerLinkActive #rla="routerLinkActive"
+            [routerLinkActiveOptions]="{exact:true}"
+            [active]="rla.isActive"> {{ link.label }} </a>
+        </nav>
+        <router-outlet></router-outlet>
     </div>
 </div>
 

@@ -1,14 +1,14 @@
 
 <div class="row">
     <div class="col-md-12">
-        <mat-tab-group  animationDuration="2000ms"  mat-stretch-tabs>
-            <mat-tab label="Basic Information"><app-basic-information></app-basic-information></mat-tab>
-            <mat-tab label="Devices"><app-devices></app-devices></mat-tab>
-            <mat-tab label="Resolution"><app-resolution> </app-resolution></mat-tab>
-            <mat-tab label="Calls"><app-calls></app-calls></mat-tab>
-            <mat-tab label="Crew"><app-crew></app-crew></mat-tab>
-            <mat-tab label="Multimedia Attachments"><app-multimedia-attachments></app-multimedia-attachments></mat-tab>
-            <mat-tab label="Equipment"><app-equipment></app-equipment></mat-tab>
-        </mat-tab-group>
+        <nav mat-tab-nav-bar animationDuration="400ms"  mat-stretch-tabs>
+            <a mat-tab-link
+            *ngFor="let link of navLinks"
+            [routerLink]="link.path"
+            routerLinkActive #rla="routerLinkActive"
+            [routerLinkActiveOptions]="{exact:true}"
+            [active]="rla.isActive"> {{ link.label }} </a>
+        </nav>
+        <router-outlet></router-outlet>
     </div>
 </div>
