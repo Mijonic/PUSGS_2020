@@ -1,3 +1,4 @@
+import { IncidentDevicesComponent } from './incidents/devices/devices.component';
 import { GlobalSettingsStreetsPriorityComponent } from './settings/global-settings-streets-priority/global-settings-streets-priority.component';
 import { GlobalSettingsResetDefaultComponent } from './settings/global-settings-reset-default/global-settings-reset-default.component';
 import { GlobalSettingsNotificationsDocumentsComponent } from './settings/global-settings-notifications-documents/global-settings-notifications-documents.component';
@@ -39,6 +40,8 @@ import { GlobalSettingsComponent } from './settings/global-settings/global-setti
 import { WorkRequestBasicInformationComponent } from './documents/work-requests/work-request/work-request-basic-information/work-request-basic-information.component';
 import { SafetyDocumentChecklistComponent } from './documents/safety-documents/safety-document-checklist/safety-document-checklist.component';
 import { IncidentCrewComponent } from './incidents/crew/crew.component';
+import { WorkPlanBasicInformationComponent } from './documents/work-plans/work-plan-basic-information/work-plan-basic-information.component';
+import { WorkPlanStateChangesComponent } from './documents/work-plans/work-plan-state-changes/work-plan-state-changes.component';
 
 
 
@@ -77,7 +80,7 @@ const routes: Routes = [
     },
     {
       path: 'devices',
-      component: DevicesComponent,
+      component: IncidentDevicesComponent,
     },
     {
       path: 'resolution',
@@ -90,7 +93,7 @@ const routes: Routes = [
   [
     {
       path: 'basic-info',
-      component: WorkRequestBasicInformationComponent, 
+      component: WorkPlanBasicInformationComponent, 
     },
     {
       path: 'multimedia',
@@ -98,7 +101,7 @@ const routes: Routes = [
     },
     {
       path: 'state-changes',
-      component: WorkRequestStateChangesComponent, 
+      component: WorkPlanStateChangesComponent, 
     },
     {
       path: 'equipment',

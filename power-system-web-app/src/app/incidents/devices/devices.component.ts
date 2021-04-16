@@ -25,11 +25,11 @@ const NAMES: string[] = [
 
 
 @Component({
-  selector: 'app-devices',
+  selector: 'app-incident-devices',
   templateUrl: './devices.component.html',
   styleUrls: ['./devices.component.css']
 })
-export class DevicesComponent implements OnInit {
+export class IncidentDevicesComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'type', 'coordinates', 'address', 'map', 'remove'];
   dataSource: MatTableDataSource<UserData>;

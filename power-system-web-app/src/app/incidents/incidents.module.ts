@@ -16,7 +16,7 @@ import { IncidentComponent } from './incident/incident.component';
 import {MatTabsModule} from '@angular/material/tabs';
 import { MultimediaAttachmentsComponent } from './multimedia-attachments/multimedia-attachments.component';
 import { BasicInformationComponent } from './basic-information/basic-information.component';
-import { DevicesComponent } from './devices/devices.component';
+import { IncidentDevicesComponent } from './devices/devices.component';
 import { ResolutionComponent } from './resolution/resolution.component';
 import { CallsComponent } from './calls/calls.component';
 import { IncidentCrewComponent } from './crew/crew.component';
@@ -40,7 +40,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     IncidentComponent,
     MultimediaAttachmentsComponent,
     BasicInformationComponent,
-    DevicesComponent,
+    IncidentDevicesComponent,
     ResolutionComponent,
     CallsComponent,
     IncidentCrewComponent,
