@@ -17,6 +17,8 @@ namespace SmartEnergy.Infrastructure.Configurations
             //Set FK
             builder.HasKey(i => i.ID);
 
+            builder.Property(i => i.ID)
+                .ValueGeneratedOnAdd();
 
             builder.Property(i => i.Cause)
                 .HasConversion<String>()
@@ -26,7 +28,6 @@ namespace SmartEnergy.Infrastructure.Configurations
               .HasConversion<String>()
               .IsRequired();
 
-
             builder.Property(i => i.Construction)
               .HasConversion<String>()
               .IsRequired();
@@ -35,15 +36,10 @@ namespace SmartEnergy.Infrastructure.Configurations
               .HasConversion<String>()
               .IsRequired();
 
-
             builder.HasOne(i => i.Incident)
                 .WithOne(p => p.Resolution)
-                .HasForeignKey<Incident>(i => i.ResolutionID)
                 .HasForeignKey<Resolution>(i => i.IncidentID)
                 .IsRequired();
-
-
-
 
         }
     }

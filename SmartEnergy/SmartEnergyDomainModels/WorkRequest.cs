@@ -21,7 +21,7 @@ namespace SmartEnergyDomainModels
         public bool IsEmergency { get; set; }
         public int UserID { get; set; }
         public User User { get; set; }
-        public int IncidentID { get; set; }
+        public int? IncidentID { get; set; }
         public Incident Incident { get; set; }
         public int MultimediaAnchorID { get; set; }
         public MultimediaAnchor MultimediaAnchor { get; set; }
@@ -30,7 +30,7 @@ namespace SmartEnergyDomainModels
         public int NotificationAnchorID { get; set; }
         public NotificationAnchor NotificationsAnchor { get; set; }
         public List<DeviceUsage> DeviceUsage { get; set; }
-        public int WorkPlanID { get; set; }
+        public int? WorkPlanID { get; set; }
         public WorkPlan WorkPlan { get; set; }
 
     }

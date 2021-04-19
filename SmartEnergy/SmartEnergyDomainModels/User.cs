@@ -13,10 +13,10 @@ namespace SmartEnergyDomainModels
         public string Name { get; set; }
         public string Lastname { get; set; }
         public string Password { get; set; }
-        public DateTime BirthDay { get; set; }
+        public DateTime? BirthDay { get; set; }
         public UserType UserType { get; set; }
         public string ImageURL { get; set; }
-        public int CrewID { get; set; }
+        public int? CrewID { get; set; }
         public Crew Crew { get; set; }
         public int LocationID { get; set; }
         public Location Location { get; set; }

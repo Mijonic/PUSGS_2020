@@ -17,6 +17,9 @@ namespace SmartEnergy.Infrastructure.Configurations
             //Set FK
             builder.HasKey(i => i.ID);
 
+            builder.Property(i => i.ID)
+                .ValueGeneratedOnAdd();
+
             builder.Property(i => i.IsDefault)
                 .IsRequired()
                 .HasDefaultValue(false);
@@ -40,12 +43,6 @@ namespace SmartEnergy.Infrastructure.Configurations
             builder.Property(i => i.ShowWarnings)
                .IsRequired()
                .HasDefaultValue(true);
-
-
-         
-
-
-
 
         }
     }

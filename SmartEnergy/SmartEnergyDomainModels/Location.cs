@@ -13,8 +13,8 @@ namespace SmartEnergyDomainModels
         public int MorningPriority { get; set; }
         public int NoonPriority { get; set; }
         public int NightPriority { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude{ get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude{ get; set; }
         public List<Consumer> Consumers { get; set; }
         public List<User> Users { get; set; }
         public List<Call> Calls { get; set; }

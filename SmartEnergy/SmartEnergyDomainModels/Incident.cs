@@ -8,14 +8,14 @@ namespace SmartEnergyDomainModels
     public class Incident
     {
         public int ID { get; set; }
-        public int Priority { get; set; }
+        public int? Priority { get; set; }
         public bool Confirmed { get; set; }
         public DateTime ETA { get; set; }
-        public DateTime ATA { get; set; }
-        public DateTime ETR { get; set; }//Check if should be Time or duration?
-        public DateTime IncidentDateTime { get; set; }
-        public DateTime WorkBeginDate { get; set; }
-        public double VoltageLevel { get; set; }
+        public DateTime? ATA { get; set; }
+        public DateTime? ETR { get; set; }//Check if should be Time or duration?
+        public DateTime? IncidentDateTime { get; set; }
+        public DateTime? WorkBeginDate { get; set; }
+        public double? VoltageLevel { get; set; }
         public int UserID { get; set; }
         public User User { get; set; }
         public int ResolutionID { get; set; }
@@ -28,7 +28,7 @@ namespace SmartEnergyDomainModels
         public NotificationAnchor NotificationAnchor { get; set; }
         public List<DeviceUsage> IncidentDevices{ get; set; }
         public List<Call> Calls { get; set; }
-        public int WorkRequestID { get; set; }
+        public int? WorkRequestID { get; set; }
         public WorkRequest WorkRequest { get; set; }
         public WorkType WorkType { get; set; }
         public IncidentStatus IncidentStatus { get; set; }

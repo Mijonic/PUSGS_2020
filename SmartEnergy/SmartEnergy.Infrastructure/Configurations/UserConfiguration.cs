@@ -17,6 +17,8 @@ namespace SmartEnergy.Infrastructure.Configurations
             //Set FK
             builder.HasKey(i => i.ID);
 
+            builder.Property(i => i.ID)
+                .ValueGeneratedOnAdd();
 
             // add unique
             builder.Property(i => i.Username)
@@ -58,26 +60,6 @@ namespace SmartEnergy.Infrastructure.Configurations
                 .WithMany(p => p.Users)
                 .HasForeignKey(i => i.LocationID)
                 .IsRequired();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         }
     }

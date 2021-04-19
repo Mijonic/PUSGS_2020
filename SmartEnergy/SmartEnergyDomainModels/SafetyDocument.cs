@@ -22,12 +22,12 @@ namespace SmartEnergyDomainModels
         public int MultimediaAnchorID { get; set; }
         public int StateChangeAnchorID { get; set; }
         public int NotificationAnchorID { get; set; }
-        public int WorkPlanID { get; set; }
+        public int? WorkPlanID { get; set; }
         public User User { get; set; }
         public MultimediaAnchor MultimediaAnchor { get; set; }
         public StateChangeAnchor StateChangeAnchor { get; set; }
         public NotificationAnchor NotificationAnchor { get; set; }
-
         public WorkPlan WorkPlan { get; set; }
+        public List<DeviceUsage> DeviceUsages { get; set; }
     }
 }

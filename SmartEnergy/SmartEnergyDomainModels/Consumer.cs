@@ -13,7 +13,7 @@ namespace SmartEnergyDomainModels
         public string Phone { get; set; }
         public string AccountID { get; set; }
         public AccountType AccountType { get; set; }
-        public int UserID { get; set; }
+        public int? UserID { get; set; }
         public User User { get; set; }
         public int LocationID { get; set; }
         public Location Location { get; set; }

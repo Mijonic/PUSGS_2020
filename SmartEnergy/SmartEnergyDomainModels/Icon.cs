@@ -10,7 +10,7 @@ namespace SmartEnergyDomainModels
         
         public int ID { get; set; }
         public string Name { get; set; }
-        public int SettingsID { get; set; }
+        public int? SettingsID { get; set; }
         public Settings Settings { get; set; }
         public IconType IconType { get; set; }
     }

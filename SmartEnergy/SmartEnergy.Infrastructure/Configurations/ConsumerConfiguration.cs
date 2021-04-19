@@ -17,6 +17,8 @@ namespace SmartEnergy.Infrastructure.Configurations
             //Set FK
             builder.HasKey(i => i.ID);
 
+            builder.Property(i => i.ID)
+                .ValueGeneratedOnAdd();
 
             builder.Property(i => i.Name)
                 .IsRequired(true)
@@ -34,28 +36,17 @@ namespace SmartEnergy.Infrastructure.Configurations
                .IsRequired(true);
 
             builder.Property(i => i.AccountType)
-               .IsRequired(true);
-
+                .IsRequired(true);
 
             builder.HasOne(i => i.User)
-             .WithOne(p => p.Consumer)
-             .HasForeignKey<User>(i => i.ConsumerID)
-             .HasForeignKey<Consumer>(i => i.UserID)
-             .IsRequired(false);
+                .WithOne(p => p.Consumer)
+                .HasForeignKey<Consumer>(i => i.UserID)
+                .IsRequired(false);
 
             builder.HasOne(i => i.Location)
-             .WithMany(p => p.Consumers)
-             .HasForeignKey(i => i.LocationID)
-             .IsRequired(true);
-
-
-
-
-
-
-
-
-
+                .WithMany(p => p.Consumers)
+                .HasForeignKey(i => i.LocationID)
+                .IsRequired();
 
         }
     }

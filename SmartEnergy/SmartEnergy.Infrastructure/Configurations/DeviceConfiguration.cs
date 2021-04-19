@@ -17,6 +17,9 @@ namespace SmartEnergy.Infrastructure.Configurations
             //Set FK
             builder.HasKey(i => i.ID);
 
+            builder.Property(i => i.ID)
+                .ValueGeneratedOnAdd();
+
             builder.Property(i => i.DeviceType)
                .HasConversion<String>()
                .IsRequired();
@@ -25,22 +28,10 @@ namespace SmartEnergy.Infrastructure.Configurations
               .HasMaxLength(50)
               .IsRequired();
 
-
             builder.HasOne(i => i.Location)
               .WithMany(p => p.Devices)
               .HasForeignKey(i => i.LocationID)
-              .IsRequired(true);
-
-
-
-
-
-
-
-
-
-
-
+              .IsRequired();
 
         }
     }

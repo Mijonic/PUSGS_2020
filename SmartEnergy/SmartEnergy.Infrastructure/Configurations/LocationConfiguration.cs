@@ -17,16 +17,19 @@ namespace SmartEnergy.Infrastructure.Configurations
             //Set FK
             builder.HasKey(i => i.ID);
 
+            builder.Property(i => i.ID)
+                .ValueGeneratedOnAdd();
+
             builder.Property(i => i.Street)
-                .IsRequired(true)
+                .IsRequired()
                 .HasMaxLength(50);
 
             builder.Property(i => i.City)
-              .IsRequired(true)
+              .IsRequired()
               .HasMaxLength(50);
 
             builder.Property(i => i.Zip)
-              .IsRequired(true)
+              .IsRequired()
               .HasMaxLength(50);
 
             builder.Property(i => i.MorningPriority)
@@ -41,25 +44,11 @@ namespace SmartEnergy.Infrastructure.Configurations
               .IsRequired()
               .HasMaxLength(5);
 
-
             builder.Property(i => i.Longitude)
               .IsRequired(false);
 
             builder.Property(i => i.Latitude)
              .IsRequired(false);
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         }
     }

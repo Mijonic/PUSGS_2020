@@ -7,9 +7,9 @@ using System.Text;
 
 namespace SmartEnergy.Infrastructure.Configurations
 {
-    public class CrewConfiguration : IEntityTypeConfiguration<Crew>
+    public class MultimediaAttachmentConfiguration : IEntityTypeConfiguration<MultimediaAttachment>
     {
-        public void Configure(EntityTypeBuilder<Crew> builder)
+        public void Configure(EntityTypeBuilder<MultimediaAttachment> builder)
         {
             //Set table name mapping
             // builder.ToTable("ListItems");
@@ -20,10 +20,14 @@ namespace SmartEnergy.Infrastructure.Configurations
             builder.Property(i => i.ID)
                 .ValueGeneratedOnAdd();
 
-            builder.Property(i => i.CrewName)
-                .IsRequired()
-                .HasMaxLength(50);
+            // add unique
+            builder.Property(i => i.Url)
+                .IsRequired();
 
+            builder.HasOne(i => i.MultimediaAnchor)
+                 .WithMany(p => p.MultimediaAttachments)
+                 .HasForeignKey(i => i.MultimediaAnchorID)
+                 .IsRequired(false);
         }
     }
 }

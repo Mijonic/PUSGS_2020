@@ -17,6 +17,8 @@ namespace SmartEnergy.Infrastructure.Configurations
             //Set FK
             builder.HasKey(i => i.ID);
 
+            builder.Property(i => i.ID)
+                .ValueGeneratedOnAdd();
 
             builder.Property(i => i.WorkType)
                 .HasConversion<String>()
@@ -50,17 +52,10 @@ namespace SmartEnergy.Infrastructure.Configurations
             builder.Property(i => i.WorkBeginDate)
                   .IsRequired(false);
 
-
             builder.HasOne(i => i.User)
                 .WithMany(p => p.Incidents)
                 .HasForeignKey(i => i.UserID)
                 .IsRequired();
-
-            builder.HasOne(i => i.WorkRequest)
-                .WithOne(p => p.Incident)
-                .HasForeignKey<Incident>(i => i.WorkRequestID)
-                .HasForeignKey<WorkRequest>(i => i.IncidentID)
-                .IsRequired(false);
 
             builder.HasOne(i => i.Crew)
                 .WithMany(p => p.Incidents)
@@ -70,36 +65,12 @@ namespace SmartEnergy.Infrastructure.Configurations
             builder.HasOne(i => i.MultimediaAnchor)
                 .WithOne(p => p.Incident)
                 .HasForeignKey<Incident>(i => i.MultimediaAnchorID)
-                .HasForeignKey<MultimediaAnchor>(i => i.IncidentID)
                 .IsRequired();
 
             builder.HasOne(i => i.NotificationAnchor)
                .WithOne(p => p.Incident)
                .HasForeignKey<Incident>(i => i.NotificationAnchorID)
-               .HasForeignKey<NotificationAnchor>(i => i.IncidentID)
                .IsRequired();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         }
     }
