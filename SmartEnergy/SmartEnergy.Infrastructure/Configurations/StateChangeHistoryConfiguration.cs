@@ -32,12 +32,12 @@ namespace SmartEnergy.Infrastructure.Configurations
             builder.HasOne(i => i.StateChangeAnchor)
                  .WithMany(p => p.StateChangeHistories)
                  .HasForeignKey(i => i.StateChangeAnchorID)
-                 .IsRequired(false);
+                 .IsRequired();
 
             builder.HasOne(i => i.User)
                  .WithMany(p => p.StateChanges)
                  .HasForeignKey(i => i.UserID)
-                 .IsRequired(false);
+                 .IsRequired();
 
         }
     }

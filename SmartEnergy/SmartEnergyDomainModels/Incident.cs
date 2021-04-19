@@ -20,11 +20,11 @@ namespace SmartEnergyDomainModels
         public User User { get; set; }
         public int ResolutionID { get; set; }
         public Resolution Resolution { get; set; }
-        public int CrewID { get; set; }
+        public int? CrewID { get; set; }
         public Crew Crew { get; set; }
-        public int MultimediaAnchorID { get; set; }
+        public int? MultimediaAnchorID { get; set; }
         public MultimediaAnchor MultimediaAnchor { get; set; }
-        public int NotificationAnchorID { get; set; }
+        public int? NotificationAnchorID { get; set; }
         public NotificationAnchor NotificationAnchor { get; set; }
         public List<DeviceUsage> IncidentDevices{ get; set; }
         public List<Call> Calls { get; set; }

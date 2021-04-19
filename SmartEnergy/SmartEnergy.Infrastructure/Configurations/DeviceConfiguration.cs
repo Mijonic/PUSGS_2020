@@ -31,7 +31,8 @@ namespace SmartEnergy.Infrastructure.Configurations
             builder.HasOne(i => i.Location)
               .WithMany(p => p.Devices)
               .HasForeignKey(i => i.LocationID)
-              .IsRequired();
+              .IsRequired()
+              .OnDelete(DeleteBehavior.Restrict);//To ensure accidental location delete doesn't propagate
 
         }
     }

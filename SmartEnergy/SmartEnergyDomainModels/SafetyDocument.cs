@@ -19,10 +19,10 @@ namespace SmartEnergyDomainModels
         public WorkType DocumentType { get; set; }
         public DocumentStatus DocumentStatus { get; set; }
         public int UserID { get; set; }
-        public int MultimediaAnchorID { get; set; }
-        public int StateChangeAnchorID { get; set; }
-        public int NotificationAnchorID { get; set; }
-        public int? WorkPlanID { get; set; }
+        public int? MultimediaAnchorID { get; set; }
+        public int? StateChangeAnchorID { get; set; }
+        public int? NotificationAnchorID { get; set; }
+        public int WorkPlanID { get; set; }
         public User User { get; set; }
         public MultimediaAnchor MultimediaAnchor { get; set; }
         public StateChangeAnchor StateChangeAnchor { get; set; }

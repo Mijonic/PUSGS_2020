@@ -54,12 +54,14 @@ namespace SmartEnergy.Infrastructure.Configurations
             builder.HasOne(i => i.Crew)
                  .WithMany(p => p.CrewMembers)
                  .HasForeignKey(i => i.CrewID)
-                 .IsRequired(false);
+                 .IsRequired(false)
+                 .OnDelete(DeleteBehavior.ClientSetNull);
 
             builder.HasOne(i => i.Location)
                 .WithMany(p => p.Users)
                 .HasForeignKey(i => i.LocationID)
-                .IsRequired();
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);//Restrict possible location delete propagation
 
         }
     }

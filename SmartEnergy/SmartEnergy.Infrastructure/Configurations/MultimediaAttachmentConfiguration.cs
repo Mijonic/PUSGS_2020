@@ -27,7 +27,7 @@ namespace SmartEnergy.Infrastructure.Configurations
             builder.HasOne(i => i.MultimediaAnchor)
                  .WithMany(p => p.MultimediaAttachments)
                  .HasForeignKey(i => i.MultimediaAnchorID)
-                 .IsRequired(false);
+                 .IsRequired();
         }
     }
 }

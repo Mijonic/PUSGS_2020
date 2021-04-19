@@ -64,29 +64,32 @@ namespace SmartEnergy.Infrastructure.Configurations
             builder.HasOne(i => i.User)
                 .WithMany(p => p.WorkRequests)
                 .HasForeignKey(i => i.UserID)
-                .IsRequired();
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);//Restrict user delete chain
 
             builder.HasOne(i => i.Incident)
                 .WithOne(p => p.WorkRequest)
                 .HasForeignKey<WorkRequest>(i => i.IncidentID)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.NoAction);
+                .IsRequired();
 
             builder.HasOne(i => i.MultimediaAnchor)
                 .WithOne(p => p.WorkRequest)
                 .HasForeignKey<WorkRequest>(i => i.MultimediaAnchorID)
-                .IsRequired();
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
 
             builder.HasOne(i => i.NotificationsAnchor)
                .WithOne(p => p.WorkRequest)
                .HasForeignKey<WorkRequest>(i => i.NotificationAnchorID)
-                .IsRequired();
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
             builder.HasOne(i => i.StateChangeAnchor)
               .WithOne(p => p.WorkRequest)
               .HasForeignKey<WorkRequest>(i => i.StateChangeAnchorID)
-                .IsRequired();
+              .IsRequired(false)
+              .OnDelete(DeleteBehavior.ClientSetNull);
 
         }
     }

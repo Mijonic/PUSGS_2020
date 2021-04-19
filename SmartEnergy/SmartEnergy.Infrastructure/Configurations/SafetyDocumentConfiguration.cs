@@ -60,28 +60,31 @@ namespace SmartEnergy.Infrastructure.Configurations
             builder.HasOne(i => i.User)
                 .WithMany(p => p.SafetyDocuments)
                 .HasForeignKey(i => i.UserID)
-                .IsRequired();
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(i => i.WorkPlan)
                 .WithMany(p => p.SafetyDocuments)
                 .HasForeignKey(i => i.WorkPlanID)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.NoAction);
+                .IsRequired(true);
 
             builder.HasOne(i => i.MultimediaAnchor)
                 .WithOne(p => p.SafetyDocument)
                 .HasForeignKey<SafetyDocument>(i => i.MultimediaAnchorID)
-                .IsRequired();
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
             builder.HasOne(i => i.NotificationAnchor)
                .WithOne(p => p.SafetyDocument)
                .HasForeignKey<SafetyDocument>(i => i.NotificationAnchorID)
-               .IsRequired();
+               .IsRequired(false)
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
             builder.HasOne(i => i.StateChangeAnchor)
                .WithOne(p => p.SafetyDocument)
                .HasForeignKey<SafetyDocument>(i => i.StateChangeAnchorID)
-               .IsRequired();
+               .IsRequired(false)
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
         }
     }

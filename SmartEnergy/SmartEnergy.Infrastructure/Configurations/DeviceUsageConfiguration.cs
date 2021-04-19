@@ -28,25 +28,25 @@ namespace SmartEnergy.Infrastructure.Configurations
             builder.HasOne(i => i.Incident)
                 .WithMany(p => p.IncidentDevices)
                 .HasForeignKey(i => i.IncidentID)
-                .OnDelete(DeleteBehavior.NoAction)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .IsRequired(false);
 
             builder.HasOne(i => i.WorkRequest)
                 .WithMany(p => p.DeviceUsage)
                 .HasForeignKey(i => i.WorkRequestID)
-                .OnDelete(DeleteBehavior.NoAction)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .IsRequired(false);
 
             builder.HasOne(i => i.WorkPlan)
                 .WithMany(p => p.WorkPlanDevices)
                 .HasForeignKey(i => i.WorkPlanID)
-                .OnDelete(DeleteBehavior.NoAction)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .IsRequired(false);
 
             builder.HasOne(i => i.SafetyDocument)
                 .WithMany(p => p.DeviceUsages)
                 .HasForeignKey(i => i.SafetyDocumentID)
-                .OnDelete(DeleteBehavior.NoAction)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .IsRequired(false);
 
         }

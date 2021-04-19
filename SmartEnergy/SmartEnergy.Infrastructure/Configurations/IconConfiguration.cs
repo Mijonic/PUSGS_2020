@@ -31,7 +31,8 @@ namespace SmartEnergy.Infrastructure.Configurations
             builder.HasOne(i => i.Settings)
                 .WithMany(p => p.Icons)
                 .HasForeignKey(i => i.SettingsID)
-                .IsRequired(false);
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
         }
     }

@@ -33,17 +33,20 @@ namespace SmartEnergy.Infrastructure.Configurations
             builder.HasOne(i => i.Location)
                 .WithMany(p => p.Calls)
                 .HasForeignKey(i => i.LocationID)
-                .IsRequired(true);
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(i => i.Consumer)
                 .WithMany(p => p.Calls)
                 .HasForeignKey(i => i.ConsumerID)
-                .IsRequired(false);
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
             builder.HasOne(i => i.Incident)
               .WithMany(p => p.Calls)
               .HasForeignKey(i => i.IncidentID)
-              .IsRequired(false);
+              .IsRequired(false)
+              .OnDelete(DeleteBehavior.ClientSetNull);
 
         }
     }
