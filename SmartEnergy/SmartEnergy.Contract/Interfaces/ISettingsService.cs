@@ -13,7 +13,7 @@ namespace SmartEnergy.Contract.Interfaces
         SettingsDto GetLastSettings();
         void ResetToDefault();
 
-        void UpdateSettings(SettingsDto modified);
+        SettingsDto UpdateSettings(SettingsDto modified);
       
 
 

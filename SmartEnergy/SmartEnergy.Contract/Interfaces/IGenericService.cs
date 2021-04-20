@@ -8,8 +8,8 @@ namespace SmartEnergy.Contract.Interfaces
     {
         List<T> GetAll();
         T Get(long id);
-        void Insert(T entity);
-        void Update(T entity);
+        T Insert(T entity);
+        T Update(T entity);
         void Delete(T entity);
     }
 

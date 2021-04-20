@@ -24,17 +24,17 @@ namespace SmartEnergy.Service.Services
 
         public SettingsDto GetDefaultSettings()
         {
-            return _mapper.Map<SettingsDto>(_dbContext.Settings.Where( x => x.IsDefault == true));
+            return _mapper.Map<SettingsDto>(_dbContext.Settings.Where( x => x.IsDefault == true).FirstOrDefault());
         }
 
         public SettingsDto GetLastSettings()
         {
-            return _mapper.Map<SettingsDto>(_dbContext.Settings.Last());
+            return _mapper.Map<SettingsDto>(_dbContext.Settings.OrderByDescending(x => x.ID).FirstOrDefault());
         }
 
         public void ResetToDefault()
         {
-            foreach(Settings settings in _dbContext.Settings.Where(x => !x.IsDefault))
+            foreach(Settings settings in _dbContext.Settings.Where(x => (bool)!x.IsDefault))
             {
                 _dbContext.Settings.Remove(settings);
             }
@@ -42,14 +42,19 @@ namespace SmartEnergy.Service.Services
             _dbContext.SaveChanges();
         }
 
-        public void UpdateSettings(SettingsDto modified)
+        public SettingsDto UpdateSettings(SettingsDto modified)
         {
+            
             if (modified.IsDefault)
             {
 
                 modified.ID = 0;
+                Settings newSett = _mapper.Map<Settings>(modified);
+                newSett.IsDefault = false;
+                _dbContext.Settings.Add(newSett);
+                _dbContext.SaveChanges();
 
-                _dbContext.Settings.Add(_mapper.Map<Settings>(modified));
+                return _mapper.Map<SettingsDto>(newSett);
 
             }
             else
@@ -61,9 +66,9 @@ namespace SmartEnergy.Service.Services
                     throw new ArgumentException($"Settings with {settings.ID} does not exists!");
 
                 settings.UpdateSetting(_mapper.Map<Settings>(modified));
+                _dbContext.SaveChanges();
+                return _mapper.Map<SettingsDto>(settings);
             }
-
-            _dbContext.SaveChanges();
 
 
         }

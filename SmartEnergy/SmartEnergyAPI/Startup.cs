@@ -8,7 +8,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using SmartEnergy.Contract.Interfaces;
 using SmartEnergy.Infrastructure;
+using SmartEnergy.Service.Services;
 using SmartEnergyAPI.Mapping;
 using System;
 using System.Collections.Generic;
@@ -41,6 +44,14 @@ namespace SmartEnergyAPI
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Smart Energy API", Version = "v1" });
+            });
+
+            services.AddScoped<ISettingsService, SettingsService>();
+            services.AddScoped<IIconService, IconService>();
+
 
         }
 
@@ -57,6 +68,13 @@ namespace SmartEnergyAPI
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("v1/swagger.json", "Smart Energy API v1");
+            });
 
             app.UseEndpoints(endpoints =>
             {

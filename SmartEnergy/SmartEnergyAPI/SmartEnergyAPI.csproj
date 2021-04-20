@@ -12,11 +12,13 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SmartEnergy.Contract\SmartEnergy.Contract.csproj" />
     <ProjectReference Include="..\SmartEnergy.Infrastructure\SmartEnergy.Infrastructure.csproj" />
+    <ProjectReference Include="..\SmartEnergy.Service\SmartEnergy.Service.csproj" />
   </ItemGroup>
 
 
