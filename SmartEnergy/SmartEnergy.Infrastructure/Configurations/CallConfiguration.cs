@@ -33,8 +33,7 @@ namespace SmartEnergy.Infrastructure.Configurations
             builder.HasOne(i => i.Location)
                 .WithMany(p => p.Calls)
                 .HasForeignKey(i => i.LocationID)
-                .IsRequired(true)
-                .OnDelete(DeleteBehavior.Restrict);
+                .IsRequired(true);
 
             builder.HasOne(i => i.Consumer)
                 .WithMany(p => p.Calls)

@@ -918,7 +918,7 @@ namespace SmartEnergy.Infrastructure.Migrations
                     b.HasOne("SmartEnergyDomainModels.Location", "Location")
                         .WithMany("Calls")
                         .HasForeignKey("LocationID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Consumer");

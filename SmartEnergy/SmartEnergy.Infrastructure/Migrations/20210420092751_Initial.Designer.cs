@@ -10,8 +10,8 @@ using SmartEnergy.Infrastructure;
 namespace SmartEnergy.Infrastructure.Migrations
 {
     [DbContext(typeof(SmartEnergyDbContext))]
-    [Migration("20210419194235_initial")]
-    partial class initial
+    [Migration("20210420092751_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -920,7 +920,7 @@ namespace SmartEnergy.Infrastructure.Migrations
                     b.HasOne("SmartEnergyDomainModels.Location", "Location")
                         .WithMany("Calls")
                         .HasForeignKey("LocationID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Consumer");

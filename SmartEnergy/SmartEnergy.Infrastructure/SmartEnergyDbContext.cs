@@ -42,7 +42,7 @@ namespace SmartEnergy.Infrastructure
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfiguration(new IconConfiguration());
+            /*modelBuilder.ApplyConfiguration(new IconConfiguration());
             modelBuilder.ApplyConfiguration(new SettingsConfiguration());
             modelBuilder.ApplyConfiguration(new ConsumerConfiguration());
             modelBuilder.ApplyConfiguration(new CallConfiguration());
@@ -62,9 +62,9 @@ namespace SmartEnergy.Infrastructure
             modelBuilder.ApplyConfiguration(new StateChangeAnchorConfiguration());
             modelBuilder.ApplyConfiguration(new StateChangeHistoryConfiguration());
             modelBuilder.ApplyConfiguration(new WorkPlanConfiguration());
-            modelBuilder.ApplyConfiguration(new WorkRequestConfiguration());
+            modelBuilder.ApplyConfiguration(new WorkRequestConfiguration());*/
 
-            //modelBuilder.ApplyConfigurationsFromAssembly(typeof(SmartEnergyDbContext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(SmartEnergyDbContext).Assembly);
 
         }
     }
