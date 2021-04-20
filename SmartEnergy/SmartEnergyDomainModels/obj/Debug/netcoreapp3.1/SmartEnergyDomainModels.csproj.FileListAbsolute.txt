@@ -16,3 +16,6 @@ C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyDomainModels\obj\
 C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyDomainModels\obj\Debug\netcoreapp3.1\SmartEnergyDomainModels.csproj.CoreCompileInputs.cache
 C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyDomainModels\obj\Debug\netcoreapp3.1\SmartEnergyDomainModels.dll
 C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyDomainModels\obj\Debug\netcoreapp3.1\SmartEnergyDomainModels.pdb
+C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyDomainModels\bin\Debug\netcoreapp3.1\SmartEnergy.Contract.dll
+C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyDomainModels\bin\Debug\netcoreapp3.1\SmartEnergy.Contract.pdb
+C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyDomainModels\obj\Debug\netcoreapp3.1\SmartEnergyDomainModels.csproj.CopyComplete

@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SmartEnergy.Infrastructure;
+using SmartEnergyAPI.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +31,15 @@ namespace SmartEnergyAPI
         {
             services.AddControllers();
             services.AddDbContext<SmartEnergyDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SmartEnergyDatabase")));
+
+            
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
 
 
         }

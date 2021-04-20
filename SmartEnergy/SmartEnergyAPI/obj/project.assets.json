@@ -15,6 +15,20 @@
           "lib/netstandard2.0/AutoMapper.dll": {}
         }
       },
+      "AutoMapper.Extensions.Microsoft.DependencyInjection/8.1.1": {
+        "type": "package",
+        "dependencies": {
+          "AutoMapper": "[10.1.1, 11.0.0)",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "3.0.0",
+          "Microsoft.Extensions.Options": "3.0.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/AutoMapper.Extensions.Microsoft.DependencyInjection.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/AutoMapper.Extensions.Microsoft.DependencyInjection.dll": {}
+        }
+      },
       "Humanizer.Core/2.8.26": {
         "type": "package",
         "compile": {
@@ -1515,6 +1529,16 @@
           "lib/netstandard1.3/System.Xml.XmlSerializer.dll": {}
         }
       },
+      "SmartEnergy.Contract/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v3.1",
+        "compile": {
+          "bin/placeholder/SmartEnergy.Contract.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/SmartEnergy.Contract.dll": {}
+        }
+      },
       "SmartEnergy.Infrastructure/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
@@ -1535,6 +1559,9 @@
       "SmartEnergyDomainModels/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
+        "dependencies": {
+          "SmartEnergy.Contract": "1.0.0"
+        },
         "compile": {
           "bin/placeholder/SmartEnergyDomainModels.dll": {}
         },
@@ -1559,6 +1586,19 @@
         "lib/net461/AutoMapper.xml",
         "lib/netstandard2.0/AutoMapper.dll",
         "lib/netstandard2.0/AutoMapper.xml"
+      ]
+    },
+    "AutoMapper.Extensions.Microsoft.DependencyInjection/8.1.1": {
+      "sha512": "xSWoVzOipuDU4PeZcUfaZQ+xqXU8QmGv5jrdlxt3MYm9xaOmrefqcfzGQ3SQ+D+8wfBa/ZwSuL0qKOVj080inA==",
+      "type": "package",
+      "path": "automapper.extensions.microsoft.dependencyinjection/8.1.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "automapper.extensions.microsoft.dependencyinjection.8.1.1.nupkg.sha512",
+        "automapper.extensions.microsoft.dependencyinjection.nuspec",
+        "icon.png",
+        "lib/netstandard2.0/AutoMapper.Extensions.Microsoft.DependencyInjection.dll"
       ]
     },
     "Humanizer.Core/2.8.26": {
@@ -5806,6 +5846,11 @@
         "system.xml.xmlserializer.nuspec"
       ]
     },
+    "SmartEnergy.Contract/1.0.0": {
+      "type": "project",
+      "path": "../SmartEnergy.Contract/SmartEnergy.Contract.csproj",
+      "msbuildProject": "../SmartEnergy.Contract/SmartEnergy.Contract.csproj"
+    },
     "SmartEnergy.Infrastructure/1.0.0": {
       "type": "project",
       "path": "../SmartEnergy.Infrastructure/SmartEnergy.Infrastructure.csproj",
@@ -5819,29 +5864,32 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
+      "AutoMapper >= 10.1.1",
+      "AutoMapper.Extensions.Microsoft.DependencyInjection >= 8.1.1",
       "Microsoft.EntityFrameworkCore >= 5.0.5",
       "Microsoft.EntityFrameworkCore.Design >= 5.0.5",
+      "SmartEnergy.Contract >= 1.0.0",
       "SmartEnergy.Infrastructure >= 1.0.0"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Predrag\\.nuget\\packages\\": {},
+    "C:\\Users\\Mijonic\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Predrag\\source\\repos\\PUSGS_2020\\SmartEnergy\\SmartEnergyAPI\\SmartEnergyAPI.csproj",
+      "projectUniqueName": "C:\\Users\\Mijonic\\Desktop\\Web\\PUSGS_2020\\SmartEnergy\\SmartEnergyAPI\\SmartEnergyAPI.csproj",
       "projectName": "SmartEnergyAPI",
-      "projectPath": "C:\\Users\\Predrag\\source\\repos\\PUSGS_2020\\SmartEnergy\\SmartEnergyAPI\\SmartEnergyAPI.csproj",
-      "packagesPath": "C:\\Users\\Predrag\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Predrag\\source\\repos\\PUSGS_2020\\SmartEnergy\\SmartEnergyAPI\\obj\\",
+      "projectPath": "C:\\Users\\Mijonic\\Desktop\\Web\\PUSGS_2020\\SmartEnergy\\SmartEnergyAPI\\SmartEnergyAPI.csproj",
+      "packagesPath": "C:\\Users\\Mijonic\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Mijonic\\Desktop\\Web\\PUSGS_2020\\SmartEnergy\\SmartEnergyAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Predrag\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Mijonic\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -5849,15 +5897,18 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\Microsoft SDKs\\Azure\\.NET SDK\\v2.9\\packages": {},
+        "C:\\Program Files\\Microsoft SDKs\\Azure\\.NET": {},
+        "C:\\Program Files\\Microsoft SDKs\\Azure\\.NET SDK": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "C:\\Users\\Predrag\\source\\repos\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Infrastructure\\SmartEnergy.Infrastructure.csproj": {
-              "projectPath": "C:\\Users\\Predrag\\source\\repos\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Infrastructure\\SmartEnergy.Infrastructure.csproj"
+            "C:\\Users\\Mijonic\\Desktop\\Web\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Contract\\SmartEnergy.Contract.csproj": {
+              "projectPath": "C:\\Users\\Mijonic\\Desktop\\Web\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Contract\\SmartEnergy.Contract.csproj"
+            },
+            "C:\\Users\\Mijonic\\Desktop\\Web\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Infrastructure\\SmartEnergy.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\Mijonic\\Desktop\\Web\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Infrastructure\\SmartEnergy.Infrastructure.csproj"
             }
           }
         }
@@ -5870,8 +5921,15 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
-        "targetAlias": "netcoreapp3.1",
         "dependencies": {
+          "AutoMapper": {
+            "target": "Package",
+            "version": "[10.1.1, )"
+          },
+          "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+            "target": "Package",
+            "version": "[8.1.1, )"
+          },
           "Microsoft.EntityFrameworkCore": {
             "target": "Package",
             "version": "[5.0.5, )"
@@ -5901,7 +5959,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.200\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
       }
     }
   }

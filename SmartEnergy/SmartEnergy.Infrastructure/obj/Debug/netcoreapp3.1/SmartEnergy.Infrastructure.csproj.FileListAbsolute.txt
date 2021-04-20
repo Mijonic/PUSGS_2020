@@ -28,3 +28,5 @@ C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\obj\Debug\netcoreapp3.1\SmartEnergy.Infrastructure.dll
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\obj\Debug\netcoreapp3.1\SmartEnergy.Infrastructure.pdb
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\obj\Debug\netcoreapp3.1\SmartEnergy.Infrastructure.genruntimeconfig.cache
+C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\bin\Debug\netcoreapp3.1\SmartEnergy.Contract.dll
+C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\bin\Debug\netcoreapp3.1\SmartEnergy.Contract.pdb

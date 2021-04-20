@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SmartEnergyDomainModels.Enums
+namespace SmartEnergy.Contract.Enums
 {
     public enum ConstructionType
     {

@@ -84,8 +84,6 @@ C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\net
 C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\obj\Debug\netcoreapp3.1\SmartEnergyAPI.csproj.CopyComplete
 C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\Humanizer.dll
 C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll
-C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\obj\Debug\netcoreapp3.1\SmartEnergyAPI.csproj.CoreCompileInputs.cache
-C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\obj\Debug\netcoreapp3.1\SmartEnergyAPI.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\AutoMapper.dll
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\Humanizer.dll
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\Microsoft.Data.SqlClient.dll
@@ -134,3 +132,8 @@ C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\ne
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\SmartEnergy.Infrastructure.pdb
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\SmartEnergyDomainModels.pdb
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\obj\Debug\netcoreapp3.1\SmartEnergyAPI.csproj.CopyComplete
+C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\SmartEnergy.Contract.dll
+C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\SmartEnergy.Contract.pdb
+C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\obj\Debug\netcoreapp3.1\SmartEnergyAPI.csproj.CoreCompileInputs.cache
+C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\obj\Debug\netcoreapp3.1\SmartEnergyAPI.MvcApplicationPartsAssemblyInfo.cache

@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SmartEnergy.Contract\SmartEnergy.Contract.csproj" />
+    <ProjectReference Include="..\SmartEnergy.Infrastructure\SmartEnergy.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

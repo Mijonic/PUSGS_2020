@@ -15,5 +15,17 @@ namespace SmartEnergyDomainModels
         public bool IsDefault {get; set;}
         public List<Icon> Icons { get; set; }
 
+
+        public void UpdateSetting(Settings modified)
+        {
+            ShowErrors = modified.ShowErrors;
+            ShowWarnings = modified.ShowWarnings;
+            ShowInfo = modified.ShowInfo;
+            ShowSuccess = modified.ShowSuccess;
+            ShowNonRequiredFields = modified.ShowNonRequiredFields;
+            IsDefault = false;
+
+        }
+
     }
 }

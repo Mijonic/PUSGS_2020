@@ -1,4 +1,5 @@
-﻿using SmartEnergyDomainModels.Enums;
+﻿
+using SmartEnergy.Contract.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
