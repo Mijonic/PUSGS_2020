@@ -1,3 +1,5 @@
+import { Crew } from 'app/shared/models/crew.model';
+import { CrewService } from './../services/crew.service';
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
@@ -26,28 +28,26 @@ const NAMES: string[] = [
   styleUrls: ['./crews.component.css']
 })
 export class CrewsComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['action', 'id', 'name', 'members'];
-  dataSource: MatTableDataSource<UserData>;
+  displayedColumns: string[] = ['action', 'name', 'members'];
+  dataSource: MatTableDataSource<Crew>;
 
   isLoading:boolean = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor() {
-    // Create 100 users
-    const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
+  constructor(private crewService:CrewService) {
 
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(users);
-    //window.dispatchEvent(new Event('resize'));
   }
 
   ngOnInit(): void {
-    window.dispatchEvent(new Event('resize'));
+    this.crewService.getAllCrews().subscribe(x => {
+      this.dataSource = new MatTableDataSource(x);
+      this.dataSource.paginator = this.paginator; 
+    });
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;    //this.isLoading = false;
+ 
   }
 
   applyFilter(event: Event) {
@@ -60,16 +60,4 @@ export class CrewsComponent implements OnInit, AfterViewInit {
   }
 }
 
-/** Builds and returns a new User. */
-function createNewUser(id: number): UserData {
-  const name = NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
-
-  return {
-    id: id.toString(),
-    name: name,
-    progress: Math.round(Math.random() * 100).toString(),
-    color: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
-  };
-}
 

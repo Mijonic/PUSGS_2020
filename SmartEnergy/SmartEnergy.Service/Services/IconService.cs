@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using SmartEnergyDomainModels;
+using SmartEnergy.Contract.CustomExceptions;
+using SmartEnergy.Contract.CustomExceptions.Icon;
 
 namespace SmartEnergy.Service.Services
 {
@@ -25,14 +27,14 @@ namespace SmartEnergy.Service.Services
         public void AddIconToSettings(int iconId, int settingsId)
         {
 
-            if (_dbContext.Settings.Find(settingsId) == null )
-                throw new InvalidOperationException($"Setting with {settingsId} does not exists!");
+            if (_dbContext.Settings.Find(settingsId) == null)
+                throw new SettingsNotFoundException();
 
 
             Icon icon = _dbContext.Icons.Find(iconId);
 
             if (icon == null)
-                throw new ArgumentException($"Icon with {iconId} does not exists!");
+                throw new IconNotFoundException();
 
 
             icon.SettingsID = settingsId;
@@ -53,14 +55,14 @@ namespace SmartEnergy.Service.Services
         public void RemoveIconFromSettings(int iconId, int settingsId)
         {
             if (_dbContext.Settings.Find(settingsId) == null)
-                throw new InvalidOperationException($"Setting with {settingsId} does not exists!");
+                throw new SettingsNotFoundException();
 
 
 
             Icon icon = _dbContext.Icons.Find(iconId);
-            
-            if(icon == null)
-                throw new ArgumentException($"Icon with {iconId} does not exists!");
+
+            if (icon == null)
+                throw new IconNotFoundException();
 
 
             icon.SettingsID = null;

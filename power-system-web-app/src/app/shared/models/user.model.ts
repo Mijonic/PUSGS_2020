@@ -1,12 +1,13 @@
 export class User {
-    id!:string;
-    name!:string;
-    lastName!:string;
-    birthday!:Date;
-    email!:string;
-    username!:string;
-    address!:string;
-    role!:string;
-    status!:string;
+    id:number = 0;
+    name:string;
+    lastname:string;
+    birthday:Date;
+    email:string;
+    username:string;
+    address:string;
+    role:string;
+    status:string;
+    crewID:number;
 }
 

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using SmartEnergyDomainModels;
+using SmartEnergy.Contract.CustomExceptions;
 
 namespace SmartEnergy.Service.Services
 {
@@ -63,7 +64,7 @@ namespace SmartEnergy.Service.Services
                 Settings settings = _dbContext.Settings.Find(modified.ID);
 
                 if (modified == null)
-                    throw new ArgumentException($"Settings with {settings.ID} does not exists!");
+                    throw new SettingsNotFoundException();
 
                 settings.UpdateSetting(_mapper.Map<Settings>(modified));
                 _dbContext.SaveChanges();

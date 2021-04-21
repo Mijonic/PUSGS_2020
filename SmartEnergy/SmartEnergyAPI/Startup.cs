@@ -22,6 +22,7 @@ namespace SmartEnergyAPI
 {
     public class Startup
     {
+        private readonly string _cors = "cors";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -49,8 +50,19 @@ namespace SmartEnergyAPI
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Smart Energy API", Version = "v1" });
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: _cors, builder => {
+                    builder.SetIsOriginAllowed(_ => true).AllowAnyHeader()
+                                        .AllowAnyMethod().AllowCredentials();
+                });
+            });
+
+            //Add Service implementations
             services.AddScoped<ISettingsService, SettingsService>();
             services.AddScoped<IIconService, IconService>();
+            services.AddScoped<ICrewService, CrewService>();
+            services.AddScoped<IUserService, UserService>();
 
 
         }
@@ -64,6 +76,7 @@ namespace SmartEnergyAPI
             }
 
             app.UseHttpsRedirection();
+            app.UseCors(_cors);
 
             app.UseRouting();
 

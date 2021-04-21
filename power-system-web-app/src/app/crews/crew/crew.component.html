@@ -9,15 +9,18 @@
                             <h1>Add crew</h1>
                         </div>
 
-                        <div class="row mt-2">
+                        <div class="row mt-2" [formGroup]="crewForm">
                             <div class="col-md-10">
                                 <mat-form-field class="w-100"> 
                                     <mat-label>Crew name</mat-label>
-                                    <input matInput placeholder="Write a crew name" value="Neko ime">
+                                    <input matInput placeholder="Write a crew name" value="{{crew.name}}" formControlName="crewNameControl">
+                                    <mat-error *ngIf="crewForm.hasError('required', 'crewNameControl')">
+                                        Crew name is required
+                                      </mat-error>
                                   </mat-form-field>
                             </div>
                             <div class="col-md-2">
-                                <button class="button-add w-100">Save Changes</button>                       
+                                <button (click)="saveChanges()" class="button-add w-100">Save Changes</button>                       
                             </div>
                         </div>
 
@@ -27,13 +30,13 @@
                                 <div
                                 cdkDropList
                                 #crewMembers="cdkDropList"
-                                [cdkDropListData]="crew"
+                                [cdkDropListData]="crew.crewMembers"
                                 [cdkDropListConnectedTo]="[availableCrew]"
                                 class="crew-list"
                                 (cdkDropListDropped)="drop($event)">
-                                    <div class="crew-member-box" *ngFor="let item of crew" cdkDrag>
-                                        {{item}}
-                                        <a class="interact-crew"><mat-icon>remove</mat-icon></a>
+                                    <div class="crew-member-box" *ngFor="let member of crew.crewMembers" cdkDrag>
+                                       {{member.name}} &nbsp; {{member.lastname}} 
+                                        <a (click)="removeMember(member)" class="interact-crew"><mat-icon>remove</mat-icon></a>
                                     </div>
                                 </div>
                             </div>
@@ -43,13 +46,13 @@
                                 <div
                                 cdkDropList 
                                 #availableCrew="cdkDropList"
-                                [cdkDropListData]="allWorkers"
+                                [cdkDropListData]="unassignedCrewMembers"
                                 [cdkDropListConnectedTo]="[crewMembers]"
                                 class="crew-list"
                                 (cdkDropListDropped)="drop($event)">
-                                    <div class="crew-member-box" *ngFor="let item of allWorkers" cdkDrag>
-                                        {{item}}
-                                        <a class="interact-crew"><mat-icon>person_add</mat-icon></a>
+                                    <div class="crew-member-box" *ngFor="let crewMember of unassignedCrewMembers" cdkDrag>
+                                        {{crewMember.name}} &nbsp; {{crewMember.lastname}}
+                                        <a (click)="addMember(crewMember)" class="interact-crew"><mat-icon>person_add</mat-icon></a>
                                     </div>
                                 </div>
                             </div>

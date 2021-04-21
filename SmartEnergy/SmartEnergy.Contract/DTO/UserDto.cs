@@ -1,12 +1,11 @@
-﻿
-using SmartEnergy.Contract.Enums;
+﻿using SmartEnergy.Contract.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SmartEnergyDomainModels
+namespace SmartEnergy.Contract.DTO
 {
-    public class User
+    public class UserDto
     {
         public int ID { get; set; }
         public string Username { get; set; }
@@ -18,16 +17,13 @@ namespace SmartEnergyDomainModels
         public UserType UserType { get; set; }
         public string ImageURL { get; set; }
         public int? CrewID { get; set; }
-        public Crew Crew { get; set; }
         public int LocationID { get; set; }
-        public Location Location { get; set; }
-        public Consumer Consumer { get; set; }
-        public List<Incident> Incidents { get; set; }
+        //public Location Location { get; set; }
+       /* public List<Incident> Incidents { get; set; }
         public List<WorkRequest> WorkRequests { get; set; }
         public List<StateChangeHistory> StateChanges { get; set; }
         public List<SafetyDocument> SafetyDocuments { get; set; }
         public List<WorkPlan> WorkPlans { get; set; }
-        public List<Notification> Notifications { get; set; }
-
+        public List<Notification> Notifications { get; set; }*/
     }
 }

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SmartEnergy.Contract.CustomExceptions;
+using SmartEnergy.Contract.CustomExceptions.Icon;
 using SmartEnergy.Contract.DTO;
 using SmartEnergy.Contract.Interfaces;
 
@@ -108,13 +110,13 @@ namespace SmartEnergyAPI.Controllers
             {
                 SettingsDto modified = _settingService.UpdateSettings(settings);
                 return Ok(modified);
-            }catch(ArgumentException)
+            }catch(SettingsNotFoundException)
             {
                 return NotFound();
             }
         }
 
-        [HttpPut("{settingsId}/icons/{iconId}")]
+        [HttpPut("{settingsId}/icons/{iconId}/add")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -125,17 +127,17 @@ namespace SmartEnergyAPI.Controllers
                 _iconService.AddIconToSettings(iconId, settingsId);
                 return Ok();
             }
-            catch (InvalidOperationException)
+            catch (SettingsNotFoundException)
             {
                 return BadRequest();
             }
-            catch (ArgumentException)
+            catch (IconNotFoundException)
             {
                 return NotFound();
             }
         }
 
-        [HttpDelete("{settingsId}/icons/{iconId}")]
+        [HttpPut("{settingsId}/icons/{iconId}/remove")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -146,11 +148,11 @@ namespace SmartEnergyAPI.Controllers
                 _iconService.RemoveIconFromSettings(iconId, settingsId);
                 return Ok();
             }
-            catch (InvalidOperationException)
+            catch (SettingsNotFoundException)
             {
                 return BadRequest();
             }
-            catch (ArgumentException)
+            catch (IconNotFoundException)
             {
                 return NotFound();
             }

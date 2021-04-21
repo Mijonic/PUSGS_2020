@@ -23,37 +23,40 @@ export class UsersComponent implements OnInit {
     let i = 0;
     for( i = 0; i < 5; i++)
     {
-    this.users.push({id:'1',
+    this.users.push({id:1,
                     name: 'Predrag',
-                    lastName: 'Glavas',
+                    lastname: 'Glavas',
                     email:'pedjaglavas98@gmail.som',
                     username: 'pedjicaglavasica98',
                     status: 'approved',
                     role:'worker',
                     address:"Vojvode Misica 8",
-                    birthday: new Date('5.3.1998.')
+                    birthday: new Date('5.3.1998.'),
+                    crewID:0
                   });
 
-    this.users.push({id:'2',
+    this.users.push({id:2,
                     name: 'Niikola',
-                    lastName: 'Mijonic',
+                    lastname: 'Mijonic',
                     email:'nidzas98@gmail.som',
                     username: 'mijonic',
                     status: 'pending',
                     role:'disptacher',
                     address:"Srbobranska 12",
-                    birthday: new Date('6.3.1998.')
+                    birthday: new Date('6.3.1998.'),
+                    crewID:0
                   });  
 
-    this.users.push({id:'3',
+    this.users.push({id:3,
                     name: 'Befan',
-                    lastName: 'Stesovic',
+                    lastname: 'Stesovic',
                     email:'stefanb@gmail.som',
                     username: 'bass',
                     status: 'blocked',
                     role:'admin',
                     address:"Bulevar Dusana Bajatovica 69",
-                    birthday: new Date('11.24.1998.')
+                    birthday: new Date('11.24.1998.'),
+                    crewID:0
                     });       
       }    
   }
