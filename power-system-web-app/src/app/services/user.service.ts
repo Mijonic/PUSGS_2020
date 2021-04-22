@@ -15,4 +15,20 @@ export class UserService {
     let requestUrl = environment.serverURL.concat("users/unassigned-crew-members");
     return this.http.get<User[]>(requestUrl);
   }
+
+  getAllUsers():Observable<User[]>{
+    let requestUrl = environment.serverURL.concat("users");
+    return this.http.get<User[]>(requestUrl);
+  }
+
+  approveUser(id:number):Observable<User>{
+    let requestUrl = environment.serverURL.concat(`users/${id}/approve`);
+    return this.http.put<User>(requestUrl, {});
+  }
+
+  denyUser(id:number):Observable<User>{
+    let requestUrl = environment.serverURL.concat(`users/${id}/deny`);
+    return this.http.put<User>(requestUrl, {});
+  }
+
 }

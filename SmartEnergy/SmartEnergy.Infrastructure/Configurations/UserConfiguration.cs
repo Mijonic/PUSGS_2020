@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SmartEnergy.Contract.Enums;
 using SmartEnergyDomainModels;
 using System;
 using System.Collections.Generic;
@@ -40,6 +41,11 @@ namespace SmartEnergy.Infrastructure.Configurations
             builder.Property(i => i.Lastname)
                 .IsRequired()
                 .HasMaxLength(30);
+
+            builder.Property(u => u.UserStatus)
+                .IsRequired()
+                .HasConversion<String>()
+                .HasDefaultValue(UserStatus.PENDING);
 
             builder.Property(i => i.BirthDay)
                 .IsRequired(false);

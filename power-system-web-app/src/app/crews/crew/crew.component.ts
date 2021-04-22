@@ -35,16 +35,26 @@ export class CrewComponent implements OnInit {
   }
 
   loadCrew(id:number){
-    this.crewService.getCrewById(id).subscribe(x =>{
-        this.crew = x;
-    });
+    this.crewService.getCrewById(id).subscribe(
+      data =>{
+        this.crew = data;
+      },
+      error =>{
+        this.toastr.error(error.error)
+      }
+    );
   }
 
   loadUnassignedCrew()
   {
-    this.userService.getAllUnassignedCrewMembers().subscribe( x=> {
-      this.unassignedCrewMembers = x;
-    });
+    this.userService.getAllUnassignedCrewMembers().subscribe( 
+      data=> {
+      this.unassignedCrewMembers = data;
+     },
+     error =>{
+      this.toastr.error('Could not load crews, server did not respond.')
+     }
+    );
 
   }
 
@@ -61,7 +71,7 @@ export class CrewComponent implements OnInit {
             this.router.navigate(['crews']);
             },
             error=>{
-              this.toastr.error(error);
+              this.toastr.error(error.error);
             }
         );
       }else
@@ -72,7 +82,7 @@ export class CrewComponent implements OnInit {
             this.toastr.success("Crew updated successfully");
             },
             error=>{
-              this.toastr.error(error);
+              this.toastr.error(error.error);
             }
         );
       }

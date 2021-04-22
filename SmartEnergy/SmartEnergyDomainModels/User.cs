@@ -28,6 +28,7 @@ namespace SmartEnergyDomainModels
         public List<SafetyDocument> SafetyDocuments { get; set; }
         public List<WorkPlan> WorkPlans { get; set; }
         public List<Notification> Notifications { get; set; }
+        public UserStatus UserStatus { get; set; }
 
     }
 }

@@ -1,13 +1,15 @@
+import { Location } from "./location.model";
 export class User {
     id:number = 0;
     name:string;
     lastname:string;
-    birthday:Date;
+    birthDay:Date;
     email:string;
     username:string;
-    address:string;
-    role:string;
-    status:string;
+    location:Location;
+    userType:string;
+    userStatus:string;
     crewID:number;
+    imageURL:string;
 }
 
