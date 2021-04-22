@@ -54,6 +54,7 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent,  outlet:"primary" },
   { path: 'map', component: WorkMapComponent,  outlet:"primary" },
   { path: 'crews', component: CrewsComponent, outlet: "primary" },
+  { path: 'crew/:id', component: CrewComponent, outlet: "primary" } ,
   { path: 'crew', component: CrewComponent, outlet: "primary" } ,
   { path: 'edit-profile', component: EditProfileComponent, outlet: "primary"},
   { path: 'users', component: UsersComponent, outlet: "primary"},

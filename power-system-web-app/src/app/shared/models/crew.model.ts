@@ -2,6 +2,6 @@ import { User } from "./user.model";
 
 export class Crew {
     id:number = 0;
-    name:string="";
+    crewName:string="";
     crewMembers:User[] = [];
 }

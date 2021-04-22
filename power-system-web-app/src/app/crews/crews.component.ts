@@ -40,14 +40,18 @@ export class CrewsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.crewService.getAllCrews().subscribe(x => {
-      this.dataSource = new MatTableDataSource(x);
-      this.dataSource.paginator = this.paginator; 
-    });
+    this.getCrews();
   }
 
   ngAfterViewInit() {
  
+  }
+
+  getCrews(){
+    this.crewService.getAllCrews().subscribe(x => {
+      this.dataSource = new MatTableDataSource(x);
+      this.dataSource.paginator = this.paginator; 
+    });
   }
 
   applyFilter(event: Event) {
@@ -57,6 +61,13 @@ export class CrewsComponent implements OnInit, AfterViewInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  delete(crewId:number)
+  {
+    this.crewService.deleteCrew(crewId).subscribe(x =>{
+        this.getCrews();
+    });
   }
 }
 

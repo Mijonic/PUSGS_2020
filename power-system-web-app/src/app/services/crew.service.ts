@@ -15,4 +15,24 @@ export class CrewService {
     let requestUrl = environment.serverURL.concat("crews");
     return this.http.get<Crew[]>(requestUrl);
   }
+
+  getCrewById(id:number):Observable<Crew>{
+    let requestUrl = environment.serverURL.concat(`crews/${id}`);
+    return this.http.get<Crew>(requestUrl);
+  }
+
+  createNewCrew(crew:Crew):Observable<Crew>{
+    let requestUrl = environment.serverURL.concat("crews");
+    return this.http.post<Crew>(requestUrl, crew);
+  }
+
+  updateCrew(crew:Crew):Observable<Crew>{
+    let requestUrl = environment.serverURL.concat(`crews/${crew.id}`);
+    return this.http.put<Crew>(requestUrl, crew);
+  }
+
+  deleteCrew(id:number):Observable<{}>{
+    let requestUrl = environment.serverURL.concat(`crews/${id}`);
+    return this.http.delete(requestUrl);
+  }
 }

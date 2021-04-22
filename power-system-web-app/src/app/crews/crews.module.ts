@@ -12,6 +12,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 
 
@@ -36,7 +38,9 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatInputModule,
     DragDropModule,
     RouterModule,
-    MatSortModule
+    MatSortModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
   ]
 })
 export class CrewsModule { }
