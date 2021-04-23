@@ -1,4 +1,11 @@
-<div class="container-fluid p-3 m-auto pr-4 table-container">
+
+  <div class='w-100 d-flex justify-content-center '*ngIf="isLoading">
+    <div class="loading-shade">
+      <mat-spinner color='primary' [diameter]= "'200'" ></mat-spinner>
+    </div>
+  </div>
+
+<div class="container-fluid p-3 m-auto pr-4 table-container" *ngIf="isLoading==false">
     <div class="row">
         <div class="col-md-12 pb-3 d-flex justify-content-end"> 
           <button [routerLink] = "['/crew']" class="button-add pt-1 d-flex justify-content-center"><mat-icon>add</mat-icon></button> 

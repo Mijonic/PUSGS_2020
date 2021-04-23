@@ -1,3 +1,4 @@
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSortModule } from '@angular/material/sort';
 import { RouterModule } from '@angular/router';
 import { CrewsComponent } from './crews.component';
@@ -41,6 +42,7 @@ import { ToastrModule } from 'ngx-toastr';
     MatSortModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
+    MatProgressSpinnerModule
   ]
 })
 export class CrewsModule { }

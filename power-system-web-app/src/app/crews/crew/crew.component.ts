@@ -21,9 +21,13 @@ export class CrewComponent implements OnInit {
   });
   showCrewError:boolean = false;
   isNew:boolean = true;
+  isLoadingUnassigned:boolean = true;
+  isLoadingCrew:boolean = true;
 
   constructor(private userService:UserService, private crewService:CrewService, private route:ActivatedRoute, private router:Router,private toastr: ToastrService){}
   ngOnInit(): void {
+    this.isLoadingCrew = true;
+    this.isLoadingUnassigned = true;
     this.loadUnassignedCrew();
 
     const crewId = this.route.snapshot.paramMap.get('id');
@@ -31,6 +35,9 @@ export class CrewComponent implements OnInit {
     {
       this.isNew = false;
       this.loadCrew(+crewId);
+    }else
+    {
+      this.isLoadingCrew = false;
     }
   }
 
@@ -38,9 +45,12 @@ export class CrewComponent implements OnInit {
     this.crewService.getCrewById(id).subscribe(
       data =>{
         this.crew = data;
+        this.isLoadingCrew = false;
       },
       error =>{
-        this.toastr.error(error.error)
+        this.toastr.error('Could not load crew.')
+        console.log(error.error);
+        this.isLoadingCrew = false;
       }
     );
   }
@@ -50,9 +60,10 @@ export class CrewComponent implements OnInit {
     this.userService.getAllUnassignedCrewMembers().subscribe( 
       data=> {
       this.unassignedCrewMembers = data;
+      this.isLoadingUnassigned = false;
      },
      error =>{
-      this.toastr.error('Could not load crews, server did not respond.')
+      this.loadUnassignedCrew();
      }
     );
 

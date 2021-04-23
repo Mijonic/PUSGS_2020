@@ -5,23 +5,6 @@ import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-  color: string;
-}
-
-/** Constants used to fill up our data base. */
-const COLORS: string[] = [
-  'maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple', 'fuchsia', 'lime', 'teal',
-  'aqua', 'blue', 'navy', 'black', 'gray'
-];
-const NAMES: string[] = [
-  'Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack', 'Charlotte', 'Theodore', 'Isla', 'Oliver',
-  'Isabella', 'Jasper', 'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'
-];
-
 @Component({
   selector: 'app-crews',
   templateUrl: './crews.component.html',
@@ -30,7 +13,6 @@ const NAMES: string[] = [
 export class CrewsComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['action', 'name', 'members'];
   dataSource: MatTableDataSource<Crew>;
-
   isLoading:boolean = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -40,6 +22,7 @@ export class CrewsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.getCrews();
   }
 
@@ -48,10 +31,16 @@ export class CrewsComponent implements OnInit, AfterViewInit {
   }
 
   getCrews(){
-    this.crewService.getAllCrews().subscribe(x => {
-      this.dataSource = new MatTableDataSource(x);
+    this.crewService.getAllCrews().subscribe(
+      data => {
+      this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator; 
+      this.isLoading = false;
+    },
+    error =>{
+      this.getCrews();
     });
+
   }
 
   applyFilter(event: Event) {

@@ -33,7 +33,11 @@
                                 [cdkDropListData]="crew.crewMembers"
                                 [cdkDropListConnectedTo]="[availableCrew]"
                                 class="crew-list"
-                                (cdkDropListDropped)="drop($event)">
+                                (cdkDropListDropped)="drop($event)"
+                                >
+                                    <div class='w-100 d-flex justify-content-center' *ngIf="isLoadingCrew">
+                                        <mat-spinner color='primary' [diameter]= "'50'"></mat-spinner>
+                                    </div>
                                     <div class="crew-member-box" *ngFor="let member of crew.crewMembers" cdkDrag>
                                        {{member.name}} &nbsp; {{member.lastname}} 
                                         <a (click)="removeMember(member)" class="interact-crew"><mat-icon>remove</mat-icon></a>
@@ -53,6 +57,9 @@
                                 [cdkDropListConnectedTo]="[crewMembers]"
                                 class="crew-list"
                                 (cdkDropListDropped)="drop($event)">
+                                    <div class='w-100 d-flex justify-content-center' *ngIf="isLoadingUnassigned">
+                                        <mat-spinner color='primary' [diameter]= "'50'"></mat-spinner>
+                                    </div>
                                     <div class="crew-member-box" *ngFor="let crewMember of unassignedCrewMembers" cdkDrag>
                                         {{crewMember.name}} &nbsp; {{crewMember.lastname}}
                                         <a (click)="addMember(crewMember)" class="interact-crew"><mat-icon>person_add</mat-icon></a>

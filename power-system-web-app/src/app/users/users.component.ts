@@ -18,10 +18,12 @@ export class UsersComponent implements OnInit {
     ];
   users:User[] = [];
   allUsers:User[] = [];
+  isLoading:boolean = true;
 
   constructor(private userService:UserService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.getUsers();
   }
 
@@ -31,6 +33,7 @@ export class UsersComponent implements OnInit {
       data =>{
         this.allUsers = data;
         this.users = data;
+        this.isLoading = false;
       }
     )
   }

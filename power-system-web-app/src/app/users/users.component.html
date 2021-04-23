@@ -32,5 +32,9 @@
       </div>
     </mat-expansion-panel>
   </div>  
+  
   <app-user-card (reload)="getUsers()" *ngFor="let user of users" [user]='user'></app-user-card>
+</div>
+<div class='w-100 d-flex justify-content-center' *ngIf="isLoading">
+    <mat-spinner color='primary' [diameter]= "'300'"></mat-spinner>
 </div>
