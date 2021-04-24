@@ -11,6 +11,7 @@ import { MatTableModule } from '@angular/material/table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NewDeviceComponent } from './new-device/new-device.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 
 
@@ -28,6 +29,7 @@ import { NewDeviceComponent } from './new-device/new-device.component';
     FormsModule, 
     ReactiveFormsModule,
     RouterModule,
+    MatAutocompleteModule,
     
     
 

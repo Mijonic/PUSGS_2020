@@ -15,5 +15,13 @@ namespace SmartEnergyDomainModels
         public List<DeviceUsage> DeviceUsage { get; set; }
         public List<Instruction> Instructions { get; set; }
 
+        public void UpdateDevice(Device modified)
+        {
+            DeviceType = modified.DeviceType;
+            Name = modified.Name;
+            LocationID = modified.LocationID;
+
+        }
+
     }
 }

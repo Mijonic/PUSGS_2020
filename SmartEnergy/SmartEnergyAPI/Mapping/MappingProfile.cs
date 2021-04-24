@@ -33,6 +33,11 @@ namespace SmartEnergyAPI.Mapping
             CreateMap<LocationDto, Location>();
             CreateMap<Location, LocationDto>();
 
+            CreateMap<DeviceDto, Device>()
+                .ForMember(mem => mem.DeviceType, op => op.MapFrom(o => o.DeviceType));
+            CreateMap<Device, DeviceDto>()
+                .ForMember(mem => mem.DeviceType, op => op.MapFrom(o => o.DeviceType));
+
         }
     }
 }

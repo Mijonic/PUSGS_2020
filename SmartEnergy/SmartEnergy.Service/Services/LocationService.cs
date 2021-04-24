@@ -24,5 +24,7 @@ namespace SmartEnergy.Service.Services
         {
             return _mapper.Map<List<LocationDto>>(_dbContext.Location.ToList());
         }
+
+     
     }
 }
