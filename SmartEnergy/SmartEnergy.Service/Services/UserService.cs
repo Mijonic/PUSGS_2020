@@ -70,12 +70,43 @@ namespace SmartEnergy.Service.Services
 
         public List<UserDto> GetAllUnassignedCrewMembers()
         {
-            return _mapper.Map<List<UserDto>>(_dbContext.Users.Where(x => x.UserType == UserType.CREW_MEMBER && x.CrewID == null).ToList());
+            return _mapper.Map<List<UserDto>>(_dbContext.Users.Where(x => x.UserType == UserType.CREW_MEMBER && x.CrewID == null && x.UserStatus == UserStatus.APPROVED).ToList());
         }
 
         public UserDto Insert(UserDto entity)
         {
-            throw new NotImplementedException();
+            Location userLocation = _dbContext.Location.Find(entity.Location.ID);
+            if(userLocation == null)
+            { 
+                throw new Exception();
+            }
+
+            User user = _mapper.Map<User>(entity);
+
+            if (user.UserType == UserType.ADMIN)
+                throw new InvalidUserDataException("User cannot register as admin!");
+
+            if(user.UserType != UserType.CREW_MEMBER && user.Crew != null)
+                throw new InvalidUserDataException("User can be part of a crew only if he is a crew member!");
+
+            if(user.Crew != null)
+            {
+                Crew crew = _dbContext.Crews.Find(user.Crew.ID);
+                if (crew == null)
+                    throw new CrewNotFoundException("Selected user crew does not exist.");
+
+            }
+
+            user.ID = 0;
+            user.UserStatus = UserStatus.PENDING;//Just in case
+            user.LocationID = userLocation.ID;
+            
+
+            _dbContext.Users.Add(user);
+            _dbContext.SaveChanges();
+
+            return _mapper.Map<UserDto>(user);
+
         }
 
         public UserDto Update(UserDto entity)

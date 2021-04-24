@@ -14,9 +14,15 @@ namespace SmartEnergy.Service.Services
         private readonly SmartEnergyDbContext _dbContext;
         private readonly IMapper _mapper;
 
-        public LocationDto GetAllLocations()
+        public LocationService(SmartEnergyDbContext dbContext, IMapper mapper)
         {
-            return _mapper.Map<LocationDto>(_dbContext.Location.ToList());
+            _dbContext = dbContext;
+            _mapper = mapper;
+        }
+
+        public List<LocationDto> GetAllLocations()
+        {
+            return _mapper.Map<List<LocationDto>>(_dbContext.Location.ToList());
         }
     }
 }

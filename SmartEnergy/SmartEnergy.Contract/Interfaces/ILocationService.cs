@@ -7,6 +7,6 @@ namespace SmartEnergy.Contract.Interfaces
 {
     public interface ILocationService
     {
-        LocationDto GetAllLocations();
+        List<LocationDto> GetAllLocations();
     }
 }

@@ -47,7 +47,7 @@
                 
                         <div class="col-md-4 mb-3">
                             <label class="registartion_labels">Role</label>
-                            <select formControlName="role" [ngClass]="{'form-control':true, 'is-valid': isValid('role'), 'is-invalid': isInvalid('role')}"
+                            <select #roleSelect (change)="onRoleChange(roleSelect.value)" formControlName="role" [ngClass]="{'form-control':true, 'is-valid': isValid('role'), 'is-invalid': isInvalid('role')}"
                              id="exampleFormControlSelect1">
                                 <option value="CREW_MEMBER">Crew member</option>
                                 <option value="DISPATCHER">Dispatcher</option>
@@ -93,14 +93,17 @@
                             <label class="registartion_labels" >Date of birth</label>
                             <input formControlName="dateOfBirth" type="date" name="bday" max="3000-12-31" [(ngModel)]="user.birthDay" 
                                    min="01-01-1900" [ngClass]="{'form-control':true, 'is-valid': isValid('dateOfBirth'), 'is-invalid': isInvalid('dateOfBirth')}">
-                           </div>
-                           <div class="invalid-feedback">
+                           
+                           <div class="invalid-feedback" *ngIf="registrationForm.hasError('required', 'dateOfBirth')">
                             Please provide a birth date.
+                           </div>
+                           <div class="invalid-feedback" *ngIf="registrationForm.hasError('underage', 'dateOfBirth')">
+                            You need to be over 18 to register.
                            </div>
                            <div class="valid-feedback">
                                 Looks good.
                             </div>
-                          
+                          </div>
                         </div>
                 
                 
@@ -114,7 +117,8 @@
                                 <label class="registartion_labels">Address</label>
                                 <select formControlName="location" [ngClass]="{'form-control':true, 'is-valid': isValid('location'), 'is-invalid': isInvalid('location')}"
                                 id="exampleFormControlSelect2">
-                                <option *ngFor="let location of locations" value="location.id">{{ location.street }}&nbsp;{{ location.city }}</option>
+                                <option disabled selected value> -- select an address -- </option>
+                                <option *ngFor="let location of locations" value="location.id">{{ location.street }},&nbsp;{{ location.city }}</option>
                               </select>
                               <div class="invalid-feedback">
                                 Please choose your address.
@@ -127,12 +131,12 @@
                             <input type="password"  formControlName="password"
                              [ngClass]="{'form-control':true, 'is-valid': isValid('password'), 'is-invalid': isInvalid('password')}"
                              id="validationServer06" placeholder="Password" [(ngModel)]="user.password"  required>
-                             <div class="invalid-feedback">
+                             <div class="invalid-feedback" *ngIf="registrationForm.hasError('required', 'password')">
                                 Please provide a password.
-                               </div>
-                               <div class="valid-feedback">
+                            </div>
+                            <div class="valid-feedback">
                                     Looks good.
-                                </div>
+                            </div>
                         </div>
                 
                         
@@ -141,9 +145,9 @@
                             <input type="password" formControlName="confirmPassword"
                              [ngClass]="{'form-control':true, 'is-valid': isValid('confirmPassword'), 'is-invalid': isInvalid('confirmPassword')}"
                              id="validationServer07" placeholder="Confirm Password" required>
-                             <div class="invalid-feedback">
-                                Please confirm password.
-                               </div>
+                             <div class="invalid-feedback" *ngIf="registrationForm.hasError('mismatchedPasswords')">
+                                Passwords do not match.
+                            </div>
                                <div class="valid-feedback">
                                     Looks good.
                                 </div>
@@ -154,16 +158,28 @@
                 
                        
                         <div class="form-row">
+                            
+
+                            <div class="col-md-4 mb-3" *ngIf="showCrews">
+                                <label class="registartion_labels">Crew</label>
+                                <select formControlName="crew" [ngClass]="{'form-control':true, 'is-valid': isValid('crew'), 'is-invalid': isInvalid('crew')}"
+                                id="exampleFormControlSelect2">
+                                    <option *ngFor="let crew of crews" value="crew.id">{{ crew.crewName }}</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                Please choose your crew.
+                               </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                
+                            </div>
+
                             <div class="col-md-4 mb-3">
                                 <input class="form-check-input is-invalid" type="checkbox" value="" id="invalidCheck3" required>
                                 <label class="form-check-label" for="invalidCheck3" style="color: rgba(255, 255, 255, 0.9); ">
                                 Receive email confirmation
                                 </label>
                             
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-                                
                             </div>
 
                         </div>

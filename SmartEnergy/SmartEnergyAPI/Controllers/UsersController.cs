@@ -85,5 +85,28 @@ namespace SmartEnergyAPI.Controllers
         }
 
 
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult CreateUser([FromBody] UserDto newUser)
+        {
+            try
+            {
+                UserDto user = _userService.Insert(newUser);
+                return Ok(user);
+            }
+            catch (CrewNotFoundException unf)
+            {
+                return NotFound(unf.Message);
+            }
+            catch (InvalidUserDataException ius)
+            {
+                return BadRequest(ius.Message);
+            }
+
+        }
+
+
     }
 }

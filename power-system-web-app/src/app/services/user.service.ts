@@ -31,4 +31,9 @@ export class UserService {
     return this.http.put<User>(requestUrl, {});
   }
 
+  createUser(user:User):Observable<{}>{
+    let requestUrl = environment.serverURL.concat(`users`);
+    return this.http.post<User>(requestUrl, user);
+  }
+
 }
