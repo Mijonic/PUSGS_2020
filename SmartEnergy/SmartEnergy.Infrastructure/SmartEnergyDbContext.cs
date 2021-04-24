@@ -20,7 +20,7 @@ namespace SmartEnergy.Infrastructure
         public DbSet<Crew> Crews { get; set; }
         public DbSet<Device> Devices { get; set; }
         public DbSet<Incident> Incidents { get; set; }
-        public DbSet<Location> Locations { get; set; }
+       // public DbSet<Location> Locations { get; set; }
         public DbSet<Resolution> Resolutions { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<DeviceUsage> DeviceUsages { get; set; }

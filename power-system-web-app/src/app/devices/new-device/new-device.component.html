@@ -41,32 +41,18 @@
                     <div class="p-3 py-5">
                         <mat-form-field class="w-100">
                             <mat-label>Address</mat-label>
-                            <input matInput placeholder="Address" value="">
-                        </mat-form-field>
-                    </div>
-                </div>
-                
-             
-            </div>
-
-
-            
-            <div class="row"  >
-                <div class="col-md-6">
-                    <div class="p-3 py-5">
-                        <mat-form-field class="w-100">
-                            <mat-label>Latitude</mat-label>
-                            <input matInput placeholder="Latitude" value="">
-                        </mat-form-field>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="p-3 py-5">
-                        <mat-form-field class="w-100">
-                            <mat-label>Longitude</mat-label>
-                            <input matInput placeholder="Longitude" value="">
-                        </mat-form-field>
+                            <input type="text"
+                                   placeholder="Pick one"
+                                   aria-label="Number"
+                                   matInput
+                                   [formControl]="newDevice"
+                                   [matAutocomplete]="auto">
+                            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                              <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                {{option}}
+                              </mat-option>
+                            </mat-autocomplete>
+                          </mat-form-field>
                     </div>
                 </div>
                 

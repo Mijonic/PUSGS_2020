@@ -5,8 +5,9 @@ using System.Text;
 
 namespace SmartEnergy.Contract.Interfaces
 {
-    public interface ILocationService
+    public interface IDeviceService : IGenericService<DeviceDto>
     {
-        List<LocationDto> GetAllLocations();
+
+
     }
 }
