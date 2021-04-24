@@ -11,5 +11,6 @@ export class User {
     userStatus:string;
     crewID:number;
     imageURL:string;
+    password:string;
 }
 

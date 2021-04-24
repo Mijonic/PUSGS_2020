@@ -1,3 +1,5 @@
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavigationModule } from './../navigation/navigation.module'
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -31,7 +33,10 @@ import {MatSelectModule} from '@angular/material/select';
     NgParticlesModule,
     MatIconModule,
     NavigationModule,
-    MatSelectModule
+    MatSelectModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatInputModule
   ]
 })
 export class FrontModule { }

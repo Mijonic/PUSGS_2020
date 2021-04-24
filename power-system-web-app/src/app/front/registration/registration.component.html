@@ -1,13 +1,4 @@
 
-<!--
-<app-particles></app-particles>
-
-<app-register-login-navbar></app-register-login-navbar>
--->
-
-
-
-
 
 <div class="modal fade" id="registrationModalCenter" tabindex="-1" role="dialog" aria-labelledby="registerModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document" >
@@ -18,7 +9,7 @@
                 <h2 style="font-size: 30px;">Register</h2>
             </div>
             <div class="d-flex justify-content-center registration_form_div">
-                <form>
+                <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
                     
                     <div class="row">
                 
@@ -31,30 +22,41 @@
                         <div class="form-row">
                         <div class="col-md-4 mb-3">
                             <label class="registartion_labels" for="validationServer01">Username</label>
-                            <input type="text" class="form-control is-valid" id="validationServer01" placeholder="Username"  required>
+                            <input type="text" [ngClass]="{'form-control':true, 'is-valid': isValid('username'), 'is-invalid': isInvalid('username')}"
+                             id="validationServer01" placeholder="Username" formControlName="username" [(ngModel)]="user.username"  required>
+                            <div class="invalid-feedback">
+                                Please provide a username.
+                            </div>
                             <div class="valid-feedback">
-                            Looks good!
+                                Looks good.
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label class="registartion_labels"  for="validationServerUsername">Email</label>
+                            <label class="registartion_labels"  for="validationServer02">Email</label>
                             <div class="input-group">
-                            
-                            <input type="text" class="form-control is-invalid" id="validationServerUsername" placeholder="Email" aria-describedby="inputGroupPrepend3" required>
+                            <input type="text" formControlName="email" [ngClass]="{'form-control':true, 'is-valid': isValid('email'), 'is-invalid': isInvalid('email')}"
+                             id="validationServer02" placeholder="Email" aria-describedby="inputGroupPrepend3" [(ngModel)]="user.email"  required>
                             <div class="invalid-feedback">
-                                Please input Email.
+                                Please provide a valid Email.
+                            </div>
+                            <div class="valid-feedback">
+                                Looks good.
                             </div>
                             </div>
                         </div>
                 
                         <div class="col-md-4 mb-3">
                             <label class="registartion_labels">Role</label>
-                            <select class="form-control" id="exampleFormControlSelect1">
-                                <option>Crew member</option>
-                                <option>Dispatcher</option>
-                                <option>Worker</option>
-                                
+                            <select formControlName="role" [ngClass]="{'form-control':true, 'is-valid': isValid('role'), 'is-invalid': isInvalid('role')}"
+                             id="exampleFormControlSelect1">
+                                <option value="CREW_MEMBER">Crew member</option>
+                                <option value="DISPATCHER">Dispatcher</option>
+                                <option value="WORKER">Worker</option> 
                               </select>
+                              <div class="invalid-feedback">
+                                Please choose a role.
+                               </div>
+
                         </div>
                 
                         
@@ -62,28 +64,42 @@
                         <div class="form-row">
                         
                         <div class="col-md-4 mb-3">
-                            <label class="registartion_labels" for="validationServer02">First name</label>
-                            <input type="text" class="form-control is-valid" id="validationServer02" placeholder="First name"  required>
+                            <label class="registartion_labels" for="validationServer03">First name</label>
+                            <input type="text" formControlName="firstName" [ngClass]="{'form-control':true, 'is-valid': isValid('firstName'), 'is-invalid': isInvalid('firstName')}"
+                             id="validationServer03" placeholder="First name" [(ngModel)]="user.name"   required>
+                             <div class="invalid-feedback">
+                                Please provide a first name.
+                            </div>
                             <div class="valid-feedback">
-                            Looks good!
+                                Looks good.
                             </div>
                         </div>
                            
                 
                         <div class="col-md-4 mb-3">
-                            <label class="registartion_labels" for="validationServer03">Last Name</label>
-                            <input type="text" class="form-control is-invalid" id="validationServer03" placeholder="Last name" required>
-                            <div class="invalid-feedback">
-                            Please provide a last name.
+                            <label class="registartion_labels" for="validationServer04">Last Name</label>
+                            <input type="text" formControlName="lastName" [ngClass]="{'form-control':true, 'is-valid': isValid('lastName'), 'is-invalid': isInvalid('lastName')}"
+                             id="validationServer04" placeholder="Last name" [(ngModel)]="user.lastname"  required>
+                             <div class="invalid-feedback">
+                                Please provide a last name.
+                            </div>
+                            <div class="valid-feedback">
+                                Looks good.
                             </div>
                         </div>
                 
                         <div class="col-md-4 mb-3">
                             <div class="form-group">
                             <label class="registartion_labels" >Date of birth</label>
-                            <input type="date" name="bday" max="3000-12-31" 
-                                   min="1000-01-01" class="form-control">
+                            <input formControlName="dateOfBirth" type="date" name="bday" max="3000-12-31" [(ngModel)]="user.birthDay" 
+                                   min="01-01-1900" [ngClass]="{'form-control':true, 'is-valid': isValid('dateOfBirth'), 'is-invalid': isInvalid('dateOfBirth')}">
                            </div>
+                           <div class="invalid-feedback">
+                            Please provide a birth date.
+                           </div>
+                           <div class="valid-feedback">
+                                Looks good.
+                            </div>
                           
                         </div>
                 
@@ -95,43 +111,61 @@
                            
                 
                             <div class="col-md-4 mb-3">
-                                <label class="registartion_labels" for="validationServer03">Address</label>
-                                <input type="text" class="form-control is-invalid" id="validationServer03" placeholder="Address" required>
-                                <div class="invalid-feedback">
-                                Please provide address.
-                                </div>
+                                <label class="registartion_labels">Address</label>
+                                <select formControlName="location" [ngClass]="{'form-control':true, 'is-valid': isValid('location'), 'is-invalid': isInvalid('location')}"
+                                id="exampleFormControlSelect2">
+                                <option *ngFor="let location of locations" value="location.id">{{ location.street }}&nbsp;{{ location.city }}</option>
+                              </select>
+                              <div class="invalid-feedback">
+                                Please choose your address.
+                               </div>
                             </div>
                 
                             
                         <div class="col-md-4 mb-3">
-                            <label class="registartion_labels" for="validationServer03">Password</label>
-                            <input type="password" class="form-control is-invalid" id="validationServer03" placeholder="Password" required>
-                            <div class="invalid-feedback">
-                            Please provide a password.
-                            </div>
+                            <label class="registartion_labels" for="validationServer06">Password</label>
+                            <input type="password"  formControlName="password"
+                             [ngClass]="{'form-control':true, 'is-valid': isValid('password'), 'is-invalid': isInvalid('password')}"
+                             id="validationServer06" placeholder="Password" [(ngModel)]="user.password"  required>
+                             <div class="invalid-feedback">
+                                Please provide a password.
+                               </div>
+                               <div class="valid-feedback">
+                                    Looks good.
+                                </div>
                         </div>
                 
                         
                         <div class="col-md-4 mb-3">
-                            <label class="registartion_labels" for="validationServer03">Confirm Password</label>
-                            <input type="password" class="form-control is-invalid" id="validationServer03" placeholder="Confirm Password" required>
-                            <div class="invalid-feedback">
-                            Please confirm password.
-                            </div>
+                            <label class="registartion_labels" for="validationServer07">Confirm Password</label>
+                            <input type="password" formControlName="confirmPassword"
+                             [ngClass]="{'form-control':true, 'is-valid': isValid('confirmPassword'), 'is-invalid': isInvalid('confirmPassword')}"
+                             id="validationServer07" placeholder="Confirm Password" required>
+                             <div class="invalid-feedback">
+                                Please confirm password.
+                               </div>
+                               <div class="valid-feedback">
+                                    Looks good.
+                                </div>
                         </div>
                 
                 
                         </div>
                 
                        
-                        <div class="form-group">
-                        <div class="form-check">
-                            <input class="form-check-input is-invalid" type="checkbox" value="" id="invalidCheck3" required>
-                            <label class="form-check-label" for="invalidCheck3" style="color: rgba(255, 255, 255, 0.9); ">
-                            Receive email notifications
-                            </label>
-                         
-                        </div>
+                        <div class="form-row">
+                            <div class="col-md-4 mb-3">
+                                <input class="form-check-input is-invalid" type="checkbox" value="" id="invalidCheck3" required>
+                                <label class="form-check-label" for="invalidCheck3" style="color: rgba(255, 255, 255, 0.9); ">
+                                Receive email confirmation
+                                </label>
+                            
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                
+                            </div>
+
                         </div>
                         <button class="btn btn-light" type="submit">Register</button>
                     </div>

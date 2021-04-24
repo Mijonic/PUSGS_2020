@@ -1,3 +1,4 @@
+import { ValidationService } from './../../services/validation.service';
 import { CrewService } from './../../services/crew.service';
 import { UserService } from './../../services/user.service';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
@@ -24,7 +25,8 @@ export class CrewComponent implements OnInit {
   isLoadingUnassigned:boolean = true;
   isLoadingCrew:boolean = true;
 
-  constructor(private userService:UserService, private crewService:CrewService, private route:ActivatedRoute, private router:Router,private toastr: ToastrService){}
+  constructor(private userService:UserService, private crewService:CrewService, private route:ActivatedRoute, 
+              private router:Router,private toastr: ToastrService, private validationService:ValidationService){}
   ngOnInit(): void {
     this.isLoadingCrew = true;
     this.isLoadingUnassigned = true;
@@ -99,7 +101,7 @@ export class CrewComponent implements OnInit {
       }
     }
     else{
-        this.validateAllFields(this.crewForm);
+        this.validationService.validateAllFields(this.crewForm);
     }
   }
 
@@ -131,7 +133,7 @@ export class CrewComponent implements OnInit {
       0);
   }
 
-  validateAllFields(formGroup: FormGroup) {         
+  /*validateAllFields(formGroup: FormGroup) {         
     Object.keys(formGroup.controls).forEach(field => {  
         const control = formGroup.get(field);            
         if (control instanceof FormControl) {             
@@ -141,6 +143,6 @@ export class CrewComponent implements OnInit {
             console.log(this.validateAllFields(control));
         }
     });
-  }
+  }*/
 
 }
