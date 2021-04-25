@@ -34,6 +34,9 @@ export class UsersComponent implements OnInit {
         this.allUsers = data;
         this.users = data;
         this.isLoading = false;
+      },
+      error =>{
+        this.getUsers();
       }
     )
   }

@@ -17,7 +17,6 @@ namespace SmartEnergy.Contract.DTO
         public string UserType { get; set; }
         public string ImageURL { get; set; }
         public int? CrewID { get; set; }
-        public int LocationID { get; set; }
         public LocationDto Location { get; set; }
         public string UserStatus { get; set; }
         /* public List<Incident> Incidents { get; set; }

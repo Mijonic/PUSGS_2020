@@ -1,9 +1,11 @@
 
 
-<div class="modal fade" id="registrationModalCenter" tabindex="-1" role="dialog" aria-labelledby="registerModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="registrationModalCenter" tabindex="-1" role="dialog" aria-labelledby="registerModalCenterTitle" aria-hidden="true" >
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document" >
       <div class="modal-content">
-        
+        <div class="modal-header" hidden="true">
+            <a><i class="fa fa-close" data-dismiss="modal"  #closeBtn></i></a>
+          </div>
         <div class="modal-background">
             <div class="d-flex justify-content-center" style="padding-top: 20px;">
                 <h2 style="font-size: 30px;">Register</h2>
@@ -118,7 +120,7 @@
                                 <select formControlName="location" [ngClass]="{'form-control':true, 'is-valid': isValid('location'), 'is-invalid': isInvalid('location')}"
                                 id="exampleFormControlSelect2">
                                 <option disabled selected value> -- select an address -- </option>
-                                <option *ngFor="let location of locations" value="location.id">{{ location.street }},&nbsp;{{ location.city }}</option>
+                                <option *ngFor="let location of locations" value="{{location.id}}">{{ location.street }},&nbsp;{{ location.city }}</option>
                               </select>
                               <div class="invalid-feedback">
                                 Please choose your address.
@@ -164,7 +166,7 @@
                                 <label class="registartion_labels">Crew</label>
                                 <select formControlName="crew" [ngClass]="{'form-control':true, 'is-valid': isValid('crew'), 'is-invalid': isInvalid('crew')}"
                                 id="exampleFormControlSelect2">
-                                    <option *ngFor="let crew of crews" value="crew.id">{{ crew.crewName }}</option>
+                                    <option *ngFor="let crew of crews" value="{{crew.id}}">{{ crew.crewName }}</option>
                                 </select>
                                 <div class="invalid-feedback">
                                 Please choose your crew.

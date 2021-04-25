@@ -1,5 +1,5 @@
 
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NavbarMessagingService } from 'app/services/navbar-messaging.service';
 import { Subscription } from 'rxjs';
 
@@ -14,6 +14,7 @@ export class FrontPageComponent implements OnInit, OnDestroy {
   showLogin:boolean = false;
   showRegister:boolean = false;
   showReportOutage:boolean = false;
+  @ViewChild('login') openBtn: ElementRef;
 
   constructor(private navbarMessaging:NavbarMessagingService) { }
 
@@ -37,8 +38,10 @@ export class FrontPageComponent implements OnInit, OnDestroy {
   showLoginForm()
   { 
     this.showRegister = false;
+    this.openBtn.nativeElement.click();
     this.showLogin = true;
     this.showReportOutage = false;
+    
   }
 
   showRegistrationForm()

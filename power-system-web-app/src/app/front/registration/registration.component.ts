@@ -1,3 +1,4 @@
+
 import { NavbarMessagingService } from 'app/services/navbar-messaging.service';
 import { UserService } from './../../services/user.service';
 import { CrewService } from './../../services/crew.service';
@@ -5,7 +6,7 @@ import { LocationService } from './../../services/location.service';
 import { User } from './../../shared/models/user.model';
 import { ToastrService } from 'ngx-toastr';
 import { ValidationService } from './../../services/validation.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Location } from 'app/shared/models/location.model';
 import { Crew } from 'app/shared/models/crew.model';
@@ -34,6 +35,7 @@ export class RegistrationComponent implements OnInit {
   locations:Location[] = [];
   crews:Crew[] = [];
   showCrews:boolean = false;
+  @ViewChild('closeBtn') closeBtn: ElementRef;
 
   constructor(private validation:ValidationService, private toastr:ToastrService, private locationService:LocationService, 
     private crewService:CrewService, private userService:UserService, private navbarService:NavbarMessagingService) {
@@ -41,6 +43,7 @@ export class RegistrationComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadLocations();
+    this.loadCrews();
   }
 
   loadLocations()
@@ -65,10 +68,18 @@ export class RegistrationComponent implements OnInit {
   {
     if(this.registrationForm.valid)
     {
+
+      this.user.location = new Location()
+      this.user.location.id = +this.registrationForm.controls['location'].value;
+      this.user.userType = this.registrationForm.controls['role'].value;
+      if(this.user.userType === 'CREW_MEMBER')
+        this.user.crewID = +this.registrationForm.controls['crew'].value;
       this.userService.createUser(this.user).subscribe(
         data =>{
             this.toastr.success("Registration successfull");
+            this.closeBtn.nativeElement.click();
             this.navbarService.activateLogin();
+            this.toastr.info("You can log in now.");
         },
         error =>{
             this.toastr.error(error.error);

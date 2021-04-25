@@ -13,13 +13,17 @@ C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\o
 C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\bin\Debug\netcoreapp3.1\SmartEnergyDomainModels.dll
 C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\bin\Debug\netcoreapp3.1\SmartEnergyDomainModels.pdb
 C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\obj\Debug\netcoreapp3.1\SmartEnergy.Infrastructure.csproj.CopyComplete
+C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\bin\Debug\netcoreapp3.1\SmartEnergy.Contract.dll
+C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\bin\Debug\netcoreapp3.1\SmartEnergy.Contract.pdb
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\bin\Debug\netcoreapp3.1\SmartEnergy.Infrastructure.deps.json
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\bin\Debug\netcoreapp3.1\SmartEnergy.Infrastructure.runtimeconfig.json
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\bin\Debug\netcoreapp3.1\SmartEnergy.Infrastructure.runtimeconfig.dev.json
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\bin\Debug\netcoreapp3.1\SmartEnergy.Infrastructure.dll
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\bin\Debug\netcoreapp3.1\SmartEnergy.Infrastructure.pdb
+C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\bin\Debug\netcoreapp3.1\SmartEnergy.Contract.dll
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\bin\Debug\netcoreapp3.1\SmartEnergyDomainModels.dll
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\bin\Debug\netcoreapp3.1\SmartEnergyDomainModels.pdb
+C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\bin\Debug\netcoreapp3.1\SmartEnergy.Contract.pdb
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\obj\Debug\netcoreapp3.1\SmartEnergy.Infrastructure.csprojAssemblyReference.cache
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\obj\Debug\netcoreapp3.1\SmartEnergy.Infrastructure.AssemblyInfoInputs.cache
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\obj\Debug\netcoreapp3.1\SmartEnergy.Infrastructure.AssemblyInfo.cs
@@ -28,7 +32,3 @@ C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\obj\Debug\netcoreapp3.1\SmartEnergy.Infrastructure.dll
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\obj\Debug\netcoreapp3.1\SmartEnergy.Infrastructure.pdb
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\obj\Debug\netcoreapp3.1\SmartEnergy.Infrastructure.genruntimeconfig.cache
-C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\bin\Debug\netcoreapp3.1\SmartEnergy.Contract.dll
-C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\bin\Debug\netcoreapp3.1\SmartEnergy.Contract.pdb
-C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\bin\Debug\netcoreapp3.1\SmartEnergy.Contract.dll
-C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergy.Infrastructure\bin\Debug\netcoreapp3.1\SmartEnergy.Contract.pdb

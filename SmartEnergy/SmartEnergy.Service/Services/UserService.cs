@@ -53,6 +53,7 @@ namespace SmartEnergy.Service.Services
                 throw new UserInvalidStatusException("User can't be denied , as his status is not Pending.");
 
             user.UserStatus = UserStatus.DENIED;
+            user.CrewID = null;
             _dbContext.SaveChanges();
 
             return _mapper.Map<UserDto>(user);
@@ -60,7 +61,7 @@ namespace SmartEnergy.Service.Services
 
         public UserDto Get(int id)
         {
-            throw new NotImplementedException();
+            return _mapper.Map<UserDto>(_dbContext.Users.Find(id));
         }
 
         public List<UserDto> GetAll()
@@ -100,6 +101,7 @@ namespace SmartEnergy.Service.Services
             user.ID = 0;
             user.UserStatus = UserStatus.PENDING;//Just in case
             user.LocationID = userLocation.ID;
+            user.Location = null;
             
 
             _dbContext.Users.Add(user);

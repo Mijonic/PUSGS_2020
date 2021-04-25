@@ -34,7 +34,7 @@ export class UserCardComponent implements OnInit {
       return 'Disptacher';
 
     if(type === 'WORKER')
-      return 'Wroker';
+      return 'Worker';
 
     if(type === 'ADMIN')
       return 'Admin';

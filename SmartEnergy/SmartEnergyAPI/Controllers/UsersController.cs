@@ -10,7 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace SmartEnergyAPI.Controllers
-{
+{ 
     [Route("api/users")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -84,6 +84,23 @@ namespace SmartEnergyAPI.Controllers
 
         }
 
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetUserById(int id)
+        {
+            try
+            {
+                UserDto user = _userService.Get(id);
+                return Ok(user);
+            }
+            catch (UserNotFoundException unf)
+            {
+                return NotFound(unf.Message);
+            }
+
+        }
+
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
@@ -94,7 +111,7 @@ namespace SmartEnergyAPI.Controllers
             try
             {
                 UserDto user = _userService.Insert(newUser);
-                return Ok(user);
+                return CreatedAtAction(nameof(GetUserById), new { id = user.ID}, user);
             }
             catch (CrewNotFoundException unf)
             {
