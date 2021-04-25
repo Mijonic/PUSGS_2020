@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartEnergy.Infrastructure;
 
 namespace SmartEnergy.Infrastructure.Migrations
 {
     [DbContext(typeof(SmartEnergyDbContext))]
-    partial class SmartEnergyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210425210308_Documents_2_Way_ID_Removed")]
+    partial class Documents_2_Way_ID_Removed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -247,6 +249,9 @@ namespace SmartEnergy.Infrastructure.Migrations
                     b.Property<int?>("Priority")
                         .HasColumnType("int");
 
+                    b.Property<int>("ResolutionID")
+                        .HasColumnType("int");
+
                     b.Property<int>("UserID")
                         .HasColumnType("int");
 
@@ -359,6 +364,18 @@ namespace SmartEnergy.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("IncidentID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SafetyDocumentID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("WorkPlanID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("WorkRequestID")
+                        .HasColumnType("int");
+
                     b.HasKey("ID");
 
                     b.ToTable("MultimediaAnchors");
@@ -429,6 +446,18 @@ namespace SmartEnergy.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("IncidentID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SafetyDocumentID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("WorkPlanID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("WorkRequestID")
+                        .HasColumnType("int");
 
                     b.HasKey("ID");
 
@@ -602,6 +631,15 @@ namespace SmartEnergy.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("SafetyDocumentID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("WorkPlanID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("WorkRequestID")
+                        .HasColumnType("int");
 
                     b.HasKey("ID");
 

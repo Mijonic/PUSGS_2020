@@ -95,6 +95,12 @@ namespace SmartEnergyAPI
             {
                 endpoints.MapControllers();
             });
+
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<SmartEnergyDbContext>();
+                context.Database.Migrate();
+            }
         }
     }
 }

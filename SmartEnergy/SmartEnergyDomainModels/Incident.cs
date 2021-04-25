@@ -19,7 +19,6 @@ namespace SmartEnergyDomainModels
         public double? VoltageLevel { get; set; }
         public int UserID { get; set; }
         public User User { get; set; }
-        public int ResolutionID { get; set; }
         public Resolution Resolution { get; set; }
         public int? CrewID { get; set; }
         public Crew Crew { get; set; }
@@ -29,7 +28,6 @@ namespace SmartEnergyDomainModels
         public NotificationAnchor NotificationAnchor { get; set; }
         public List<DeviceUsage> IncidentDevices{ get; set; }
         public List<Call> Calls { get; set; }
-        public int? WorkRequestID { get; set; }
         public WorkRequest WorkRequest { get; set; }
         public WorkType WorkType { get; set; }
         public IncidentStatus IncidentStatus { get; set; }

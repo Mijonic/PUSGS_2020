@@ -30,7 +30,6 @@ namespace SmartEnergyDomainModels
         public int? NotificationAnchorID { get; set; }
         public NotificationAnchor NotificationsAnchor { get; set; }
         public List<DeviceUsage> DeviceUsage { get; set; }
-        public int? WorkPlanID { get; set; }
         public WorkPlan WorkPlan { get; set; }
 
     }
