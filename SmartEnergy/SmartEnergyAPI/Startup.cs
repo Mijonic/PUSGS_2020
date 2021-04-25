@@ -65,7 +65,7 @@ namespace SmartEnergyAPI
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IDeviceService, DeviceService>();
-
+            services.AddScoped<IWorkRequestService, WorkRequestService>();
 
         }
 

@@ -8,7 +8,10 @@ import { ChooseIncidentDialogComponent } from 'app/documents/dialogs/choose-inci
   styleUrls: ['./work-request-basic-information.component.css']
 })
 export class WorkRequestBasicInformationComponent implements OnInit {
-  documentTypes:string[] = ['Planned work', 'Unplanned work'];
+  documentTypes = [
+                   {display:'Planned work', value:'PLANNED'},
+                   {display:'Unplanned work', value:'UNPLANNED'},
+                  ];
   isEmergency:boolean = true;
 
   constructor(public dialog:MatDialog) { }

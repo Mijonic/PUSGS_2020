@@ -6,7 +6,8 @@
                 <div class="col-md-12">
                     <div class="p-3 py-5">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h1>Add crew</h1>
+                            <h1 *ngIf="isNew">Add crew</h1>
+                            <h1 *ngIf="isNew == false">Edit crew</h1>
                         </div>
                         <form [formGroup]="crewForm" (ngSubmit)="saveChanges()">
                         <div class="row mt-2" >

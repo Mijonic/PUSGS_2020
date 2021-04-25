@@ -6,12 +6,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./work-request.component.css']
 })
 export class WorkRequestComponent implements OnInit {
+  isNew:boolean = true;
   navLinks = [
-    { path: 'basic-info', label: 'Basic information' },
-    { path: 'state-changes', label: 'History of state changes' },
-    { path: 'multimedia', label: 'Multimedia attachments' },
-    { path: 'equipment', label: 'Equipment' },
+    { path: 'basic-info', label: 'Basic information', isDisabled: false },
+    { path: 'state-changes', label: 'History of state changes', isDisabled: this.isNew },
+    { path: 'multimedia', label: 'Multimedia attachments', isDisabled: this.isNew },
+    { path: 'equipment', label: 'Equipment', isDisabled: this.isNew },
   ];
+
+  
 
   constructor() { }
 

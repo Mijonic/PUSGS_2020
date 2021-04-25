@@ -151,15 +151,15 @@ const routes: Routes = [
         component: WorkRequestBasicInformationComponent, 
       },
       {
-        path: 'multimedia',
+        path: 'multimedia/:id',
         component: MultimediaAttachmentsComponent, 
       },
       {
-        path: 'state-changes',
+        path: 'state-changes/:id',
         component: WorkRequestStateChangesComponent, 
       },
       {
-        path: 'equipment',
+        path: 'equipment/:id',
         component: WorkRequestEquipmentComponent,
       },
     ],
@@ -191,7 +191,8 @@ const routes: Routes = [
       component: GlobalSettingsStreetsPriorityComponent,
     },
   ],
-}
+},
+{ path: '**', redirectTo: '', pathMatch:"full", outlet: "primary",}
 
 
 ];

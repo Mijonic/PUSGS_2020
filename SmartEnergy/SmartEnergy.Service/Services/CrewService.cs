@@ -82,7 +82,7 @@ namespace SmartEnergy.Service.Services
                 }
                 newCrew.CrewMembers = crewMembers;
             }
-            
+            newCrew.ID = 0;
             _dbContext.Crews.Add(newCrew);
             _dbContext.SaveChanges();
 

@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <div class="row" >
-      <div class="container rounded bg-white mt-5">
+      <div class="container rounded bg-white mt-5 mb-2">
 
         <div class="row">
             <div class="col-md-12 d-flex justify-content-start">
@@ -13,8 +13,8 @@
             <div class="p-3">
               <mat-form-field >
                 <mat-label>Document type</mat-label>
-                <mat-select>
-                  <mat-option *ngFor="let documentType of documentTypes" [value]="documentType">{{documentType}}</mat-option>
+                <mat-select required>
+                  <mat-option *ngFor="let documentType of documentTypes" value="{{documentType.value}}">{{documentType.display}}</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -36,7 +36,7 @@
             <div class="p-3 d-flex flex-row">
               <mat-form-field >
                 <mat-label>Incident</mat-label>
-                <input matInput disabled value="33234361">
+                <input matInput disabled required value="33234361">
               </mat-form-field>
               <a (click)="onChooseIncident()" class="clickable pl-1 pt-3">
                 <mat-icon >more_horiz</mat-icon>
@@ -57,7 +57,7 @@
               <div class="p-3">
                 <mat-form-field appearance="legacy" class="w-100">
                     <mat-label>Start date/time</mat-label>
-                    <input matInput [matDatepicker]="startTime">
+                    <input matInput [matDatepicker]="startTime" required>
                     <mat-datepicker-toggle matSuffix [for]="startTime" class="date-picker-image"></mat-datepicker-toggle>
                     <mat-datepicker #startTime></mat-datepicker>
                 </mat-form-field>
@@ -68,7 +68,7 @@
               <div class="p-3">
                 <mat-form-field appearance="legacy" class="w-100">
                     <mat-label>End date/time</mat-label>
-                    <input matInput [matDatepicker]="endTime">
+                    <input matInput [matDatepicker]="endTime" required>
                     <mat-datepicker-toggle matSuffix [for]="endTime" class="date-picker-image"></mat-datepicker-toggle>
                     <mat-datepicker #endTime></mat-datepicker>
                   </mat-form-field>
@@ -124,7 +124,7 @@
                 <div class="p-3">
                     <mat-form-field class="w-100">
                         <mat-label>Purpose</mat-label>
-                        <input matInput placeholder="Specify work plan purpose" value="">
+                        <input matInput placeholder="Specify work plan purpose" value="" required>
                     </mat-form-field>
                 </div>
             </div>
@@ -148,6 +148,14 @@
                     </mat-form-field>
                 </div>
             </div>
+         </div>
+
+         <div class="row mb-2">
+          <div class="col-md-12">
+            <div class="p-3">
+              <button class="button-add w-100 mr-auto">Save changes</button>
+            </div>
+          </div>
          </div>
 
 

@@ -38,6 +38,13 @@ namespace SmartEnergyAPI.Mapping
             CreateMap<Device, DeviceDto>()
                 .ForMember(mem => mem.DeviceType, op => op.MapFrom(o => o.DeviceType));
 
+            CreateMap<WorkRequestDto, WorkRequest>()
+                .ForMember(mem => mem.DocumentStatus, op => op.MapFrom(o => o.DocumentStatus))
+                .ForMember(mem => mem.DocumentType, op => op.MapFrom(o => o.DocumentType));
+            CreateMap<WorkRequest, WorkRequestDto>()
+                .ForMember(mem => mem.DocumentStatus, op => op.MapFrom(o => o.DocumentStatus))
+                .ForMember(mem => mem.DocumentType, op => op.MapFrom(o => o.DocumentType));
+
         }
     }
 }
