@@ -166,6 +166,8 @@ const routes: Routes = [
   },
   { path: 'devices', component: DevicesComponent, outlet: "primary"},
   { path: 'new-device', component: NewDeviceComponent, outlet: "primary"},
+  { path: 'new-device/:id', component: NewDeviceComponent, outlet: "primary"},
+
   { path: 'global-settings', redirectTo: '/global-settings/change-password', pathMatch:"full", outlet: "primary",},
   { path: 'global-settings', component: GlobalSettingsComponent,  outlet: "primary",
   children:

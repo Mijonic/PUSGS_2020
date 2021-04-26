@@ -12,6 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NewDeviceComponent } from './new-device/new-device.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 
@@ -30,6 +31,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     ReactiveFormsModule,
     RouterModule,
     MatAutocompleteModule,
+    MatProgressSpinnerModule
     
     
 
