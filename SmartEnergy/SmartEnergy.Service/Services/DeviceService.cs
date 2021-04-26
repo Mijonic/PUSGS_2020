@@ -55,13 +55,18 @@ namespace SmartEnergy.Service.Services
             newDevice.ID = 0;
             newDevice.Location = null;
 
-            if (entity.Name.Trim().Equals(""))
-                throw new InvalidDeviceException("You have to enter device name!");
+            //if (entity.Name.Trim().Equals("") || entity.Name == null)
+            //    throw new InvalidDeviceException("You have to enter device name!");
+
             if(!Enum.IsDefined(typeof(DeviceType), entity.DeviceType))
                 throw new InvalidDeviceException("Undefined device type!");
 
             if (_dbContext.Location.Any(x => x.ID == entity.LocationID) == false)
                 throw new LocationNotFoundException($"Location with id = {entity.LocationID} does not exists!");
+
+
+
+            //newDevice.Name = $"{newDevice.DeviceType.ToString().Substring(0, 3)}{_dbContext.Devices.Count()}"; 
 
             _dbContext.Devices.Add(newDevice);
             _dbContext.SaveChanges();
@@ -85,7 +90,7 @@ namespace SmartEnergy.Service.Services
             if (oldDevice == null)
                 throw new DeviceNotFoundException($"Device with Id = {updatedDevice.ID} does not exists!");
 
-            if (updatedDevice.Name.Trim().Equals(""))
+            if (updatedDevice.Name.Trim().Equals("") || updatedDevice.Name == null)
                 throw new InvalidDeviceException("You have to enter device name!");
 
             if (_dbContext.Location.Where(x => x.ID.Equals(updatedDevice.LocationID)) == null)
