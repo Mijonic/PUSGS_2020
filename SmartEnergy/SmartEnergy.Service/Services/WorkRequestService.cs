@@ -17,11 +17,13 @@ namespace SmartEnergy.Service.Services
     {
         private readonly SmartEnergyDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IIncidentService _incidentService;
 
-        public WorkRequestService(SmartEnergyDbContext dbContext, IMapper mapper)
+        public WorkRequestService(SmartEnergyDbContext dbContext, IMapper mapper, IIncidentService incidentService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _incidentService = incidentService;
         }
 
         public void Delete(int id)
@@ -51,13 +53,22 @@ namespace SmartEnergy.Service.Services
                 throw new IncidentNotFoundException($"Attached incident with id {entity.IncidentID} does not exist.");
             }
 
+            if (_dbContext.WorkRequests.FirstOrDefault(x => x.IncidentID == entity.IncidentID) != null)
+                throw new WorkRequestInvalidStateException($"Work request already created for incident with id {entity.IncidentID}");
+
             if (entity.StartDate.CompareTo(entity.EndDate) > 0)
                 throw new WorkRequestInvalidStateException($"Start date cannot be after end date.");
 
-            if(entity.Purpose == null || entity.Purpose.Length >100)
+            if (entity.StartDate.CompareTo(DateTime.Now) < 0)
+                throw new WorkRequestInvalidStateException($"Start date cannot be in the past.");
+
+            if (entity.Purpose == null || entity.Purpose.Length >100)
                 throw new WorkRequestInvalidStateException($"Purpose must be at most 100 characters long and is required.");
 
             if (entity.Note != null && entity.Note.Length > 100)
+                throw new WorkRequestInvalidStateException($"Note must be at most 100 characters long.");
+            
+            if (entity.Details != null && entity.Details.Length > 100)
                 throw new WorkRequestInvalidStateException($"Note must be at most 100 characters long.");
 
             if (entity.CompanyName != null && entity.CompanyName.Length > 50)
@@ -66,23 +77,33 @@ namespace SmartEnergy.Service.Services
             if (entity.Phone != null && entity.Phone.Length > 30)
                 throw new WorkRequestInvalidStateException($"Phone must be at most 30 characters long.");
 
-            if (entity.Street == null || entity.Street.Length > 50)
-                throw new WorkRequestInvalidStateException($"Street must be at most 50 characters long and is required.");
+            if (entity.Street != null && entity.Street.Length > 50)
+                throw new WorkRequestInvalidStateException($"Street must be at most 50 characters long.");
+
+            if(entity.Street == null || entity.Street != "")
+            {
+                try
+                {
+                    LocationDto location = _incidentService.GetIncidentLocation(entity.IncidentID);
+                    entity.Street = location.Street + ", " + location.City; 
+                }catch
+                {
+
+                }
+            }
+
 
             MultimediaAnchor mAnchor = new MultimediaAnchor();
-            _dbContext.MultimediaAnchors.Add(mAnchor);
 
             StateChangeAnchor sAnchor = new StateChangeAnchor();
-            _dbContext.StateChangeAnchors.Add(sAnchor);
 
             NotificationAnchor nAnchor = new NotificationAnchor();
-            _dbContext.NotificationAnchors.Add(nAnchor);
 
             WorkRequest workRequest = _mapper.Map<WorkRequest>(entity);
             workRequest.ID = 0;
-            workRequest.MultimediaAnchorID = mAnchor.ID;
-            workRequest.NotificationAnchorID = nAnchor.ID;
-            workRequest.StateChangeAnchorID = sAnchor.ID;
+            workRequest.MultimediaAnchor = mAnchor;
+            workRequest.NotificationsAnchor = nAnchor;
+            workRequest.StateChangeAnchor = sAnchor;
             workRequest.DocumentStatus = DocumentStatus.DRAFT;
             _dbContext.WorkRequests.Add(workRequest);
 

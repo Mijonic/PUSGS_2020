@@ -93,6 +93,7 @@ export class CrewComponent implements OnInit {
             data => {
             this.crew = data;
             this.toastr.success("Crew updated successfully");
+            this.router.navigate(['crews']);
             },
             error=>{
               this.toastr.error(error.error);

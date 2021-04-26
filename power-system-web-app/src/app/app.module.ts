@@ -15,6 +15,7 @@ import { UsersModule } from './users/users.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { DevicesModule } from './devices/devices.module';
 import { ToastrModule } from 'ngx-toastr';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 
 
@@ -41,7 +42,7 @@ import { ToastrModule } from 'ngx-toastr';
     ToastrModule.forRoot(),
   ],
 
-  providers: [DatePipe],
+  providers: [DatePipe,{provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

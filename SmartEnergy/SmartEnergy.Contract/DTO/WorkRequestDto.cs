@@ -13,6 +13,7 @@ namespace SmartEnergy.Contract.DTO
         public DateTime CreatedOn { get; set; }
         public string Purpose { get; set; }
         public string Note { get; set; }
+        public string Details { get; set; }
         public string CompanyName { get; set; }
         public string Phone { get; set; }
         public string Street { get; set; }
@@ -21,9 +22,6 @@ namespace SmartEnergy.Contract.DTO
         public bool IsEmergency { get; set; }
         public int UserID { get; set; }
         public int IncidentID { get; set; }
-        public int? MultimediaAnchorID { get; set; }
-        public int? StateChangeAnchorID { get; set; }
-        public int? NotificationAnchorID { get; set; }
 
     }
 }

@@ -36,4 +36,9 @@ export class UserService {
     return this.http.post<User>(requestUrl, user);
   }
 
+  getById(id:number):Observable<User>{
+    let requestUrl = environment.serverURL.concat(`users/${id}`);
+    return this.http.get<User>(requestUrl);
+  }
+
 }

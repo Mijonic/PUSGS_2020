@@ -26,5 +26,6 @@ namespace SmartEnergyAPI.Controllers
         {
             return Ok(_locationService.GetAllLocations());
         }
+
     }
 }

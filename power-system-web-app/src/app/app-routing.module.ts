@@ -151,6 +151,10 @@ const routes: Routes = [
         component: WorkRequestBasicInformationComponent, 
       },
       {
+        path: 'basic-info/:id',
+        component: WorkRequestBasicInformationComponent, 
+      },
+      {
         path: 'multimedia/:id',
         component: MultimediaAttachmentsComponent, 
       },

@@ -100,6 +100,7 @@ import { WorkRequestEquipmentComponent } from './work-requests/work-request/work
     MatButtonToggleModule,
     MatCheckboxModule
   ]
+
 })
 export class DocumentsModule {
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SmartEnergy.Contract.CustomExceptions.Incident;
 using SmartEnergy.Contract.CustomExceptions.WorkRequest;
 using SmartEnergy.Contract.DTO;
 using SmartEnergy.Contract.Interfaces;
@@ -56,9 +57,12 @@ namespace SmartEnergyAPI.Controllers
                 WorkRequestDto newWorkRequest = _workRequestService.Insert(workRequest);
                 return CreatedAtAction(nameof(GetById), new { id = newWorkRequest.ID}, newWorkRequest);
             }
-            catch (WorkRequestNotFound wnf)
+            catch (IncidentNotFoundException wnf)
             {
                 return NotFound(wnf.Message);
+            }catch(WorkRequestInvalidStateException wris)
+            {
+                return BadRequest(wris.Message);
             }
         }
 

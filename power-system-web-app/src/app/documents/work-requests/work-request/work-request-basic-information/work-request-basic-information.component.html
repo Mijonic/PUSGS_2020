@@ -1,21 +1,33 @@
+
 <div class="container-fluid">
     <div class="row" >
-      <div class="container rounded bg-white mt-5 mb-2">
+      
+      <div class="container rounded bg-white mt-5 mb-2" >
 
         <div class="row">
             <div class="col-md-12 d-flex justify-content-start">
-                <h1 class="p-3 pb-5">Work request</h1>
+                <h1 class="p-3 pb-5" *ngIf="isNew">New work request</h1>
+                <h1 class="p-3 pb-5" *ngIf="isNew == false">Edit work request</h1>
             </div>
          </div>
-
+         <div class='w-100 d-flex justify-content-center '*ngIf="isLoading">
+          <div class="loading-shade">
+            <mat-spinner color='primary' [diameter]= "'200'" ></mat-spinner>
+          </div>
+        </div>
+         <form [formGroup]="workRequestForm" (ngSubmit)="onSave()">
         <div class="row" >
+
           <div class="col-md-6">
             <div class="p-3">
               <mat-form-field >
                 <mat-label>Document type</mat-label>
-                <mat-select required>
+                <mat-select  required formControlName="documentType">
                   <mat-option *ngFor="let documentType of documentTypes" value="{{documentType.value}}">{{documentType.display}}</mat-option>
                 </mat-select>
+                <mat-error >
+                  Please select document type.
+                </mat-error>
               </mat-form-field>
             </div>
           </div>
@@ -24,7 +36,7 @@
             <div class="p-3">
               <mat-form-field class="w-100">
                 <mat-label>Status</mat-label>
-                <input matInput disabled value="Draft">
+                <input matInput formControlName="status">
               </mat-form-field>
             </div>
            </div>
@@ -36,7 +48,10 @@
             <div class="p-3 d-flex flex-row">
               <mat-form-field >
                 <mat-label>Incident</mat-label>
-                <input matInput disabled required value="33234361">
+                <input matInput formControlName="incident" required value="3" >
+                <mat-error >
+                  Please select related incident.
+                </mat-error>
               </mat-form-field>
               <a (click)="onChooseIncident()" class="clickable pl-1 pt-3">
                 <mat-icon >more_horiz</mat-icon>
@@ -46,7 +61,7 @@
   
             <div class="col-md-6">
               <div class="p-3 d-flex flex-row mt-3">
-                <mat-checkbox color="primary"  [(ngModel)]="isEmergency">Emergency</mat-checkbox>
+                <mat-checkbox formControlName="emergency" color="primary" >Emergency</mat-checkbox>
               </div>
             </div>
         </div>
@@ -57,9 +72,12 @@
               <div class="p-3">
                 <mat-form-field appearance="legacy" class="w-100">
                     <mat-label>Start date/time</mat-label>
-                    <input matInput [matDatepicker]="startTime" required>
+                    <input matInput [matDatepicker]="startTime" formControlName="startDate" required>
                     <mat-datepicker-toggle matSuffix [for]="startTime" class="date-picker-image"></mat-datepicker-toggle>
                     <mat-datepicker #startTime></mat-datepicker>
+                    <mat-error *ngIf="workRequestForm.hasError('invalidDates', 'startDate')">
+                      Start date is required, must be in the future and before end date.
+                    </mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -68,10 +86,14 @@
               <div class="p-3">
                 <mat-form-field appearance="legacy" class="w-100">
                     <mat-label>End date/time</mat-label>
-                    <input matInput [matDatepicker]="endTime" required>
+                    <input matInput [matDatepicker]="endTime" formControlName="endDate" required>
                     <mat-datepicker-toggle matSuffix [for]="endTime" class="date-picker-image"></mat-datepicker-toggle>
                     <mat-datepicker #endTime></mat-datepicker>
+                    <mat-error *ngIf="workRequestForm.hasError('invalidDates', 'endDate')">
+                      End date is required and must be after start date.
+                    </mat-error>
                   </mat-form-field>
+                  
               </div>
             </div>
         </div>
@@ -81,7 +103,10 @@
               <div class="p-3">
                 <mat-form-field class="w-100">
                     <mat-label>Company</mat-label>
-                    <input matInput placeholder="Specify company that will handle outage" value="">
+                    <input matInput placeholder="Specify company that will handle outage" formControlName="companyName" value="">
+                    <mat-error *ngIf="workRequestForm.hasError('maxlength', 'companyName')">
+                      Company name must not exceed 50 characters.
+                    </mat-error>
                   </mat-form-field>
               </div>
             </div>
@@ -90,7 +115,10 @@
               <div class="p-3">
                 <mat-form-field class="w-100">
                   <mat-label>Phone number</mat-label>
-                  <input matInput placeholder="Specify phone number of consumer who reported outage" value="">
+                  <input matInput placeholder="Specify phone number of consumer who reported outage" formControlName="phone" value="">
+                  <mat-error *ngIf="workRequestForm.hasError('maxlength', 'phone')">
+                    Phone number must not exceed 30 characters.
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -101,7 +129,7 @@
               <div class="p-3">
                 <mat-form-field appearance="legacy" class="w-100">
                     <mat-label>Created on</mat-label>
-                    <input disabled matInput [matDatepicker]="createdTime">
+                    <input formControlName="createdOn" matInput [matDatepicker]="createdTime">
                     <mat-datepicker-toggle matSuffix [for]="createdTime" class="date-picker-image"></mat-datepicker-toggle>
                     <mat-datepicker #createdTime></mat-datepicker>
                 </mat-form-field>
@@ -115,7 +143,7 @@
                 <div class="p-3">
                     <mat-form-field class="w-100">
                         <mat-label>Created by</mat-label>
-                        <input matInput disabled value="Pedjurda Glavasurda">
+                        <input matInput formControlName="createdBy">
                     </mat-form-field>
                 </div>
             </div>
@@ -124,7 +152,13 @@
                 <div class="p-3">
                     <mat-form-field class="w-100">
                         <mat-label>Purpose</mat-label>
-                        <input matInput placeholder="Specify work plan purpose" value="" required>
+                        <input matInput formControlName="purpose" placeholder="Specify work plan purpose" value="" required>
+                        <mat-error *ngIf="workRequestForm.hasError('required', 'purpose')">
+                          Please specify purpose.
+                        </mat-error>
+                        <mat-error *ngIf="workRequestForm.hasError('maxlength', 'purpose')">
+                          Purpose must not exceed 100 characters.
+                        </mat-error>
                     </mat-form-field>
                 </div>
             </div>
@@ -135,7 +169,10 @@
                 <div class="p-3">
                     <mat-form-field class="w-100">
                         <mat-label>Details</mat-label>
-                        <textarea matInput placeholder="Explain in depth what will be done"></textarea>
+                        <textarea matInput formControlName="details" placeholder="Explain in depth what will be done"></textarea>
+                        <mat-error>
+                          Notes must not exceed 100 characters.
+                        </mat-error>
                     </mat-form-field>
                 </div>
             </div>
@@ -144,7 +181,10 @@
                 <div class="p-3">
                     <mat-form-field class="w-100">
                         <mat-label>Notes</mat-label>
-                        <textarea matInput placeholder="Add additional info that will help"></textarea>
+                        <textarea matInput formControlName="note" placeholder="Add additional info that will help"></textarea>
+                        <mat-error>
+                          Notes must not exceed 100 characters.
+                        </mat-error>
                     </mat-form-field>
                 </div>
             </div>
@@ -153,10 +193,12 @@
          <div class="row mb-2">
           <div class="col-md-12">
             <div class="p-3">
-              <button class="button-add w-100 mr-auto">Save changes</button>
+              <button type="submit" class="button-add w-100 mr-auto">Save changes</button>
             </div>
           </div>
          </div>
+
+      </form>
 
 
       </div>

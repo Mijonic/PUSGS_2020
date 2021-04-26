@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartEnergy.Infrastructure;
 
 namespace SmartEnergy.Infrastructure.Migrations
 {
     [DbContext(typeof(SmartEnergyDbContext))]
-    partial class SmartEnergyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210426194453_WR_Street_NUllable")]
+    partial class WR_Street_NUllable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

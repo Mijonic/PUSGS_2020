@@ -46,6 +46,10 @@ namespace SmartEnergy.Infrastructure.Configurations
                   .IsRequired(false)
                   .HasMaxLength(100);
 
+            builder.Property(i => i.Details)
+                 .IsRequired(false)
+                 .HasMaxLength(100);
+
             builder.Property(i => i.IsEmergency)
                   .IsRequired();
 
@@ -59,7 +63,7 @@ namespace SmartEnergy.Infrastructure.Configurations
 
             builder.Property(i => i.Street)
                   .HasMaxLength(50)
-                  .IsRequired();
+                  .IsRequired(false);
 
             builder.HasOne(i => i.User)
                 .WithMany(p => p.WorkRequests)

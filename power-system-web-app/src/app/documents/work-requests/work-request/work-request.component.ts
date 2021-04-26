@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-work-request',
@@ -16,9 +17,17 @@ export class WorkRequestComponent implements OnInit {
 
   
 
-  constructor() { }
+  constructor(private route:ActivatedRoute) { }
 
   ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if(id && id!= "")
+    {
+      this.navLinks.forEach( f => {
+          f.path.concat(`/${id}`);
+          f.isDisabled = false;
+      });
+    }
   }
 
 }
