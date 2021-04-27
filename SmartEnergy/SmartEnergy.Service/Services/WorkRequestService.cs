@@ -31,10 +31,7 @@ namespace SmartEnergy.Service.Services
         public void Delete(int id)
         {
             WorkRequest wr = _dbContext.WorkRequests.Include( x => x.WorkPlan)
-                                                    .Include( x=> x.DeviceUsage)
-                                                    .Include( x => x.MultimediaAnchor)
-                                                    .Include(x => x.NotificationsAnchor)
-                                                    .Include(x => x.StateChangeAnchor)
+                                                    .Include( x => x.DeviceUsage)
                                                     .FirstOrDefault( x=> x.ID == id);
             if (wr == null)
                 throw new WorkRequestNotFound($"Work request with id {id} dos not exist.");

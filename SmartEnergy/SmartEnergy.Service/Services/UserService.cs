@@ -84,6 +84,10 @@ namespace SmartEnergy.Service.Services
 
             User user = _mapper.Map<User>(entity);
 
+
+            if (_dbContext.Users.FirstOrDefault(x => x.Email == user.Email) != null)
+                throw new InvalidUserDataException($"User with email address {user.Email} already exists.");
+
             if (user.UserType == UserType.ADMIN)
                 throw new InvalidUserDataException("User cannot register as admin!");
 

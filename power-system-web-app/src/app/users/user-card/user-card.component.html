@@ -3,8 +3,8 @@
     <img class="card-img-top profile-image" [src]="user.imageURL" alt="Card image cap" *ngIf="user.imageURL">
     <div class="card-body pb-1">
       <div class="d-flex flex-row title-row">
-          <h2 class="card-title mb-0">{{user.name}}&nbsp;{{user.lastname}}</h2>
-          &nbsp;
+          <h2 class="card-title mb-0">{{getUserDisplay()}}</h2>
+
           <h3>
               <mat-icon [inline]="true" *ngIf="user.userStatus === 'APPROVED' ">verified_user</mat-icon>
               <mat-icon [inline]="true" *ngIf="user.userStatus === 'PENDING' ">hourglass_full</mat-icon>

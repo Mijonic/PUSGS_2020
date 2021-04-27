@@ -26,6 +26,11 @@ export class UserCardComponent implements OnInit {
 
   }
 
+  getUserDisplay()
+  {
+    return (`${this.user.name} ${this.user.lastname}`);
+  }
+
   getUserTypeDisplay(type:string){
     if(type === 'CREW_MEMBER')
       return 'Crew member';

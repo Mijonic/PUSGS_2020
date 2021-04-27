@@ -17,6 +17,7 @@
   
     .card-title{
       font-weight:bolder ;
+      overflow-y:hidden;
     }
   
     .button-user-card{
