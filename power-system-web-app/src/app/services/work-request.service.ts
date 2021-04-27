@@ -21,8 +21,18 @@ export class WorkRequestService {
     return this.http.get<WorkRequest>(requestUrl);
   }
 
+  getAll():Observable<WorkRequest[]>{
+    let requestUrl = environment.serverURL.concat(`work-requests`);
+    return this.http.get<WorkRequest[]>(requestUrl);
+  }
+
   updateWorkRequest(workRequest:WorkRequest):Observable<WorkRequest>{
     let requestUrl = environment.serverURL.concat(`work-requests/${workRequest.id}`);
     return this.http.put<WorkRequest>(requestUrl, workRequest);
+  }
+
+  deleteWorkRequest(id:number):Observable<{}>{
+    let requestUrl = environment.serverURL.concat(`work-requests/${id}`);
+    return this.http.delete<WorkRequest>(requestUrl);
   }
 }

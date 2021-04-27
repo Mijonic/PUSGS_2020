@@ -101,5 +101,22 @@ namespace SmartEnergyAPI.Controllers
         }
 
 
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult DeleteWorkRequest(int id)
+        {
+            try
+            {
+                _workRequestService.Delete(id);
+                return NoContent();
+            }
+            catch (WorkRequestNotFound wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+        }
+
+
     }
 }
