@@ -33,5 +33,20 @@ namespace SmartEnergyDomainModels
         public List<DeviceUsage> DeviceUsage { get; set; }
         public WorkPlan WorkPlan { get; set; }
 
+        public void Update(WorkRequest newData)
+        {
+            StartDate = newData.StartDate;
+            EndDate = newData.EndDate;
+            Purpose = newData.Purpose;
+            Note = newData.Note;
+            Details = newData.Details;
+            CompanyName = newData.CompanyName;
+            Phone = newData.Phone;
+            Street = newData.Street;
+            DocumentType = newData.DocumentType;
+            IncidentID = newData.IncidentID;
+            IsEmergency = newData.IsEmergency;
+        }
+
     }
 }

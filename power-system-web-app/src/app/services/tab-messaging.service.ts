@@ -4,27 +4,22 @@ import { Observable, Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class NavbarMessagingService implements OnDestroy {
-
+export class TabMessagingService implements OnDestroy{
   private subject = new Subject<any>();
   
   constructor() { }
+
   ngOnDestroy(): void {
     this.subject.unsubscribe();
   }
 
-  activateLogin()
+  showEdit(wrId:number)
   {
-    this.subject.next("login");
+    this.subject.next(wrId);
   }
-
-  activateRegister()
-  {
-    this.subject.next("Register");
-  }
-
 
   getMessage():Observable<any>{
     return this.subject.asObservable();
   }
+
 }

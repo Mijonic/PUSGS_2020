@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SmartEnergy.Contract.CustomExceptions;
 using SmartEnergy.Contract.CustomExceptions.Incident;
 using SmartEnergy.Contract.CustomExceptions.WorkRequest;
 using SmartEnergy.Contract.DTO;
@@ -60,7 +61,40 @@ namespace SmartEnergyAPI.Controllers
             catch (IncidentNotFoundException wnf)
             {
                 return NotFound(wnf.Message);
-            }catch(WorkRequestInvalidStateException wris)
+            }
+            catch (UserNotFoundException unf)
+            {
+                return NotFound(unf.Message);
+            }
+            catch (WorkRequestInvalidStateException wris)
+            {
+                return BadRequest(wris.Message);
+            }
+        }
+
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult CreateWorkRequest(int id,[FromBody] WorkRequestDto workRequest)
+        {
+            if (id != workRequest.ID)
+                return BadRequest($"Request id and entity id don't match");
+            try
+            {
+                WorkRequestDto modified = _workRequestService.Update(workRequest);
+                return Ok(modified);
+            }
+            catch (IncidentNotFoundException wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+            catch (UserNotFoundException unf)
+            {
+                return NotFound(unf.Message);
+            }
+            catch (WorkRequestInvalidStateException wris)
             {
                 return BadRequest(wris.Message);
             }

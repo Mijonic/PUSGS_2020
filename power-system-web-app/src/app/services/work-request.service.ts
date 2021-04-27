@@ -15,4 +15,14 @@ export class WorkRequestService {
     let requestUrl = environment.serverURL.concat("work-requests");
     return this.http.post<WorkRequest>(requestUrl, workRequest);
   }
+
+  getById(id:number):Observable<WorkRequest>{
+    let requestUrl = environment.serverURL.concat(`work-requests/${id}`);
+    return this.http.get<WorkRequest>(requestUrl);
+  }
+
+  updateWorkRequest(workRequest:WorkRequest):Observable<WorkRequest>{
+    let requestUrl = environment.serverURL.concat(`work-requests/${workRequest.id}`);
+    return this.http.put<WorkRequest>(requestUrl, workRequest);
+  }
 }

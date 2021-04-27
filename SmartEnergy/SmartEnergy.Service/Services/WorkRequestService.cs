@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SmartEnergy.Contract.CustomExceptions;
 using SmartEnergy.Contract.CustomExceptions.Incident;
 using SmartEnergy.Contract.CustomExceptions.WorkRequest;
 using SmartEnergy.Contract.DTO;
@@ -48,50 +49,7 @@ namespace SmartEnergy.Service.Services
 
         public WorkRequestDto Insert(WorkRequestDto entity)
         {
-            if(_dbContext.Incidents.Find(entity.IncidentID) == null)
-            {
-                throw new IncidentNotFoundException($"Attached incident with id {entity.IncidentID} does not exist.");
-            }
-
-            if (_dbContext.WorkRequests.FirstOrDefault(x => x.IncidentID == entity.IncidentID) != null)
-                throw new WorkRequestInvalidStateException($"Work request already created for incident with id {entity.IncidentID}");
-
-            if (entity.StartDate.CompareTo(entity.EndDate) > 0)
-                throw new WorkRequestInvalidStateException($"Start date cannot be after end date.");
-
-            if (entity.StartDate.CompareTo(DateTime.Now) < 0)
-                throw new WorkRequestInvalidStateException($"Start date cannot be in the past.");
-
-            if (entity.Purpose == null || entity.Purpose.Length >100)
-                throw new WorkRequestInvalidStateException($"Purpose must be at most 100 characters long and is required.");
-
-            if (entity.Note != null && entity.Note.Length > 100)
-                throw new WorkRequestInvalidStateException($"Note must be at most 100 characters long.");
-            
-            if (entity.Details != null && entity.Details.Length > 100)
-                throw new WorkRequestInvalidStateException($"Note must be at most 100 characters long.");
-
-            if (entity.CompanyName != null && entity.CompanyName.Length > 50)
-                throw new WorkRequestInvalidStateException($"Note must be at most 100 characters long.");
-
-            if (entity.Phone != null && entity.Phone.Length > 30)
-                throw new WorkRequestInvalidStateException($"Phone must be at most 30 characters long.");
-
-            if (entity.Street != null && entity.Street.Length > 50)
-                throw new WorkRequestInvalidStateException($"Street must be at most 50 characters long.");
-
-            if(entity.Street == null || entity.Street != "")
-            {
-                try
-                {
-                    LocationDto location = _incidentService.GetIncidentLocation(entity.IncidentID);
-                    entity.Street = location.Street + ", " + location.City; 
-                }catch
-                {
-
-                }
-            }
-
+            ValidateWorkRequest(entity);
 
             MultimediaAnchor mAnchor = new MultimediaAnchor();
 
@@ -114,7 +72,67 @@ namespace SmartEnergy.Service.Services
 
         public WorkRequestDto Update(WorkRequestDto entity)
         {
-            throw new NotImplementedException();
+            ValidateWorkRequest(entity);
+            WorkRequest existing = _dbContext.WorkRequests.Find(entity.ID);
+            if (existing == null)
+                throw new WorkRequestNotFound($"Work request with id {entity.ID} does not exist");
+
+            existing.Update(_mapper.Map<WorkRequest>(entity));
+
+            _dbContext.SaveChanges();
+
+            return _mapper.Map<WorkRequestDto>(existing);
+
+            
+        }
+
+        private void ValidateWorkRequest(WorkRequestDto entity)
+        {
+            if (_dbContext.Incidents.Find(entity.IncidentID) == null)
+            {
+                throw new IncidentNotFoundException($"Attached incident with id {entity.IncidentID} does not exist.");
+            }
+
+            if(_dbContext.Users.Find(entity.UserID) == null)
+                throw new UserNotFoundException($"Attached user with id {entity.UserID} does not exist.");
+
+            WorkRequest wr = _dbContext.WorkRequests.FirstOrDefault(x => x.IncidentID == entity.IncidentID);
+            if (wr != null && wr.ID != entity.ID )
+                throw new WorkRequestInvalidStateException($"Work request already created for incident with id {entity.IncidentID}");
+
+            if (entity.StartDate.CompareTo(entity.EndDate) > 0)
+                throw new WorkRequestInvalidStateException($"Start date cannot be after end date.");
+
+            if (entity.StartDate.CompareTo(DateTime.Now) < 0)
+                throw new WorkRequestInvalidStateException($"Start date cannot be in the past.");
+
+            if (entity.Purpose == null || entity.Purpose.Length > 100)
+                throw new WorkRequestInvalidStateException($"Purpose must be at most 100 characters long and is required.");
+
+            if (entity.Note != null && entity.Note.Length > 100)
+                throw new WorkRequestInvalidStateException($"Note must be at most 100 characters long.");
+
+            if (entity.Details != null && entity.Details.Length > 100)
+                throw new WorkRequestInvalidStateException($"Note must be at most 100 characters long.");
+
+            if (entity.CompanyName != null && entity.CompanyName.Length > 50)
+                throw new WorkRequestInvalidStateException($"Note must be at most 100 characters long.");
+
+            if (entity.Phone != null && entity.Phone.Length > 30)
+                throw new WorkRequestInvalidStateException($"Phone must be at most 30 characters long.");
+
+            if (entity.Street != null && entity.Street.Length > 50)
+                throw new WorkRequestInvalidStateException($"Street must be at most 50 characters long.");
+
+            if (entity.Street == null || entity.Street != "")
+            {
+                try
+                {
+                    LocationDto location = _incidentService.GetIncidentLocation(entity.IncidentID);
+                    entity.Street = location.Street + ", " + location.City;
+                }
+                catch { }
+            }
         }
     }
 }

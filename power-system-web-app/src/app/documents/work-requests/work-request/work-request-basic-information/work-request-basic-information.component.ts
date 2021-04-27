@@ -1,9 +1,10 @@
+import { TabMessagingService } from './../../../../services/tab-messaging.service';
 import { IncidentService } from './../../../../services/incident.service';
 import { ToastrService } from 'ngx-toastr';
 import { WorkRequestService } from './../../../../services/work-request.service';
 import { UserService } from './../../../../services/user.service';
 import { ValidationService } from './../../../../services/validation.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ChooseIncidentDialogComponent } from 'app/documents/dialogs/choose-incident-dialog/choose-incident-dialog.component';
@@ -43,12 +44,14 @@ export class WorkRequestBasicInformationComponent implements OnInit {
   isLoading:boolean = false;
 
   constructor(public dialog:MatDialog, private validation:ValidationService, private route:ActivatedRoute, private userService:UserService, 
-    private workRequestService:WorkRequestService, private toastr:ToastrService, private router:Router, private incidentService:IncidentService) { }
+    private workRequestService:WorkRequestService, private toastr:ToastrService, private router:Router, private incidentService:IncidentService,
+    private tabMessaging:TabMessagingService) { }
 
   ngOnInit(): void {
     const wrId = this.route.snapshot.paramMap.get('id');
     if(wrId && wrId != "")
     {
+      this.tabMessaging.showEdit(+wrId);
       this.isNew = false;
       this.loadWorkRequest(+wrId);
     }
@@ -57,7 +60,23 @@ export class WorkRequestBasicInformationComponent implements OnInit {
 
   loadWorkRequest(id:number)
   {
-
+    this.isLoading = true;
+      this.workRequestService.getById(id).subscribe(
+        data =>{
+          this.isLoading = false;
+          this.workRequest = data;
+          this.populateControls(this.workRequest);
+        } ,
+        error =>{
+          if(error.error instanceof ProgressEvent)
+          {
+            this.loadWorkRequest(id);
+          }else
+          {
+            this.toastr.error(error.error);
+          }
+        }
+      );
   }
 
   populateControls(workRequest:WorkRequest)
@@ -133,6 +152,26 @@ export class WorkRequestBasicInformationComponent implements OnInit {
             data =>{
               this.toastr.success("Work request created successfully");
               this.router.navigate(['work-request/basic-info', data.id])
+            },
+            error =>{
+             this.isLoading = false;
+              if(error.error instanceof ProgressEvent)
+                {
+                  this.toastr.error("Server is unreachable");
+                }else
+                {
+                  this.toastr.error(error.error);
+                }
+              
+            }
+          )
+        }else
+        {
+          this.workRequestService.updateWorkRequest(this.workRequest).subscribe(
+            data =>{
+              this.toastr.success("Work request updated successfully");
+              this.workRequest = data;
+              this.isLoading = false;
             },
             error =>{
              this.isLoading = false;

@@ -1,13 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { TabMessagingService } from './../../../services/tab-messaging.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-work-request',
   templateUrl: './work-request.component.html',
   styleUrls: ['./work-request.component.css']
 })
-export class WorkRequestComponent implements OnInit {
+export class WorkRequestComponent implements OnInit, OnDestroy {
   isNew:boolean = true;
+  tabMessagingSubscription!:Subscription;
   navLinks = [
     { path: 'basic-info', label: 'Basic information', isDisabled: false },
     { path: 'state-changes', label: 'History of state changes', isDisabled: this.isNew },
@@ -17,17 +19,25 @@ export class WorkRequestComponent implements OnInit {
 
   
 
-  constructor(private route:ActivatedRoute) { }
+  constructor(private tabMessaging:TabMessagingService) { }
+  ngOnDestroy(): void {
+    this.tabMessagingSubscription.unsubscribe();
+  }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if(id && id!= "")
-    {
-      this.navLinks.forEach( f => {
-          f.path.concat(`/${id}`);
-          f.isDisabled = false;
-      });
-    }
+    this.tabMessagingSubscription = this.tabMessaging.getMessage().subscribe( message => {
+        if(this.isNew)
+          this.showEdit(message);
+    });
+  }
+
+  showEdit(id:any)
+  {
+    this.isNew = false;
+    this.navLinks.forEach( f => {
+      f.path = f.path.concat(`/${id}`);
+      f.isDisabled = false;
+  });
   }
 
 }
