@@ -19,10 +19,12 @@ namespace SmartEnergyAPI.Controllers
     public class WorkRequestController : ControllerBase
     {
         private readonly IWorkRequestService _workRequestService;
+        private readonly IMultimediaService _multimediaService;
 
-        public WorkRequestController(IWorkRequestService workRequestService)
+        public WorkRequestController(IWorkRequestService workRequestService, IMultimediaService multimediaService)
         {
             _workRequestService = workRequestService;
+            _multimediaService = multimediaService;
         }
 
         [HttpGet]
@@ -42,6 +44,21 @@ namespace SmartEnergyAPI.Controllers
                 WorkRequestDto workRequest = _workRequestService.Get(id);
                 return Ok(workRequest);
             }catch(WorkRequestNotFound wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+        }
+
+        [HttpGet("{id}/devices")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetWorkRequestDevices(int id)
+        {
+            try
+            {
+                return Ok(_workRequestService.GetWorkRequestDevices(id));
+            }
+            catch (WorkRequestNotFound wnf)
             {
                 return NotFound(wnf.Message);
             }
@@ -110,6 +127,23 @@ namespace SmartEnergyAPI.Controllers
             {
                 _workRequestService.Delete(id);
                 return NoContent();
+            }
+            catch (WorkRequestNotFound wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+        }
+
+        [HttpPost("{id}/upload")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [RequestSizeLimit(long.MaxValue)]
+        public IActionResult AttachFile(int id, IFormFile file)
+        {
+            try
+            {
+                _multimediaService.AttachFileToWorkRequest(file, id);
+                return Ok();
             }
             catch (WorkRequestNotFound wnf)
             {

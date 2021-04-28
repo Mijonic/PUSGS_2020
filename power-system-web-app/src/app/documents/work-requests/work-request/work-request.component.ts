@@ -1,5 +1,5 @@
 import { TabMessagingService } from './../../../services/tab-messaging.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './work-request.component.html',
   styleUrls: ['./work-request.component.css']
 })
-export class WorkRequestComponent implements OnInit, OnDestroy {
+export class WorkRequestComponent implements OnInit, OnDestroy{
   isNew:boolean = true;
   tabMessagingSubscription!:Subscription;
   navLinks = [
@@ -20,14 +20,15 @@ export class WorkRequestComponent implements OnInit, OnDestroy {
   
 
   constructor(private tabMessaging:TabMessagingService) { }
+
   ngOnDestroy(): void {
     this.tabMessagingSubscription.unsubscribe();
   }
 
   ngOnInit(): void {
     this.tabMessagingSubscription = this.tabMessaging.getMessage().subscribe( message => {
-        if(this.isNew)
-          this.showEdit(message);
+      if(this.isNew)
+        this.showEdit(message);
     });
   }
 

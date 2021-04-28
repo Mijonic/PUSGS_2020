@@ -8,6 +8,5 @@ namespace SmartEnergy.Contract.Interfaces
     public interface IDeviceService : IGenericService<DeviceDto>
     {
 
-
     }
 }

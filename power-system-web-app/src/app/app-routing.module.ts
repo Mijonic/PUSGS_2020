@@ -1,3 +1,4 @@
+import { WorkRequestMultimediaComponent } from './documents/work-requests/work-request/work-request-multimedia/work-request-multimedia.component';
 import { IncidentDevicesComponent } from './incidents/devices/devices.component';
 import { GlobalSettingsStreetsPriorityComponent } from './settings/global-settings-streets-priority/global-settings-streets-priority.component';
 import { GlobalSettingsResetDefaultComponent } from './settings/global-settings-reset-default/global-settings-reset-default.component';
@@ -156,13 +157,13 @@ const routes: Routes = [
       },
       {
         path: 'multimedia/:id',
-        component: MultimediaAttachmentsComponent, 
+        component: WorkRequestMultimediaComponent, 
       },
       {
         path: 'state-changes/:id',
         component: WorkRequestStateChangesComponent, 
       },
-      {
+     {
         path: 'equipment/:id',
         component: WorkRequestEquipmentComponent,
       },

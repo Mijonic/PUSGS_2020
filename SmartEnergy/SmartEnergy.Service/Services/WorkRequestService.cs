@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SmartEnergy.Contract.CustomExceptions;
+using SmartEnergy.Contract.CustomExceptions.Device;
 using SmartEnergy.Contract.CustomExceptions.Incident;
 using SmartEnergy.Contract.CustomExceptions.WorkRequest;
 using SmartEnergy.Contract.DTO;
@@ -58,6 +59,21 @@ namespace SmartEnergy.Service.Services
         public List<WorkRequestDto> GetAll()
         {
             return _mapper.Map<List<WorkRequestDto>>(_dbContext.WorkRequests.ToList());
+        }
+
+        public List<DeviceDto> GetWorkRequestDevices(int workRequestId)
+        {
+            WorkRequest workRequest = _dbContext.WorkRequests.Include(x => x.DeviceUsage)
+                                                             .ThenInclude(x => x.Device)
+                                                             .FirstOrDefault(x => x.ID == workRequestId);
+            if (workRequest == null)
+                throw new WorkRequestNotFound($"Work request with id {workRequestId} does not exist.");
+
+            List<Device> devices = new List<Device>();
+            foreach (DeviceUsage d in workRequest.DeviceUsage)
+                devices.Add(d.Device);
+
+            return _mapper.Map<List<DeviceDto>>(devices);
         }
 
         public WorkRequestDto Insert(WorkRequestDto entity)

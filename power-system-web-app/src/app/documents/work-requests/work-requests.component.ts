@@ -1,3 +1,4 @@
+import { UserService } from './../../services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { DisplayService } from './../../services/display.service';
 import { WorkRequestService } from './../../services/work-request.service';
@@ -24,7 +25,8 @@ export class WorkRequestsComponent implements  AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private workRequestService:WorkRequestService, public display:DisplayService, private toastr:ToastrService) {
+  constructor(private workRequestService:WorkRequestService, public display:DisplayService, private toastr:ToastrService,
+    private userService:UserService) {
   }
 
   loadWorkRequests()

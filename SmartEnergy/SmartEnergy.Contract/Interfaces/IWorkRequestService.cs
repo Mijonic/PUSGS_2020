@@ -7,5 +7,6 @@ namespace SmartEnergy.Contract.Interfaces
 {
     public interface IWorkRequestService :IGenericService<WorkRequestDto>
     {
+        public List<DeviceDto> GetWorkRequestDevices(int workRequestId);
     }
 }

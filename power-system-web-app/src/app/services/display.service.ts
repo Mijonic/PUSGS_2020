@@ -1,3 +1,4 @@
+import { Location } from './../shared/models/location.model';
 import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 
@@ -19,5 +20,13 @@ export class DisplayService {
   getDateDisplay(date:Date)
   {
     return this.datePipe.transform(date, "dd/MM/yyyy");
+  }
+
+  getCoordinatesDisplay(location:Location){
+    return `${location.latitude}, ${location.longitude}`;
+  }
+
+  getAddressDisplay(location:Location){
+    return `${location.street}, ${location.city}`;
   }
 }

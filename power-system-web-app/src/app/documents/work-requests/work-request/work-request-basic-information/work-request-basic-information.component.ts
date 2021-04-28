@@ -42,19 +42,26 @@ export class WorkRequestBasicInformationComponent implements OnInit {
   }, {validators:this.logicalDates});
   isNew = true;
   isLoading:boolean = false;
+  workReqId:number;
 
   constructor(public dialog:MatDialog, private validation:ValidationService, private route:ActivatedRoute, private userService:UserService, 
     private workRequestService:WorkRequestService, private toastr:ToastrService, private router:Router, private incidentService:IncidentService,
-    private tabMessaging:TabMessagingService) { }
+    private tabMessaging:TabMessagingService)
+     
+    {
+      
+    }
 
   ngOnInit(): void {
     const wrId = this.route.snapshot.paramMap.get('id');
-    if(wrId && wrId != "")
-    {
-      this.tabMessaging.showEdit(+wrId);
-      this.isNew = false;
-      this.loadWorkRequest(+wrId);
-    }
+      if(wrId && wrId != "")
+      {
+        this.tabMessaging.showEdit(+wrId);
+        this.isNew = false;
+        this.workReqId = +wrId;
+        this.loadWorkRequest(this.workReqId);
+      }
+    
     this.user.id = 7;
   }
 

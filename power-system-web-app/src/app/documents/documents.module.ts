@@ -1,3 +1,6 @@
+import { BrowserModule } from '@angular/platform-browser';
+
+import { MultimediaModule } from './../multimedia/multimedia.module';
 import { ChooseWorkRequestDialogComponent } from 'app/documents/dialogs/choose-work-request-dialog/choose-work-request-dialog.component';
 import { MatIconModule } from '@angular/material/icon';
 import { WorkPlansComponent } from './work-plans/work-plans.component';
@@ -43,6 +46,7 @@ import { WorkRequestBasicInformationComponent } from './work-requests/work-reque
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { WorkRequestStateChangesComponent } from './work-requests/work-request/work-request-state-changes/work-request-state-changes.component';
 import { WorkRequestEquipmentComponent } from './work-requests/work-request/work-request-equipment/work-request-equipment.component';
+import { WorkRequestMultimediaComponent } from './work-requests/work-request/work-request-multimedia/work-request-multimedia.component';
 
 
 @NgModule({
@@ -70,12 +74,14 @@ import { WorkRequestEquipmentComponent } from './work-requests/work-request/work
     WorkRequestComponent,
     WorkRequestBasicInformationComponent,
     WorkRequestStateChangesComponent,
-    WorkRequestEquipmentComponent
+    WorkRequestEquipmentComponent,
+    WorkRequestMultimediaComponent
   ],
   exports: [
     WorkPlansComponent,
     WorkRequestsComponent,
-    WorkPlanComponent 
+    WorkPlanComponent,
+    WorkRequestMultimediaComponent 
   ],
   imports: [
     CommonModule,
@@ -98,7 +104,9 @@ import { WorkRequestEquipmentComponent } from './work-requests/work-request/work
     MatDialogModule,
     MatFileUploadModule,
     MatButtonToggleModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MultimediaModule,
+    BrowserModule
   ]
 
 })
