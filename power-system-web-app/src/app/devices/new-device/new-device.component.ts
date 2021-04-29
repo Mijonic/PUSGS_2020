@@ -114,7 +114,7 @@ export class NewDeviceComponent implements OnInit {
       if(this.isNew)
       {
           this.device.name ="TEST"
-          this.device.deviceType = +this.newDeviceForm.value.deviceTypeControl;
+          this.device.deviceType = this.newDeviceForm.value.deviceTypeControl;
           this.device.locationId = +this.newDeviceForm.value.deviceLocationControl;
 
 
@@ -132,7 +132,7 @@ export class NewDeviceComponent implements OnInit {
           );
       }else
       {
-          this.device.deviceType = +this.newDeviceForm.value.deviceTypeControl;
+          this.device.deviceType = this.newDeviceForm.value.deviceTypeControl;
           this.device.locationId = +this.newDeviceForm.value.deviceLocationControl;
 
           this.deviceService.updateDevice(this.device).subscribe(

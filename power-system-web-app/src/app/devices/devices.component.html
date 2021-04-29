@@ -65,7 +65,7 @@
                             <!-- Type Column -->
                             <ng-container matColumnDef="type">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
-                            <td mat-cell *matCellDef="let row"> {{getDeviceTypeString(row.deviceType)}} </td>
+                            <td mat-cell *matCellDef="let row"> {{row.deviceType}} </td>
                             </ng-container>
                         
                             <!-- Coordinates Column -->

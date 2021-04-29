@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+
 using SmartEnergy.Contract.Interfaces;
 using SmartEnergy.Infrastructure;
 using SmartEnergy.Service.Services;
@@ -58,6 +59,8 @@ namespace SmartEnergyAPI
                 });
             });
 
+
+
             //Add Service implementations
             services.AddScoped<ISettingsService, SettingsService>();
             services.AddScoped<IIconService, IconService>();
@@ -68,6 +71,9 @@ namespace SmartEnergyAPI
             services.AddScoped<IWorkRequestService, WorkRequestService>();
             services.AddScoped<IIncidentService, IncidentService>();
             services.AddScoped<IMultimediaService, MultimediaService>();
+            services.AddScoped<ITimeService, TimeService>();
+
+           
 
         }
 

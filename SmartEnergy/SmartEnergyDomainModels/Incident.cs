@@ -17,6 +17,7 @@ namespace SmartEnergyDomainModels
         public DateTime? IncidentDateTime { get; set; }
         public DateTime? WorkBeginDate { get; set; }
         public double? VoltageLevel { get; set; }
+        public string Description { get; set; }  
         public int UserID { get; set; }
         public User User { get; set; }
         public Resolution Resolution { get; set; }
@@ -31,5 +32,25 @@ namespace SmartEnergyDomainModels
         public WorkRequest WorkRequest { get; set; }
         public WorkType WorkType { get; set; }
         public IncidentStatus IncidentStatus { get; set; }
+
+        public void Update(Incident newData)
+        {
+            Priority = newData.Priority;
+            Confirmed = newData.Confirmed;
+            ETA = newData.ETA;
+            ATA = newData.ATA;
+            ETR = newData.ETR;
+            IncidentDateTime = newData.IncidentDateTime;
+            WorkBeginDate = newData.WorkBeginDate;
+            WorkType = newData.WorkType;
+            IncidentStatus = newData.IncidentStatus;
+            Description = newData.Description;
+            VoltageLevel = newData.VoltageLevel;
+
+
+
+
+        }
+
     }
 }

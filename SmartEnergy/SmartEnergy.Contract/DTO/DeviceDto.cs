@@ -13,6 +13,8 @@ namespace SmartEnergy.Contract.DTO
         public int LocationID { get; set; }
         public LocationDto Location { get; set; }
 
+        public int DeviceCounter { get; set; }
+
         //public List<DeviceUsage> DeviceUsage { get; set; }
         // public List<Instruction> Instructions { get; set; }
     }

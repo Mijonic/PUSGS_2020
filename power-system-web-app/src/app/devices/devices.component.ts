@@ -108,18 +108,18 @@ export class DevicesComponent implements OnInit {
 
   }
 
-  getDeviceTypeString(deviceType:number)
-  {
-      switch(deviceType)
-      {
-          case 0: return "POWER_SWITCH";
-          case 1: return "FUSE"
-          case 2: return "TRANSFORMER"
-          case 3: return "DISCONNECTOR"   
-      }
+  // getDeviceTypeString(deviceType:number)
+  // {
+  //     switch(deviceType)
+  //     {
+  //         case 0: return "POWER_SWITCH";
+  //         case 1: return "FUSE"
+  //         case 2: return "TRANSFORMER"
+  //         case 3: return "DISCONNECTOR"   
+  //     }
 
-      return "UNKNOWN";
-  }
+  //     return "UNKNOWN";
+  // }
 
   delete(deviceId: number)
   {
