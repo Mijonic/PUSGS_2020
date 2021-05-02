@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartEnergy.Infrastructure;
 
 namespace SmartEnergy.Infrastructure.Migrations
 {
     [DbContext(typeof(SmartEnergyDbContext))]
-    partial class SmartEnergyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210502214834_Timestamps_optional")]
+    partial class Timestamps_optional
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -623,8 +625,7 @@ namespace SmartEnergy.Infrastructure.Migrations
 
                     b.Property<DateTime?>("ChangeDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DocumentStatus")
                         .IsRequired()
@@ -805,8 +806,7 @@ namespace SmartEnergy.Infrastructure.Migrations
 
                     b.Property<DateTime?>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Details")
                         .HasMaxLength(100)

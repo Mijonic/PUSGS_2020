@@ -1,3 +1,4 @@
+import { StateChange } from './../shared/models/state-change.model';
 import { IMultimediaService } from './../shared/interfaces/multimedia-service';
 import { MultimediaAttachment } from './../shared/models/multimedia-attachment.model';
 import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
@@ -71,6 +72,11 @@ export class WorkRequestService implements IMultimediaService {
   getAttachments(wrId:number): Observable<MultimediaAttachment[]> {
     let requestUrl = environment.serverURL.concat(`work-requests/${wrId}/attachments`);
 		return this.http.get<MultimediaAttachment[]>(requestUrl);
+  }
+
+  getStateChanges(wrId:number): Observable<StateChange[]> {
+    let requestUrl = environment.serverURL.concat(`work-requests/${wrId}/state-changes`);
+		return this.http.get<StateChange[]>(requestUrl);
   }
 
 

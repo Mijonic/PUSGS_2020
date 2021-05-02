@@ -46,10 +46,6 @@ namespace SmartEnergyDomainModels
             IncidentStatus = newData.IncidentStatus;
             Description = newData.Description;
             VoltageLevel = newData.VoltageLevel;
-
-
-
-
         }
 
     }

@@ -52,6 +52,9 @@ namespace SmartEnergy.Infrastructure.Configurations
             builder.Property(i => i.WorkBeginDate)
                   .IsRequired(false);
 
+            builder.Property(i => i.Description)
+                  .IsRequired(false);
+
             builder.HasOne(i => i.User)
                 .WithMany(p => p.Incidents)
                 .HasForeignKey(i => i.UserID)

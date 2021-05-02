@@ -35,8 +35,8 @@ namespace SmartEnergy.Infrastructure.Configurations
                   .IsRequired();
 
             builder.Property(i => i.CreatedOn)
-                  .IsRequired()
-                  .ValueGeneratedOnAdd();
+                  .IsRequired(false)
+                  .HasDefaultValueSql("getdate()");
 
             builder.Property(i => i.Purpose)
                   .HasMaxLength(100)

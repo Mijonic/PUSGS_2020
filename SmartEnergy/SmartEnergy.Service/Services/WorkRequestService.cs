@@ -89,6 +89,15 @@ namespace SmartEnergy.Service.Services
 
             NotificationAnchor nAnchor = new NotificationAnchor();
 
+            StateChangeHistory stateChange = new StateChangeHistory()
+            {
+                DocumentStatus = DocumentStatus.DRAFT,
+                UserID = entity.UserID,
+                
+            };
+
+            sAnchor.StateChangeHistories = new List<StateChangeHistory>() { stateChange };
+
             WorkRequest workRequest = _mapper.Map<WorkRequest>(entity);
             workRequest.ID = 0;
             workRequest.MultimediaAnchor = mAnchor;

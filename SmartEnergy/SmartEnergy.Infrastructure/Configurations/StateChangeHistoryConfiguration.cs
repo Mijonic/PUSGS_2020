@@ -21,9 +21,9 @@ namespace SmartEnergy.Infrastructure.Configurations
                 .ValueGeneratedOnAdd();
 
             // add unique
-            builder.Property(i => i.ChangeDate)
-                .ValueGeneratedOnAdd()
-                .IsRequired();
+           builder.Property(i => i.ChangeDate)
+                .IsRequired(false)
+                .HasDefaultValueSql("getdate()");
 
             builder.Property(i => i.DocumentStatus)
                 .HasConversion<String>()

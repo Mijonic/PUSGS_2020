@@ -10,7 +10,7 @@ namespace SmartEnergyDomainModels
         public int ID { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public DateTime CreatedOn{ get; set; }
+        public DateTime? CreatedOn{ get; set; }
         public string Purpose { get; set; }
         public string Note{ get; set; }
         public string Details { get; set; }

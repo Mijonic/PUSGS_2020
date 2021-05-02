@@ -21,11 +21,13 @@ namespace SmartEnergyAPI.Controllers
     {
         private readonly IWorkRequestService _workRequestService;
         private readonly IMultimediaService _multimediaService;
+        private readonly IStateChangeService _stateChangeService;
 
-        public WorkRequestController(IWorkRequestService workRequestService, IMultimediaService multimediaService)
+        public WorkRequestController(IWorkRequestService workRequestService, IMultimediaService multimediaService, IStateChangeService stateChangeService)
         {
             _workRequestService = workRequestService;
             _multimediaService = multimediaService;
+            _stateChangeService = stateChangeService;
         }
 
         [HttpGet]
@@ -191,6 +193,23 @@ namespace SmartEnergyAPI.Controllers
                 return NotFound(wnf.Message);
             }
         }
+
+
+        [HttpGet("{id}/state-changes")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<StateChangeHistoryDto>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetWorkRequestStateChanges(int id)
+        {
+            try
+            {
+                return Ok(_stateChangeService.GetWorkRequestStateHistory(id));
+            }
+            catch (WorkRequestNotFound wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+        }
+
 
         [HttpDelete("{id}/attachments/{filename}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
