@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SmartEnergy.Contract.CustomExceptions;
 using SmartEnergy.Contract.CustomExceptions.Incident;
+using SmartEnergy.Contract.CustomExceptions.Multimedia;
 using SmartEnergy.Contract.CustomExceptions.WorkRequest;
 using SmartEnergy.Contract.DTO;
 using SmartEnergy.Contract.Interfaces;
@@ -134,9 +135,10 @@ namespace SmartEnergyAPI.Controllers
             }
         }
 
-        [HttpPost("{id}/upload")]
+        [HttpPost("{id}/attachments")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [RequestSizeLimit(long.MaxValue)]
         public IActionResult AttachFile(int id, IFormFile file)
         {
@@ -149,8 +151,66 @@ namespace SmartEnergyAPI.Controllers
             {
                 return NotFound(wnf.Message);
             }
+            catch (MultimediaAlreadyExists mae)
+            {
+                return BadRequest(mae.Message);
+            }
         }
 
+        [HttpGet("{id}/attachments/{filename}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type= typeof(FileStreamResult))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult AttachFile(int id, string filename)
+        {
+            try
+            {
+                return File(_multimediaService.GetWorkRequestAttachmentStream(id, filename), "application/octet-stream", filename);
+            }
+            catch (WorkRequestNotFound wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+            catch (MultimediaNotFoundException mne)
+            {
+                return NotFound(mne.Message);
+            }
+        }
+
+
+        [HttpGet("{id}/attachments")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<MultimediaAttachmentDto>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult  GetWorkRequestAttachments(int id)
+        {
+            try
+            {
+                return Ok(_multimediaService.GetWorkRequestAttachments(id));
+            }
+            catch (WorkRequestNotFound wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+        }
+
+        [HttpDelete("{id}/attachments/{filename}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetWorkRequestAttachments(int id, string filename)
+        {
+            try
+            {
+                _multimediaService.DeleteWorkRequestAttachment(id, filename);
+                return Ok();
+            }
+            catch (WorkRequestNotFound wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+            catch (MultimediaNotFoundException mnf)
+            {
+                return NotFound(mnf.Message);
+            }
+        }
 
     }
 }

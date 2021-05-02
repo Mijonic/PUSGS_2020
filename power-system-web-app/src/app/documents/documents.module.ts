@@ -46,7 +46,6 @@ import { WorkRequestBasicInformationComponent } from './work-requests/work-reque
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { WorkRequestStateChangesComponent } from './work-requests/work-request/work-request-state-changes/work-request-state-changes.component';
 import { WorkRequestEquipmentComponent } from './work-requests/work-request/work-request-equipment/work-request-equipment.component';
-import { WorkRequestMultimediaComponent } from './work-requests/work-request/work-request-multimedia/work-request-multimedia.component';
 
 
 @NgModule({
@@ -75,13 +74,11 @@ import { WorkRequestMultimediaComponent } from './work-requests/work-request/wor
     WorkRequestBasicInformationComponent,
     WorkRequestStateChangesComponent,
     WorkRequestEquipmentComponent,
-    WorkRequestMultimediaComponent
   ],
   exports: [
     WorkPlansComponent,
     WorkRequestsComponent,
     WorkPlanComponent,
-    WorkRequestMultimediaComponent 
   ],
   imports: [
     CommonModule,

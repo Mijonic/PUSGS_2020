@@ -1,3 +1,5 @@
+import { IMultimediaService } from './../shared/interfaces/multimedia-service';
+import { MultimediaAttachment } from './../shared/models/multimedia-attachment.model';
 import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Device } from 'app/shared/models/device.model';
@@ -8,9 +10,14 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class WorkRequestService {
+export class WorkRequestService implements IMultimediaService {
 
   constructor(private http: HttpClient) { }
+  
+  deleteAttachment(filename: string, documentId: number): Observable<any> {
+    let requestUrl = environment.serverURL.concat(`work-requests/${documentId}/attachments/${filename}`);
+    return this.http.delete(requestUrl);
+  }
   
   createWorkRequest(workRequest:WorkRequest):Observable<WorkRequest>{
     let requestUrl = environment.serverURL.concat("work-requests");
@@ -43,7 +50,7 @@ export class WorkRequestService {
   }
 
   uploadAttachment(file: File, workRequestId:number): Observable<HttpEvent<any>> {
-    let requestUrl = environment.serverURL.concat(`work-requests/${workRequestId}/upload`);
+    let requestUrl = environment.serverURL.concat(`work-requests/${workRequestId}/attachments`);
     const formData: FormData = new FormData();
 
     formData.append('file', file);
@@ -55,4 +62,16 @@ export class WorkRequestService {
 
     return this.http.request(request);
   }
+
+  downloadAttachment(wrId:number, filename:string): Observable<any> {
+    let requestUrl = environment.serverURL.concat(`work-requests/${wrId}/attachments/${filename}`);
+		return this.http.get(requestUrl, {responseType: 'blob'});
+  }
+
+  getAttachments(wrId:number): Observable<MultimediaAttachment[]> {
+    let requestUrl = environment.serverURL.concat(`work-requests/${wrId}/attachments`);
+		return this.http.get<MultimediaAttachment[]>(requestUrl);
+  }
+
+
 }

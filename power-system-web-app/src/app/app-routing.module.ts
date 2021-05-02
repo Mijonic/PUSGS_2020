@@ -1,4 +1,4 @@
-import { WorkRequestMultimediaComponent } from './documents/work-requests/work-request/work-request-multimedia/work-request-multimedia.component';
+
 import { IncidentDevicesComponent } from './incidents/devices/devices.component';
 import { GlobalSettingsStreetsPriorityComponent } from './settings/global-settings-streets-priority/global-settings-streets-priority.component';
 import { GlobalSettingsResetDefaultComponent } from './settings/global-settings-reset-default/global-settings-reset-default.component';
@@ -15,11 +15,11 @@ import { SafetyDocumentStateChangesComponent } from './documents/safety-document
 import { SafetyDocumentBasicInformationComponent } from './documents/safety-documents/safety-document-basic-information/safety-document-basic-information.component';
 import { WorkRequestEquipmentComponent } from './documents/work-requests/work-request/work-request-equipment/work-request-equipment.component';
 import { WorkRequestStateChangesComponent } from './documents/work-requests/work-request/work-request-state-changes/work-request-state-changes.component';
-import { MultimediaAttachmentsComponent } from './incidents/multimedia-attachments/multimedia-attachments.component';
+//import { MultimediaAttachmentsComponent } from './incidents/multimedia-attachments/multimedia-attachments.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { CrewsComponent } from './crews/crews.component';
 import { WorkMapComponent } from './map/work-map/work-map.component';
-import { NgModule } from '@angular/core';
+import { InjectionToken, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CrewComponent } from './crews/crew/crew.component';
 import { RegistrationComponent } from './front/registration/registration.component';
@@ -43,8 +43,13 @@ import { SafetyDocumentChecklistComponent } from './documents/safety-documents/s
 import { IncidentCrewComponent } from './incidents/crew/crew.component';
 import { WorkPlanBasicInformationComponent } from './documents/work-plans/work-plan-basic-information/work-plan-basic-information.component';
 import { WorkPlanStateChangesComponent } from './documents/work-plans/work-plan-state-changes/work-plan-state-changes.component';
+import { IMultimediaService } from './shared/interfaces/multimedia-service';
+import { MultimediaAttachmentsComponent } from './multimedia/multimedia-attachments/multimedia-attachments.component';
 
-
+export const INCIDENT_SERVICE_TOKEN = new InjectionToken<IMultimediaService>("IncidentMultimedia"); 
+export const WORK_REQUEST_SERVICE_TOKEN = new InjectionToken<IMultimediaService>("WorkRequestMultimedia");
+export const WORK_PLAN_SERVICE_TOKEN = new InjectionToken<IMultimediaService>("WorkPlanMultimedia"); 
+export const SAFETY_DOCUMENTS_SERVICE_TOKEN = new InjectionToken<IMultimediaService>("SafetyDocumentMultimedia"); 
 
 
 const routes: Routes = [
@@ -157,7 +162,8 @@ const routes: Routes = [
       },
       {
         path: 'multimedia/:id',
-        component: WorkRequestMultimediaComponent, 
+        component: MultimediaAttachmentsComponent,
+        data:{requiredService: WORK_REQUEST_SERVICE_TOKEN}
       },
       {
         path: 'state-changes/:id',
