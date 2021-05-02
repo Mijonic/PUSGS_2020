@@ -44,9 +44,18 @@ namespace SmartEnergyAPI.Mapping
             CreateMap<WorkRequestDto, WorkRequest>()
                 .ForMember(mem => mem.DocumentStatus, op => op.MapFrom(o => o.DocumentStatus))
                 .ForMember(mem => mem.DocumentType, op => op.MapFrom(o => o.DocumentType));
+
             CreateMap<WorkRequest, WorkRequestDto>()
                 .ForMember(mem => mem.DocumentStatus, op => op.MapFrom(o => o.DocumentStatus))
                 .ForMember(mem => mem.DocumentType, op => op.MapFrom(o => o.DocumentType));
+
+            CreateMap<Incident, IncidentDto>()
+               .ForMember(mem => mem.WorkType, op => op.MapFrom(o => o.WorkType))
+               .ForMember(mem => mem.IncidentStatus, op => op.MapFrom(o => o.IncidentStatus));
+
+            CreateMap<IncidentDto, Incident>()
+             .ForMember(mem => mem.WorkType, op => op.MapFrom(o => o.WorkType))
+             .ForMember(mem => mem.IncidentStatus, op => op.MapFrom(o => o.IncidentStatus));
 
         }
     }

@@ -23,10 +23,10 @@
                             <mat-label>Type</mat-label>
                             <mat-select formControlName="deviceTypeControl" >
                                 <mat-option disabled selected value> -- select device type -- </mat-option>
-                                <mat-option value="0">Power Switch</mat-option>
-                                <mat-option value="1">Fuse</mat-option>
-                                <mat-option value="2">Transformer</mat-option>
-                                <mat-option value="3">Disconnector</mat-option>
+                                <mat-option value="POWER_SWITCH">Power Switch</mat-option>
+                                <mat-option value="FUSE">Fuse</mat-option>
+                                <mat-option value="TRANSFORMER">Transformer</mat-option>
+                                <mat-option value="DISCONNECTOR">Disconnector</mat-option>
                             </mat-select>
                         </mat-form-field>
                         <mat-error *ngIf="submitted && newDeviceForm.controls.deviceTypeControl.invalid">

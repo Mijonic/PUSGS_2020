@@ -26,6 +26,8 @@ namespace SmartEnergy.Service.Services
             _mapper = mapper;
         }
 
+
+        
         public void Delete(int id)
         {
             Device device = _dbContext.Devices.FirstOrDefault(x => x.ID.Equals(id));
@@ -64,9 +66,15 @@ namespace SmartEnergy.Service.Services
             if (_dbContext.Location.Any(x => x.ID == entity.LocationID) == false)
                 throw new LocationNotFoundException($"Location with id = {entity.LocationID} does not exists!");
 
+            Device deviceWithMaxCounter = _dbContext.Devices.FirstOrDefault(x => x.DeviceCounter == _dbContext.Devices.Max(y => y.DeviceCounter));
+            
+            if(deviceWithMaxCounter == null)
+                newDevice.Name = $"{newDevice.DeviceType.ToString().Substring(0, 3)}1";
+            else
+                newDevice.Name = $"{newDevice.DeviceType.ToString().Substring(0, 3)}{deviceWithMaxCounter.DeviceCounter+1}";
 
 
-            //newDevice.Name = $"{newDevice.DeviceType.ToString().Substring(0, 3)}{_dbContext.Devices.Count()}"; 
+            newDevice.DeviceCounter = deviceWithMaxCounter.DeviceCounter + 1;
 
             _dbContext.Devices.Add(newDevice);
             _dbContext.SaveChanges();
@@ -95,6 +103,9 @@ namespace SmartEnergy.Service.Services
 
             if (_dbContext.Location.Where(x => x.ID.Equals(updatedDevice.LocationID)) == null)
                 throw new LocationNotFoundException($"Location with id = {updatedDevice.LocationID} does not exists!");
+
+
+            updatedDevice.Name = $"{updatedDevice.DeviceType.ToString().Substring(0, 3)}{updatedDevice.DeviceCounter}";
 
 
             oldDevice.UpdateDevice(updatedDevice);

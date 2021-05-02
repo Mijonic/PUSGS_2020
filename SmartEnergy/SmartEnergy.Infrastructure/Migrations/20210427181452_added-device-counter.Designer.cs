@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartEnergy.Infrastructure;
 
 namespace SmartEnergy.Infrastructure.Migrations
 {
     [DbContext(typeof(SmartEnergyDbContext))]
-    partial class SmartEnergyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210427181452_added-device-counter")]
+    partial class addeddevicecounter
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -227,9 +229,6 @@ namespace SmartEnergy.Infrastructure.Migrations
 
                     b.Property<int?>("CrewID")
                         .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ETA")
                         .HasColumnType("datetime2");

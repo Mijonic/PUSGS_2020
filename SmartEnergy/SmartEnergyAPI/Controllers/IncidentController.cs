@@ -37,5 +37,107 @@ namespace SmartEnergyAPI.Controllers
                 return NotFound(lnf.Message);
             }
         }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<IncidentDto>))]
+        public IActionResult Get()
+        {
+            return Ok(_incidentService.GetAll());
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IncidentDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetById(int id)
+        {
+            try
+            {
+                IncidentDto Incident = _incidentService.Get(id);
+
+                return Ok(Incident);
+            }
+            catch (IncidentNotFoundException incidentNotFoud)
+            {
+                return NotFound(incidentNotFoud.Message);
+            }
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IncidentDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult CreateIncident([FromBody] IncidentDto incident)
+        {
+            try
+            {
+                IncidentDto newIncident = _incidentService.Insert(incident);
+
+                return CreatedAtAction(nameof(GetById), new { id = newIncident.ID }, newIncident);
+            }
+            catch (IncidentNotFoundException incidentNotFound)
+            {
+                return NotFound(incidentNotFound.Message);
+            }        
+            catch (InvalidIncidentException invalidIncident)
+            {
+                return BadRequest(invalidIncident.Message);
+            }
+        }
+
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IncidentDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult CreateIncident(int id, [FromBody] IncidentDto incident)
+        {
+            if (id != incident.ID)
+                return BadRequest($"Request id and entity id don't match");
+            try
+            {
+                IncidentDto modified = _incidentService.Update(incident);
+                return Ok(modified);
+            }
+            catch (IncidentNotFoundException wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+            catch (InvalidIncidentException invalidIncident)
+            {
+                return BadRequest(invalidIncident.Message);
+            }
+        }
+
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult DeleteIncident(int id)
+        {
+            try
+            {
+                _incidentService.Delete(id);
+
+                return NoContent();
+            }
+            catch (IncidentNotFoundException incidentNotFound)
+            {
+                return NotFound(incidentNotFound.Message);
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
