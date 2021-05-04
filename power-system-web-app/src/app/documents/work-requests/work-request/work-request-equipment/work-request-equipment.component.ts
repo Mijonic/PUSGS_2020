@@ -1,3 +1,4 @@
+import { DisplayService } from './../../../../services/display.service';
 import { ToastrService } from 'ngx-toastr';
 import { WorkRequestService } from './../../../../services/work-request.service';
 import { DeviceService } from 'app/services/device.service';
@@ -19,7 +20,7 @@ import { TabMessagingService } from 'app/services/tab-messaging.service';
 })
 export class WorkRequestEquipmentComponent implements OnInit, AfterViewInit{
 
-  displayedColumns: string[] = ['id', 'name', 'type', 'coordinates', 'address', 'map', 'remove'];
+  displayedColumns: string[] = ['id', 'name', 'type', 'coordinates', 'address', 'actions'];
   dataSource: MatTableDataSource<Device>;
   isLoading:boolean = true;
 
@@ -27,7 +28,7 @@ export class WorkRequestEquipmentComponent implements OnInit, AfterViewInit{
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(public dialog:MatDialog, private wrService:WorkRequestService, private route:ActivatedRoute, private toastr:ToastrService,
-    private tabMessaging:TabMessagingService) {
+    private tabMessaging:TabMessagingService, public display:DisplayService) {
   }
 
   ngOnInit(): void {
@@ -71,16 +72,6 @@ export class WorkRequestEquipmentComponent implements OnInit, AfterViewInit{
     }
   }
 
-
-
-  onAddDevice()
-  {
-    const dialogRef = this.dialog.open(ChooseEquipmentDialogComponent, {width: "70%"});
-
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log(`The dialog was closed and choosen id is ${result}`);
-    });
-  }
 
 }
 

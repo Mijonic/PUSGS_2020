@@ -160,3 +160,4 @@ C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\obj\Debug\ne
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\obj\Debug\netcoreapp3.1\SmartEnergyAPI.dll
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\obj\Debug\netcoreapp3.1\SmartEnergyAPI.pdb
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\obj\Debug\netcoreapp3.1\SmartEnergyAPI.genruntimeconfig.cache
+C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\nClam.dll

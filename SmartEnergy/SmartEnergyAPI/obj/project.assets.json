@@ -481,6 +481,15 @@
           }
         }
       },
+      "nClam/5.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/nClam.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/nClam.dll": {}
+        }
+      },
       "Newtonsoft.Json/10.0.1": {
         "type": "package",
         "dependencies": {
@@ -1670,7 +1679,8 @@
         "framework": ".NETCoreApp,Version=v3.1",
         "dependencies": {
           "SmartEnergy.Contract": "1.0.0",
-          "SmartEnergy.Infrastructure": "1.0.0"
+          "SmartEnergy.Infrastructure": "1.0.0",
+          "nClam": "5.0.1"
         },
         "compile": {
           "bin/placeholder/SmartEnergy.Service.dll": {}
@@ -2479,6 +2489,18 @@
         "runtimes/win/lib/netcoreapp3.0/Microsoft.Win32.SystemEvents.xml",
         "useSharedDesignerContext.txt",
         "version.txt"
+      ]
+    },
+    "nClam/5.0.1": {
+      "sha512": "j5c8mZMGE1QWXRoVt2JjUn8fPx0senIXhXeXeBLj1LPSu58v44lBaIGqXA7b18ScAljl8RUkHWGhHReC8F5rIw==",
+      "type": "package",
+      "path": "nclam/5.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/nClam.dll",
+        "nclam.5.0.1.nupkg.sha512",
+        "nclam.nuspec"
       ]
     },
     "Newtonsoft.Json/10.0.1": {

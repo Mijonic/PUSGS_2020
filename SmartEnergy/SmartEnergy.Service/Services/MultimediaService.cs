@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using nClam;
 using SmartEnergy.Contract.CustomExceptions.Multimedia;
 using SmartEnergy.Contract.CustomExceptions.WorkRequest;
 using SmartEnergy.Contract.DTO;
@@ -12,6 +14,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SmartEnergy.Service.Services
 {
@@ -19,15 +22,18 @@ namespace SmartEnergy.Service.Services
     {
         private readonly SmartEnergyDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
 
-        public MultimediaService(SmartEnergyDbContext dbContext, IMapper mapper)
+        public MultimediaService(SmartEnergyDbContext dbContext, IMapper mapper, IConfiguration configuration)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _configuration = configuration;
         }
 
-        public void AttachFileToWorkRequest(IFormFile formFile, int workRequestId)
+        public async Task AttachFileToWorkRequestAsync(IFormFile formFile, int workRequestId)
         {
+            await ScanAttachmentAsync(formFile);
             WorkRequest wr = _dbContext.WorkRequests.Find(workRequestId);
 
             if (wr == null)
@@ -104,5 +110,20 @@ namespace SmartEnergy.Service.Services
             FileStream stream = new FileStream(@$"Attachments/WR{workRequestId}/{fileName}", FileMode.Open);
             return stream;
         }
+
+        public async Task ScanAttachmentAsync(IFormFile formFile)
+        {
+            MemoryStream ms = new MemoryStream();
+            formFile.OpenReadStream().CopyTo(ms);
+            byte[] fileBytes = ms.ToArray();
+
+
+            ClamClient clam = new ClamClient(this._configuration["ClamAVServer:URL"],
+                                        Convert.ToInt32(this._configuration["ClamAVServer:Port"]));
+            var scanResult = await clam.SendAndScanFileAsync(fileBytes);
+           if (scanResult.Result != ClamScanResults.Clean)
+                throw new MultimediaInfectedException($"This attachment is infected with virus!");
+        }
+
     }
 }

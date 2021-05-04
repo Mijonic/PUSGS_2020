@@ -8,7 +8,9 @@ namespace SmartEnergy.Contract.Interfaces
 {
     public interface IStateChangeService
     {
-        public void UpdateWorkRequestState(int workRequestId, DocumentStatus newState);
+        public WorkRequestDto ApproveWorkRequest(int workRequestId);
+        public WorkRequestDto CancelWorkRequest(int workRequestId);
+        public WorkRequestDto DenyWorkRequest(int workRequestId);
         public List<StateChangeHistoryDto> GetWorkRequestStateHistory(int workRequestId);
     }
 }

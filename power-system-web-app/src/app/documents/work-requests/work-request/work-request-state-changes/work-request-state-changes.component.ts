@@ -1,3 +1,4 @@
+import { TabMessagingService } from 'app/services/tab-messaging.service';
 import { ToastrService } from 'ngx-toastr';
 import { StateChange } from './../../../../shared/models/state-change.model';
 import { WorkRequestService } from './../../../../services/work-request.service';
@@ -10,16 +11,77 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./work-request-state-changes.component.css']
 })
 export class WorkRequestStateChangesComponent implements OnInit {
-
+  workRequestId:number;
   stateChanges:StateChange[];
   isLoading:boolean;
-  constructor(private workReqService:WorkRequestService, private toastr:ToastrService, private route:ActivatedRoute) { }
+  constructor(private workReqService:WorkRequestService, private toastr:ToastrService, private route:ActivatedRoute, private tabMessaging:TabMessagingService) { }
 
   ngOnInit(): void {
     const wrId = this.route.snapshot.paramMap.get('id');
     if(wrId != null && wrId != '')
+    {
       this.loadStateChanges(+wrId);
+      this.tabMessaging.showEdit(+wrId);
+      this.workRequestId = +wrId;
+    }
+      
 
+  }
+
+  approve()
+  {
+    this.workReqService.approveWorkRequest(this.workRequestId).subscribe(
+      data =>{
+        this.toastr.success("Work request approved");
+        this.loadStateChanges(this.workRequestId);
+      },
+      error =>{
+        if(error.error instanceof ProgressEvent)
+        {
+          this.toastr.error("Server unreachable");
+        }else{
+          this.toastr.error(error.error);
+        }
+      }
+    )
+  }
+
+
+  deny()
+  {
+    this.workReqService.denyWorkRequest(this.workRequestId).subscribe(
+      data =>{
+        this.toastr.success("Work request denied.");
+        this.loadStateChanges(this.workRequestId);
+      },
+      error =>{
+        if(error.error instanceof ProgressEvent)
+        {
+          this.toastr.error("Server unreachable");
+        }else{
+          this.toastr.error(error.error);
+        }
+      }
+    )
+  }
+
+
+  cancel()
+  {
+    this.workReqService.cancelWorkRequest(this.workRequestId).subscribe(
+      data =>{
+        this.toastr.success("Work request cancelled");
+        this.loadStateChanges(this.workRequestId);
+      },
+      error =>{
+        if(error.error instanceof ProgressEvent)
+        {
+          this.toastr.error("Server unreachable");
+        }else{
+          this.toastr.error(error.error);
+        }
+      }
+    )
   }
 
   loadStateChanges(id:number){
