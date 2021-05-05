@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartEnergy.Contract.CustomExceptions;
+using SmartEnergy.Contract.CustomExceptions.Multimedia;
 using SmartEnergy.Contract.CustomExceptions.User;
 using SmartEnergy.Contract.DTO;
 using SmartEnergy.Contract.Interfaces;
@@ -16,10 +17,12 @@ namespace SmartEnergyAPI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IMultimediaService _multimediaService;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, IMultimediaService multimediaService)
         {
             _userService = userService;
+            _multimediaService = multimediaService;
         }
 
         [HttpGet]
@@ -28,6 +31,25 @@ namespace SmartEnergyAPI.Controllers
         {
             return Ok(_userService.GetAll());
 
+        }
+
+        [HttpGet("{id}/avatar/{filename}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetFile(int id, string filename)
+        {
+            try
+            {
+                return File(_multimediaService.GetUserAvatarStream(id, filename), "application/octet-stream", filename);
+            }
+            catch (UserNotFoundException wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+            catch (MultimediaNotFoundException mne)
+            {
+                return NotFound(mne.Message);
+            }
         }
 
 
@@ -122,6 +144,32 @@ namespace SmartEnergyAPI.Controllers
                 return BadRequest(ius.Message);
             }
 
+        }
+
+        [HttpPost("{id}/avatar")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [RequestSizeLimit(long.MaxValue)]
+        public async Task<IActionResult> AttachAvatarAsync(int id, IFormFile file)
+        {
+            try
+            {
+                await _multimediaService.AttachUserAvatar(file, id);
+                return Ok();
+            }
+            catch (UserNotFoundException wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+            catch (MultimediaInfectedException mie)
+            {
+                return BadRequest(mie.Message);
+            }
+            catch (MultimediaNotImageException mni)
+            {
+                return BadRequest(mni.Message);
+            }
         }
 
 

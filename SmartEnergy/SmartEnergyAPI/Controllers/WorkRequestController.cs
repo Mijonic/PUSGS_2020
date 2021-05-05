@@ -97,7 +97,7 @@ namespace SmartEnergyAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult CreateWorkRequest(int id,[FromBody] WorkRequestDto workRequest)
+        public IActionResult EditWorkRequest(int id,[FromBody] WorkRequestDto workRequest)
         {
             if (id != workRequest.ID)
                 return BadRequest($"Request id and entity id don't match");
@@ -161,16 +161,20 @@ namespace SmartEnergyAPI.Controllers
             {
                 return BadRequest(mie.Message);
             }
+            catch (WorkRequestInvalidStateException wis)
+            {
+                return BadRequest(wis.Message);
+            }
         }
 
         [HttpGet("{id}/attachments/{filename}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type= typeof(FileStreamResult))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult AttachFile(int id, string filename)
+        public IActionResult GetFile(int id, string filename)
         {
             try
             {
-                return File(_multimediaService.GetWorkRequestAttachmentStream(id, filename), "application/octet-stream", filename);
+                return File(_multimediaService.GetUserAvatarStream(id, filename), "application/octet-stream", filename);
             }
             catch (WorkRequestNotFound wnf)
             {
@@ -218,7 +222,7 @@ namespace SmartEnergyAPI.Controllers
         [HttpDelete("{id}/attachments/{filename}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult GetWorkRequestAttachments(int id, string filename)
+        public IActionResult DeleteAttachment(int id, string filename)
         {
             try
             {
@@ -233,6 +237,11 @@ namespace SmartEnergyAPI.Controllers
             {
                 return NotFound(mnf.Message);
             }
+            catch (WorkRequestInvalidStateException wis)
+            {
+                return BadRequest(wis.Message);
+            }
+            
         }
 
         [HttpPut("{id}/approve")]

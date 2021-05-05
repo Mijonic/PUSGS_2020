@@ -1,7 +1,7 @@
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../services/user.service';
 import { DatePipe } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { User } from 'app/shared/models/user.model';
 import { Location } from "app/shared/models/location.model";
 
@@ -14,16 +14,51 @@ export class UserCardComponent implements OnInit {
   @Input()
   user!:User;
   @Output() reload: EventEmitter<any> = new EventEmitter();
+  @ViewChild("avatar") avatar:ElementRef;
+  isLoadingImage:boolean = true;
 
   constructor(public datePipe:DatePipe, private userService:UserService, private toastr:ToastrService) { }
 
   ngOnInit(): void {
+    if(this.user.imageURL)
+    {
+      this.loadUserImage();
+    }
+    else
+      this.isLoadingImage = false;
   }
 
   getDateForDisplay(date:Date)
   {
     return this.datePipe.transform(date, 'dd-MM-yyyy');
 
+  }
+
+  loadUserImage()
+  {
+    this.userService.getUserAvatar(this.user.id, this.user.imageURL).subscribe(
+      data =>{
+        this.isLoadingImage = false;
+        const reader = new FileReader();
+        reader.readAsDataURL(data);
+        reader.onload = _event => {
+            this.avatar.nativeElement.src = reader.result!.toString(); 
+
+        };
+      },
+      error =>{
+
+      if(error.error instanceof ProgressEvent)
+      {
+        this.loadUserImage();
+      }else
+      {
+        this.toastr.error(error.error);
+        this.isLoadingImage = false;
+      }
+    }
+
+    )
   }
 
   getUserDisplay()

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from 'app/shared/models/user.model';
 import { environment } from 'environments/environment';
@@ -31,7 +31,7 @@ export class UserService {
     return this.http.put<User>(requestUrl, {});
   }
 
-  createUser(user:User):Observable<{}>{
+  createUser(user:User):Observable<User>{
     let requestUrl = environment.serverURL.concat(`users`);
     return this.http.post<User>(requestUrl, user);
   }
@@ -39,6 +39,25 @@ export class UserService {
   getById(id:number):Observable<User>{
     let requestUrl = environment.serverURL.concat(`users/${id}`);
     return this.http.get<User>(requestUrl);
+  }
+
+  uploadAvatar(file: File, userId:number): Observable<HttpEvent<any>> {
+    let requestUrl = environment.serverURL.concat(`users/${userId}/avatar`);
+    const formData: FormData = new FormData();
+
+    formData.append('file', file);
+
+    const request = new HttpRequest('POST', requestUrl, formData, {
+      reportProgress: true,
+      responseType: 'json'
+    });
+
+    return this.http.request(request);
+  }
+
+  getUserAvatar(userId:number, filename:string): Observable<any> {
+    let requestUrl = environment.serverURL.concat(`users/${userId}/avatar/${filename}`);
+		return this.http.get(requestUrl, {responseType: 'blob'});
   }
 
 }
