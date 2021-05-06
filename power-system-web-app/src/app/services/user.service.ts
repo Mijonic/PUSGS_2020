@@ -1,6 +1,7 @@
-import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpParams, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from 'app/shared/models/user.model';
+import { UsersList } from 'app/shared/models/users-list.model';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 
@@ -17,8 +18,26 @@ export class UserService {
   }
 
   getAllUsers():Observable<User[]>{
-    let requestUrl = environment.serverURL.concat("users");
+    let requestUrl = environment.serverURL.concat("users/all");
     return this.http.get<User[]>(requestUrl);
+  }
+
+  getUsersPaged( page: number, perPage:number,sort?: string, order?: string, userType?:string, searchParam?:string, userStatus?:string):Observable<UsersList>{
+    let requestUrl = environment.serverURL.concat("users");
+    let params = new HttpParams();
+    if(sort)
+      params = params.append('sortBy', sort);
+    if(order)
+      params = params.append('direction', order);
+    params = params.append('page', page.toString());
+    params = params.append('perPage', perPage.toString());
+    if(searchParam)
+      params = params.append('searchParam', searchParam);
+    if(userStatus)
+      params = params.append('status', userStatus);
+    if(userType)
+      params = params.append('type', userType);
+    return this.http.get<UsersList>(requestUrl, {params:params});
   }
 
   approveUser(id:number):Observable<User>{

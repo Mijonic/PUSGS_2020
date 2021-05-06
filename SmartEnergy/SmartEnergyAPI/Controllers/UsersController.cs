@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SmartEnergy.Contract.CustomExceptions;
 using SmartEnergy.Contract.CustomExceptions.Multimedia;
 using SmartEnergy.Contract.CustomExceptions.User;
 using SmartEnergy.Contract.DTO;
+using SmartEnergy.Contract.Enums;
 using SmartEnergy.Contract.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -25,11 +27,21 @@ namespace SmartEnergyAPI.Controllers
             _multimediaService = multimediaService;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<UserDto>))]
         public IActionResult GetAll()
         {
             return Ok(_userService.GetAll());
+
+        }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<CrewsListDto>))]
+        public IActionResult GetAll([FromQuery] string searchParam, [FromQuery] UserField sortBy, [FromQuery] SortingDirection direction,
+                                    [FromQuery][BindRequired] int page, [FromQuery][BindRequired] int perPage, [FromQuery] UserStatusFilter status,
+                                    [FromQuery] UserTypeFilter type)
+        {
+            return Ok(_userService.GetUsersPaged(sortBy, direction, page, perPage, status, type, searchParam));
 
         }
 

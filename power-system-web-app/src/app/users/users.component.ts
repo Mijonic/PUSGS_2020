@@ -1,3 +1,4 @@
+import { FormGroup, FormControl } from '@angular/forms';
 import { UserService } from './../services/user.service';
 import { Component, OnInit } from '@angular/core';
 import { User } from 'app/shared/models/user.model';
@@ -10,47 +11,68 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class UsersComponent implements OnInit {
   roles: any[] = 
-  [ {role:'ALL', value:'All'},
-    {role:'WORKER', value:'Worker'},
-    {role:'ADMIN', value:'Administrator'},
-    {role:'DISPATCHER', value:'Dispatcher'},
-    {role:'CREW_MEMBER', value:'Crew member'},
+  [ {role:'all', value:'All'},
+    {role:'worker', value:'Worker'},
+    {role:'admin', value:"Administrator"},
+    {role:'dispatcher', value:'Dispatcher'},
+    {role:'crew_member', value:'Crew member'},
     ];
   users:User[] = [];
   allUsers:User[] = [];
   isLoading:boolean = true;
+  currentPage:number = 0;
+  perPage:number = 5;
+  totalResultCount:number = 0;
+
+  usersForm = new FormGroup({
+      search:new FormControl(""),
+      typeFilter:new FormControl("all"),
+      statusFilter:new FormControl("all"),
+  });
 
   constructor(private userService:UserService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.getUsers();
+    this.getUsers(this.currentPage, this.perPage);
   }
 
-  getUsers()
+  shouldLoadMore()
   {
-    this.userService.getAllUsers().subscribe(
+    return this.totalResultCount > (this.currentPage + 1) * this.perPage;
+  }
+
+  getUsers(currentPage:number = 0, perPage:number = 5)
+  {
+    let type:string = this.usersForm.controls['typeFilter'].value;
+    let status:string = this.usersForm.controls['statusFilter'].value;
+    let search:string = this.usersForm.controls['search'].value;
+    this.userService.getUsersPaged(currentPage, perPage, undefined, undefined, type, search, status).subscribe(
       data =>{
-        this.allUsers = data;
-        this.users = data;
+        this.currentPage = currentPage;
+        this.perPage = perPage;
+        if(currentPage > 0)
+        {
+          this.users = this.users.concat(data.users);
+        }else
+        {
+          this.users = data.users;
+        }
+
+        this.totalResultCount = data.totalCount;
         this.isLoading = false;
       },
       error =>{
-        this.getUsers();
+        this.getUsers(currentPage, perPage);
       }
     )
   }
 
-  applyRoleFilter(role:any)
+  loadMoreUsers()
   {
-    if(role.value == 'ALL')
-    {
-      this.users = this.allUsers;
-      return;
-    }
-    this.users = this.allUsers.filter(x => x.userType == role.value);
+    this.currentPage += 1;
+    this.getUsers(this.currentPage, this.perPage);
   }
 
- 
 
 }
