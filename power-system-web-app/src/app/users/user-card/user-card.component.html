@@ -1,6 +1,8 @@
 <div class="card mat-elevation-z8 mb-2">
-    <img class="card-img-top profile-image" src="../../../assets/Images/zmaj.jpg" alt="Card image cap" *ngIf="!(user.imageURL)">
-    <img class="card-img-top profile-image" [src]="user.imageURL" alt="Card image cap" *ngIf="user.imageURL">
+    <div class='w-100 d-flex justify-content-center' *ngIf="isLoadingImage">
+      <mat-spinner color='primary' [diameter]= "'100'"></mat-spinner>
+    </div>
+    <img #avatar class="card-img-top profile-image" src="../../../assets/Images/zmaj.jpg" alt="Card image cap" *ngIf="isLoadingImage == false" >
     <div class="card-body pb-1">
       <div class="d-flex flex-row title-row">
           <h2 class="card-title mb-0">{{getUserDisplay()}}</h2>

@@ -79,5 +79,22 @@ export class WorkRequestService implements IMultimediaService {
 		return this.http.get<StateChange[]>(requestUrl);
   }
 
+  approveWorkRequest(wrId:number): Observable<WorkRequest> {
+    let requestUrl = environment.serverURL.concat(`work-requests/${wrId}/approve`);
+		return this.http.put<WorkRequest>(requestUrl, {});
+  }
+
+  
+  denyWorkRequest(wrId:number): Observable<WorkRequest> {
+    let requestUrl = environment.serverURL.concat(`work-requests/${wrId}/deny`);
+		return this.http.put<WorkRequest>(requestUrl, {});
+  }
+
+  
+  cancelWorkRequest(wrId:number): Observable<WorkRequest> {
+    let requestUrl = environment.serverURL.concat(`work-requests/${wrId}/cancel`);
+		return this.http.put<WorkRequest>(requestUrl, {});
+  }
+
 
 }

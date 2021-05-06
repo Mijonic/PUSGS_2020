@@ -22,6 +22,11 @@ export class DisplayService {
     return this.datePipe.transform(date, "dd/MM/yyyy");
   }
 
+  getStateChangeDateDisplay(date:Date)
+  {
+    return this.datePipe.transform(date, "dd/MM/yyyy hh:mm");
+  }
+
   getCoordinatesDisplay(location:Location){
     return `${location.latitude}, ${location.longitude}`;
   }

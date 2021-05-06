@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="nClam" Version="5.0.1" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SmartEnergy.Contract\SmartEnergy.Contract.csproj" />
     <ProjectReference Include="..\SmartEnergy.Infrastructure\SmartEnergy.Infrastructure.csproj" />
   </ItemGroup>

@@ -1,5 +1,6 @@
+import { CrewsList } from './../shared/models/crews-list.model';
 import { Crew } from 'app/shared/models/crew.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
@@ -11,8 +12,18 @@ export class CrewService {
 
   constructor(private http: HttpClient) { }
 
-  getAllCrews():Observable<Crew[]>{
+  getCrewsPaged(sort: string, order: string, page: number, perPage:number):Observable<CrewsList>{
     let requestUrl = environment.serverURL.concat("crews");
+    let params = new HttpParams();
+    params = params.append('sortBy', sort);
+    params = params.append('direction', order);
+    params = params.append('page', page.toString());
+    params = params.append('perPage', perPage.toString());
+    return this.http.get<CrewsList>(requestUrl, {params:params});
+  }
+
+  getAllCrews():Observable<Crew[]>{
+    let requestUrl = environment.serverURL.concat("crews/all");
     return this.http.get<Crew[]>(requestUrl);
   }
 

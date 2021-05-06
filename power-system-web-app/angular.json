@@ -32,6 +32,11 @@
                 "output": "./assets"
               }
             ],
+            "allowedCommonJsDependencies": [
+              "file-saver",
+              "apexcharts",
+              "tsparticles"
+           ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
@@ -80,10 +85,14 @@
             }
           }
         },
+
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "power-system-web-app:build"
+            "browserTarget": "power-system-web-app:build",
+            "ssl": true,
+            "sslKey": "ssl/server.key",
+            "sslCert": "ssl/server.crt"
           },
           "configurations": {
             "production": {

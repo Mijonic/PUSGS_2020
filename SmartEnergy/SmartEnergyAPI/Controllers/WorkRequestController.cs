@@ -97,7 +97,7 @@ namespace SmartEnergyAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult CreateWorkRequest(int id,[FromBody] WorkRequestDto workRequest)
+        public IActionResult EditWorkRequest(int id,[FromBody] WorkRequestDto workRequest)
         {
             if (id != workRequest.ID)
                 return BadRequest($"Request id and entity id don't match");
@@ -142,11 +142,11 @@ namespace SmartEnergyAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [RequestSizeLimit(long.MaxValue)]
-        public IActionResult AttachFile(int id, IFormFile file)
+        public async Task<IActionResult> AttachFileAsync(int id, IFormFile file)
         {
             try
             {
-                _multimediaService.AttachFileToWorkRequest(file, id);
+                await _multimediaService.AttachFileToWorkRequestAsync(file, id);
                 return Ok();
             }
             catch (WorkRequestNotFound wnf)
@@ -157,16 +157,24 @@ namespace SmartEnergyAPI.Controllers
             {
                 return BadRequest(mae.Message);
             }
+            catch (MultimediaInfectedException mie)
+            {
+                return BadRequest(mie.Message);
+            }
+            catch (WorkRequestInvalidStateException wis)
+            {
+                return BadRequest(wis.Message);
+            }
         }
 
         [HttpGet("{id}/attachments/{filename}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type= typeof(FileStreamResult))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult AttachFile(int id, string filename)
+        public IActionResult GetFile(int id, string filename)
         {
             try
             {
-                return File(_multimediaService.GetWorkRequestAttachmentStream(id, filename), "application/octet-stream", filename);
+                return File(_multimediaService.GetUserAvatarStream(id, filename), "application/octet-stream", filename);
             }
             catch (WorkRequestNotFound wnf)
             {
@@ -214,7 +222,7 @@ namespace SmartEnergyAPI.Controllers
         [HttpDelete("{id}/attachments/{filename}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult GetWorkRequestAttachments(int id, string filename)
+        public IActionResult DeleteAttachment(int id, string filename)
         {
             try
             {
@@ -228,6 +236,75 @@ namespace SmartEnergyAPI.Controllers
             catch (MultimediaNotFoundException mnf)
             {
                 return NotFound(mnf.Message);
+            }
+            catch (WorkRequestInvalidStateException wis)
+            {
+                return BadRequest(wis.Message);
+            }
+            
+        }
+
+        [HttpPut("{id}/approve")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type=typeof(WorkRequestDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult ApproveWorkRequest(int id)
+        {
+            try
+            {
+                WorkRequestDto wr = _stateChangeService.ApproveWorkRequest(id);
+                return Ok(wr);
+            }
+            catch (WorkRequestNotFound wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+            catch (WorkRequestInvalidStateException wnf)
+            {
+                return BadRequest(wnf.Message);
+            }
+        }
+
+        [HttpPut("{id}/cancel")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult CancelWorkRequest(int id)
+        {
+            try
+            {
+                WorkRequestDto wr = _stateChangeService.CancelWorkRequest(id);
+                return Ok(wr);
+            }
+            catch (WorkRequestNotFound wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+            catch (WorkRequestInvalidStateException wnf)
+            {
+                return BadRequest(wnf.Message);
+            }
+        }
+
+
+        [HttpPut("{id}/deny")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult DenyWorkRequest(int id)
+        {
+            try
+            {
+                WorkRequestDto wr = _stateChangeService.DenyWorkRequest(id);
+                return Ok(wr);
+            }
+            catch (WorkRequestNotFound wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+            catch (WorkRequestInvalidStateException wnf)
+            {
+                return BadRequest(wnf.Message);
             }
         }
 

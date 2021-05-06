@@ -68,6 +68,7 @@ namespace SmartEnergy.Service.Services
         {
             WorkRequest workRequest = _dbContext.WorkRequests.Include(x => x.DeviceUsage)
                                                              .ThenInclude(x => x.Device)
+                                                             .ThenInclude(x => x.Location)
                                                              .FirstOrDefault(x => x.ID == workRequestId);
             if (workRequest == null)
                 throw new WorkRequestNotFound($"Work request with id {workRequestId} does not exist.");
@@ -140,6 +141,9 @@ namespace SmartEnergy.Service.Services
             WorkRequest wr = _dbContext.WorkRequests.FirstOrDefault(x => x.IncidentID == entity.IncidentID);
             if (wr != null && wr.ID != entity.ID )
                 throw new WorkRequestInvalidStateException($"Work request already created for incident with id {entity.IncidentID}");
+
+            if (wr.DocumentStatus == DocumentStatus.APPROVED || wr.DocumentStatus == DocumentStatus.CANCELLED)
+                throw new WorkRequestInvalidStateException($"Work request is in {wr.DocumentStatus.ToString()} state and cannot be edited.");
 
             if (entity.StartDate.CompareTo(entity.EndDate) > 0)
                 throw new WorkRequestInvalidStateException($"Start date cannot be after end date.");

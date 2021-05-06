@@ -2,8 +2,10 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SmartEnergy.Contract.CustomExceptions;
 using SmartEnergy.Contract.DTO;
+using SmartEnergy.Contract.Enums;
 using SmartEnergy.Contract.Interfaces;
 using SmartEnergy.Infrastructure;
 using System;
@@ -24,11 +26,19 @@ namespace SmartEnergyAPI.Controllers
             _crewService = crewService;
         }
 
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CrewDto))]
-        public IActionResult GetAllCrews()
+        [HttpGet("all")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<CrewDto>))]
+        public IActionResult GetCrews()
         {
             return Ok(_crewService.GetAll());
+
+        }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CrewsListDto))]
+        public IActionResult GetCrewsPaged([FromQuery] CrewField sortBy, [FromQuery] SortingDirection direction, [FromQuery][BindRequired] int page, [FromQuery][BindRequired] int perPage)
+        {
+            return Ok(_crewService.GetCrewsPaged(sortBy, direction, page, perPage));
 
         }
 

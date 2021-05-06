@@ -48,6 +48,50 @@ namespace SmartEnergy.Service.Services
             return _mapper.Map<List<CrewDto>>(_dbContext.Crews.Include("CrewMembers").ToList());
         }
 
+        public CrewsListDto GetCrewsPaged(CrewField sortBy, SortingDirection direction, int page, int pageSize)
+        {
+            IQueryable<Crew> pagedData = _dbContext.Crews
+                                        .Include(x => x.CrewMembers)
+                                        .AsQueryable();
+            if (direction == SortingDirection.asc)
+            {
+                switch (sortBy)
+                {
+                    case CrewField.id:
+                        pagedData = pagedData.OrderBy(x => x.ID);
+                        break;
+                    case CrewField.crewName:
+                        pagedData = pagedData.OrderBy(x => x.CrewName);
+                        break;
+                }
+            }
+            else
+            {
+                switch (sortBy)
+                {
+                    case CrewField.id:
+                        pagedData = pagedData.OrderByDescending(x => x.ID);
+                        break;
+                    case CrewField.crewName:
+                        pagedData = pagedData.OrderByDescending(x => x.CrewName);
+                        break;
+                }
+            }
+
+            int resourceCount = pagedData.Count();
+            pagedData = pagedData.Skip(page * pageSize)
+                                 .Take(pageSize);
+
+            CrewsListDto returnValue = new CrewsListDto()
+            { 
+                Crews = _mapper.Map<List<CrewDto>>(pagedData.ToList()),
+                TotalCount = resourceCount
+            };
+
+            return returnValue;
+
+        }
+
         public CrewDto Insert(CrewDto entity)
         {
             Crew newCrew = _mapper.Map<Crew>(entity);

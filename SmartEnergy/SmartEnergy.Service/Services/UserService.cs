@@ -66,12 +66,35 @@ namespace SmartEnergy.Service.Services
 
         public List<UserDto> GetAll()
         {
-            return _mapper.Map<List<UserDto>>(_dbContext.Users.Include("Location").ToList());
+            return _mapper.Map<List<UserDto>>(_dbContext.Users.Include(x => x.Location).ToList());
         }
 
         public List<UserDto> GetAllUnassignedCrewMembers()
         {
             return _mapper.Map<List<UserDto>>(_dbContext.Users.Where(x => x.UserType == UserType.CREW_MEMBER && x.CrewID == null && x.UserStatus == UserStatus.APPROVED).ToList());
+        }
+
+        public UsersListDto GetUsersPaged(UserField sortBy, SortingDirection direction, int page, int perPage, UserStatusFilter status, UserTypeFilter type, string searchParam)
+        {
+            IQueryable<User> usersPaged = _dbContext.Users.Include(x => x.Location).AsQueryable();
+
+            usersPaged = FilterUsersByStatus(usersPaged, status);
+            usersPaged = FilterUsersByType(usersPaged, type);
+            usersPaged = SearchUsers(usersPaged, searchParam);
+            usersPaged = SortUsers(usersPaged, sortBy, direction);
+            
+            int resourceCount = usersPaged.Count();
+            usersPaged = usersPaged.Skip(page * perPage)
+                                    .Take(perPage);
+
+            UsersListDto returnValue = new UsersListDto()
+            {
+                Users = _mapper.Map<List<UserDto>>(usersPaged.ToList()),
+                TotalCount = resourceCount
+            };
+
+            return returnValue;
+
         }
 
         public UserDto Insert(UserDto entity)
@@ -119,5 +142,106 @@ namespace SmartEnergy.Service.Services
         {
             throw new NotImplementedException();
         }
+
+        private IQueryable<User> FilterUsersByStatus(IQueryable<User> users, UserStatusFilter status)
+        {
+            //Filter by status, ignore if ALL
+            switch (status)
+            {
+                case UserStatusFilter.approved:
+                    return users.Where(x => x.UserStatus == UserStatus.APPROVED);
+                case UserStatusFilter.denied:
+                    return users.Where(x => x.UserStatus == UserStatus.DENIED);
+                case UserStatusFilter.pending:
+                    return users.Where(x => x.UserStatus == UserStatus.PENDING);
+            }
+
+            return users;
+        }
+
+
+        private IQueryable<User> FilterUsersByType(IQueryable<User> users, UserTypeFilter type)
+        {
+            //Filter by TYPE, ignore if ALL
+            switch (type)
+            {
+                case UserTypeFilter.admin:
+                    return users.Where(x => x.UserType == UserType.ADMIN);
+                case UserTypeFilter.consumer:
+                    return users.Where(x => x.UserType == UserType.CONSUMER);
+                case UserTypeFilter.crew_member:
+                    return users.Where(x => x.UserType == UserType.CREW_MEMBER);
+                case UserTypeFilter.dispatcher:
+                    return users.Where(x => x.UserType == UserType.DISPATCHER);
+                case UserTypeFilter.worker:
+                    return users.Where(x => x.UserType == UserType.WORKER);
+            }
+
+            return users;
+        }
+
+
+        private IQueryable<User> SearchUsers(IQueryable<User> users, string searchParam)
+        {
+            if (string.IsNullOrWhiteSpace(searchParam)) //Ignore empty search
+                return users;
+            ///Perform search
+            return users.Where(x => x.Email.Contains(searchParam) ||
+                                               x.Name.Contains(searchParam) ||
+                                               x.Lastname.Contains(searchParam) ||
+                                               x.Username.Contains(searchParam) ||
+                                               x.BirthDay.ToString().Contains(searchParam) ||
+                                               x.Location.Street.Contains(searchParam) ||
+                                               x.Location.City.Contains(searchParam) ||
+                                               x.Location.Zip.Contains(searchParam));
+        }
+
+
+        private IQueryable<User> SortUsers(IQueryable<User> users, UserField sortBy, SortingDirection direction)
+        {
+            //Sort
+            if (direction == SortingDirection.asc)
+            {
+                switch (sortBy)
+                {
+                    case UserField.id:
+                        return users.OrderBy(x => x.ID);
+                    case UserField.birthDay:
+                        return users.OrderBy(x => x.BirthDay);
+                    case UserField.email:
+                        return users.OrderBy(x => x.Email);
+                    case UserField.lastname:
+                        return users.OrderBy(x => x.Lastname);
+                    case UserField.name:
+                        return users.OrderBy(x => x.Name);
+                    case UserField.username:
+                        return users.OrderBy(x => x.Username);
+                }
+
+            }
+            else
+            {
+                switch (sortBy)
+                {
+                    case UserField.id:
+                        return users.OrderByDescending(x => x.ID);
+                    case UserField.birthDay:
+                        return users.OrderByDescending(x => x.BirthDay);
+                    case UserField.email:
+                        return users.OrderByDescending(x => x.Email);
+                    case UserField.lastname:
+                        return users.OrderByDescending(x => x.Lastname);
+                    case UserField.name:
+                        return users.OrderByDescending(x => x.Name);
+                    case UserField.username:
+                        return users.OrderByDescending(x => x.Username);
+                }
+
+            }
+
+            return users;
+        }
     }
+
+
 }
