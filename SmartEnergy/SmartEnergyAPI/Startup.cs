@@ -17,6 +17,7 @@ using SmartEnergyAPI.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace SmartEnergyAPI
@@ -34,7 +35,9 @@ namespace SmartEnergyAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(options =>
+                                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter())); 
+
             services.AddDbContext<SmartEnergyDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SmartEnergyDatabase")));
 
             
@@ -49,6 +52,7 @@ namespace SmartEnergyAPI
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Smart Energy API", Version = "v1" });
+                
             });
 
             services.AddCors(options =>
