@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using SmartEnergy.Contract.CustomExceptions;
 using SmartEnergy.Contract.CustomExceptions.Incident;
 using SmartEnergy.Contract.CustomExceptions.Location;
 using SmartEnergy.Contract.DTO;
@@ -19,15 +20,21 @@ namespace SmartEnergy.Service.Services
 
         private readonly SmartEnergyDbContext _dbContext;
         private readonly ITimeService _timeService;
+        private readonly ICrewService _crewService;
         private readonly IMapper _mapper;
 
-        public IncidentService(SmartEnergyDbContext dbContext, ITimeService timeService, IMapper mapper)
+        public IncidentService(SmartEnergyDbContext dbContext, ITimeService timeService, ICrewService crewService, IMapper mapper)
         {
             _dbContext = dbContext;
             _timeService = timeService;
+            _crewService = crewService;
             _mapper = mapper;
 
+
         }
+
+           
+        
 
 
         // determine what to delete with incident object
@@ -60,13 +67,18 @@ namespace SmartEnergy.Service.Services
 
             return _mapper.Map<IncidentDto>(incident);
         }
-   
+
 
         public List<IncidentDto> GetAll()
         {
             return _mapper.Map<List<IncidentDto>>(_dbContext.Incidents.ToList());
         }
 
+        /// <summary>
+        /// Get incident location
+        /// </summary>
+        /// <param name="incidentId"></param>
+        /// <returns>LocationDto</returns>
         public LocationDto GetIncidentLocation(int incidentId)
         {
             Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
@@ -113,6 +125,7 @@ namespace SmartEnergy.Service.Services
 
 
             incident.Priority = 0;
+            incident.IncidentStatus = IncidentStatus.INITIAL; // with basic info only init
 
          
 
@@ -176,7 +189,11 @@ namespace SmartEnergy.Service.Services
 
 
         }
-
+        /// <summary>
+        /// Get priority for specific incident by finding device related to incident with highest priority.
+        /// </summary>
+        /// <param name="incidentId"></param>
+        /// <returns>Integer priority</returns>
         private int GetIncidentPriority(int incidentId)
         {
 
@@ -222,7 +239,79 @@ namespace SmartEnergy.Service.Services
           
         }
 
-        
 
+        /// <summary>
+        /// Connect specific crew with incident
+        /// </summary>
+        /// <param name="incidentId"></param>
+        /// <param name="crewId"></param>
+        /// <returns></returns>
+        public IncidentDto AddCrewToIncident(int incidentId, int crewId)
+        {
+            Incident incident = _dbContext.Incidents.Find(incidentId);
+
+            if (incident == null)
+                throw new IncidentNotFoundException($"Incident with id = {incidentId} does not exists!");
+
+
+            Crew crew = _dbContext.Crews.Find(crewId);
+
+            if (crew == null)
+                throw new CrewNotFoundException($"Crew with id = {crewId} does not exists!");
+
+            incident.CrewID = crew.ID;
+
+
+            _dbContext.SaveChanges();
+
+            return _mapper.Map<IncidentDto>(incident);
+
+
+
+
+
+
+
+        }
+
+
+        /// <summary>
+        /// This function get all incidents which are ready for usage in work request
+        /// </summary>
+        /// <returns>List of ready incidents</returns>
+        public List<IncidentDto> GetUnassignedIncidents()
+        {
+
+            bool isFree = true;
+
+            List<Incident> allIncidents = _dbContext.Incidents.ToList();
+            List<WorkRequest> allWorkRequests = _dbContext.WorkRequests.Include("Incident").ToList();
+
+            List<Incident> unassignedIcidents = new List<Incident>();
+
+            foreach(Incident incident in allIncidents)
+            {
+                isFree = true;
+
+                foreach(WorkRequest workRequest in allWorkRequests)
+                {
+                    if (workRequest.IncidentID.Equals(incident.ID))
+                    {
+                        isFree = false;
+                        break;
+                    }
+                   
+                }
+
+                if( !incident.IncidentStatus.Equals(IncidentStatus.INITIAL) && isFree)
+                    unassignedIcidents.Add(incident);
+
+
+            }
+
+
+            
+            return _mapper.Map<List<IncidentDto>>(unassignedIcidents);
+        }
     }
 }

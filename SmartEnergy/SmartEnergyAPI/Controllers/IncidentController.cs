@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SmartEnergy.Contract.CustomExceptions;
 using SmartEnergy.Contract.CustomExceptions.Incident;
 using SmartEnergy.Contract.CustomExceptions.Location;
 using SmartEnergy.Contract.DTO;
@@ -43,6 +44,14 @@ namespace SmartEnergyAPI.Controllers
         public IActionResult Get()
         {
             return Ok(_incidentService.GetAll());
+        }
+
+
+        [HttpGet("unassigned")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<IncidentDto>))]
+        public IActionResult GetUnassignedIcidents()
+        {
+            return Ok(_incidentService.GetUnassignedIncidents());
         }
 
         [HttpGet("{id}")]
@@ -128,9 +137,28 @@ namespace SmartEnergyAPI.Controllers
 
 
 
+        [HttpPut("incident/{incidentId}/crew/{crewId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IncidentDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)] 
+        public IActionResult AddCrewToIncident(int incidentId, int crewId)
+        {
+         
+            try
+            {
 
+                IncidentDto modified = _incidentService.AddCrewToIncident(incidentId, crewId);
 
-
+                return Ok(modified);
+            }
+            catch (IncidentNotFoundException incidentNotFound)
+            {
+                return NotFound(incidentNotFound.Message);
+            }        
+            catch (CrewNotFoundException crewNotFound)
+            {
+                return NotFound(crewNotFound.Message);
+            }
+        }
 
 
 

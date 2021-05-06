@@ -24,7 +24,7 @@ namespace SmartEnergyAPI.Controllers
 
        
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DeviceDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
         public IActionResult GetAllDevices()
         {
             return Ok(_deviceService.GetAll());
