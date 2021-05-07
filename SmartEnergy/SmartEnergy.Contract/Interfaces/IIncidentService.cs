@@ -12,5 +12,9 @@ namespace SmartEnergy.Contract.Interfaces
         IncidentDto AddCrewToIncident(int incidentId, int crewId);
 
         List<IncidentDto> GetUnassignedIncidents();
+
+        void AddDeviceToIncident(int incidentId, int deviceId);
+
+        
     }
 }
