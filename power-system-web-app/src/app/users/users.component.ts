@@ -44,6 +44,7 @@ export class UsersComponent implements OnInit {
 
   getUsers(currentPage:number = 0, perPage:number = 5)
   {
+    this.isLoading = true;
     let type:string = this.usersForm.controls['typeFilter'].value;
     let status:string = this.usersForm.controls['statusFilter'].value;
     let search:string = this.usersForm.controls['search'].value;
