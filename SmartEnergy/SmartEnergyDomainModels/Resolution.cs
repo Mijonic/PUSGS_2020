@@ -15,5 +15,17 @@ namespace SmartEnergyDomainModels
 
         public int IncidentID { get; set; }
         public Incident Incident { get; set; }
+
+
+        public void UpdateResolution(Resolution modified)
+        {
+            Cause = modified.Cause;
+            Subcause = modified.Subcause;
+            Construction = modified.Construction;
+            Material = modified.Material;
+            IncidentID = modified.IncidentID;
+
+
+        }
     }
 }

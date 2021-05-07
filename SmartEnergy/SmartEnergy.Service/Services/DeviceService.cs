@@ -67,14 +67,19 @@ namespace SmartEnergy.Service.Services
                 throw new LocationNotFoundException($"Location with id = {entity.LocationID} does not exists!");
 
             Device deviceWithMaxCounter = _dbContext.Devices.FirstOrDefault(x => x.DeviceCounter == _dbContext.Devices.Max(y => y.DeviceCounter));
-            
-            if(deviceWithMaxCounter == null)
+
+            if (deviceWithMaxCounter == null)
+            {
                 newDevice.Name = $"{newDevice.DeviceType.ToString().Substring(0, 3)}1";
+                newDevice.DeviceCounter = 1;
+            }      
             else
-                newDevice.Name = $"{newDevice.DeviceType.ToString().Substring(0, 3)}{deviceWithMaxCounter.DeviceCounter+1}";
+            {
+                newDevice.Name = $"{newDevice.DeviceType.ToString().Substring(0, 3)}{deviceWithMaxCounter.DeviceCounter + 1}";
+                newDevice.DeviceCounter = deviceWithMaxCounter.DeviceCounter + 1;
+            }
 
-
-            newDevice.DeviceCounter = deviceWithMaxCounter.DeviceCounter + 1;
+            
 
             _dbContext.Devices.Add(newDevice);
             _dbContext.SaveChanges();

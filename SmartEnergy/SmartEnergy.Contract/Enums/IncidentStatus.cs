@@ -7,6 +7,7 @@ namespace SmartEnergy.Contract.Enums
     public enum IncidentStatus
     {
         UNRESOLVED,
-        RESOLVED
+        RESOLVED,
+        INITIAL
     }
 }

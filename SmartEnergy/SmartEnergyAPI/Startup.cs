@@ -77,6 +77,7 @@ namespace SmartEnergyAPI
             services.AddScoped<IMultimediaService, MultimediaService>();
             services.AddScoped<ITimeService, TimeService>();
             services.AddScoped<IStateChangeService, StateChangeService>();
+            services.AddScoped<IResolutionService, ResolutionService>();
 
 
 

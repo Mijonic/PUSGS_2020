@@ -8,5 +8,9 @@ namespace SmartEnergy.Contract.Interfaces
     public interface IIncidentService : IGenericService<IncidentDto>
     {
         LocationDto GetIncidentLocation(int incidentId);
+
+        IncidentDto AddCrewToIncident(int incidentId, int crewId);
+
+        List<IncidentDto> GetUnassignedIncidents();
     }
 }
