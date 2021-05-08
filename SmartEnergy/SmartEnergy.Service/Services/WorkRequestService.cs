@@ -80,6 +80,28 @@ namespace SmartEnergy.Service.Services
             return _mapper.Map<List<DeviceDto>>(devices);
         }
 
+        public WorkRequestsListDto GetWorkRequestsPaged(WorkRequestField sortBy, SortingDirection direction, int page, int perPage, DocumentStatusFilter status, OwnerFilter owner, string searchParam)
+        {
+            IQueryable<WorkRequest> wrPaged = _dbContext.WorkRequests.Include(x => x.User).AsQueryable();
+
+            wrPaged = FilterWorkRequestsByStatus(wrPaged, status);
+            wrPaged = FilterWorkRequestsByOwner(wrPaged, owner);
+            wrPaged = SearchWorkRequests(wrPaged, searchParam);
+            wrPaged = SortWorkRequests(wrPaged, sortBy, direction);
+
+            int resourceCount = wrPaged.Count();
+            wrPaged = wrPaged.Skip(page * perPage)
+                                    .Take(perPage);
+
+            WorkRequestsListDto returnValue = new WorkRequestsListDto()
+            {
+                WorkRequests = _mapper.Map<List<WorkRequestDto>>(wrPaged.ToList()),
+                TotalCount = resourceCount
+            };
+
+            return returnValue;
+        }
+
         public WorkRequestDto Insert(WorkRequestDto entity)
         {
             ValidateWorkRequest(entity);
@@ -178,6 +200,115 @@ namespace SmartEnergy.Service.Services
                 }
                 catch { }
             }
+        }
+
+
+        private IQueryable<WorkRequest> FilterWorkRequestsByStatus(IQueryable<WorkRequest> wr, DocumentStatusFilter status)
+        {
+            //Filter by status, ignore if ALL
+            switch (status)
+            {
+                case DocumentStatusFilter.approved:
+                    return wr.Where(x => x.DocumentStatus == DocumentStatus.APPROVED);
+                case DocumentStatusFilter.canceled:
+                    return wr.Where(x => x.DocumentStatus == DocumentStatus.CANCELLED);
+                case DocumentStatusFilter.denied:
+                    return wr.Where(x => x.DocumentStatus == DocumentStatus.DENIED);
+                case DocumentStatusFilter.draft:
+                    return wr.Where(x => x.DocumentStatus == DocumentStatus.DRAFT);
+            }
+
+            return wr;
+        }
+
+        private IQueryable<WorkRequest> FilterWorkRequestsByOwner(IQueryable<WorkRequest> wr, OwnerFilter owner)
+        {
+            //TODO: Add filtering after authorization and authentication
+            return wr;
+        }
+
+
+        private IQueryable<WorkRequest> SearchWorkRequests(IQueryable<WorkRequest> wr, string searchParam)
+        {
+            if (string.IsNullOrWhiteSpace(searchParam)) //Ignore empty search
+                return wr;
+            ///Perform search
+            return wr.Where(x => x.Street.Contains(searchParam) ||
+                                               x.StartDate.ToString().Contains(searchParam) ||
+                                               x.EndDate.ToString().Contains(searchParam) ||
+                                               x.User.Username.Contains(searchParam) ||
+                                               x.CompanyName.Contains(searchParam) ||
+                                               x.Phone.Contains(searchParam) ||
+                                               x.CreatedOn.ToString().Contains(searchParam));
+        }
+
+        private IQueryable<WorkRequest> SortWorkRequests(IQueryable<WorkRequest> wr, WorkRequestField sortBy, SortingDirection direction)
+        {
+            //Sort
+            if (direction == SortingDirection.asc)
+            {
+                switch (sortBy)
+                {
+                    case WorkRequestField.id:
+                        return wr.OrderBy(x => x.ID);
+                    case WorkRequestField.company:
+                        return wr.OrderBy(x => x.CompanyName);
+                    case WorkRequestField.createdby:
+                        return wr.OrderBy(x => x.User.Username);
+                    case WorkRequestField.creationdate:
+                        return wr.OrderBy(x => x.CreatedOn);
+                    case WorkRequestField.emergency:
+                        return wr.OrderBy(x => x.IsEmergency);
+                    case WorkRequestField.enddate:
+                        return wr.OrderBy(x => x.EndDate);
+                    case WorkRequestField.incident:
+                        return wr.OrderBy(x => x.IncidentID);
+                    case WorkRequestField.phoneno:
+                        return wr.OrderBy(x => x.Phone);
+                    case WorkRequestField.startdate:
+                        return wr.OrderBy(x => x.StartDate);
+                    case WorkRequestField.status:
+                        return wr.OrderBy(x => x.DocumentStatus);
+                    case WorkRequestField.street:
+                        return wr.OrderBy(x => x.Street);
+                    case WorkRequestField.type:
+                        return wr.OrderBy(x => x.DocumentType);
+                }
+
+            }
+            else
+            {
+                switch (sortBy)
+                {
+                    case WorkRequestField.id:
+                        return wr.OrderByDescending(x => x.ID);
+                    case WorkRequestField.company:
+                        return wr.OrderByDescending(x => x.CompanyName);
+                    case WorkRequestField.createdby:
+                        return wr.OrderByDescending(x => x.User.Username);
+                    case WorkRequestField.creationdate:
+                        return wr.OrderByDescending(x => x.CreatedOn);
+                    case WorkRequestField.emergency:
+                        return wr.OrderByDescending(x => x.IsEmergency);
+                    case WorkRequestField.enddate:
+                        return wr.OrderByDescending(x => x.EndDate);
+                    case WorkRequestField.incident:
+                        return wr.OrderByDescending(x => x.IncidentID);
+                    case WorkRequestField.phoneno:
+                        return wr.OrderByDescending(x => x.Phone);
+                    case WorkRequestField.startdate:
+                        return wr.OrderByDescending(x => x.StartDate);
+                    case WorkRequestField.status:
+                        return wr.OrderByDescending(x => x.DocumentStatus);
+                    case WorkRequestField.street:
+                        return wr.OrderByDescending(x => x.Street);
+                    case WorkRequestField.type:
+                        return wr.OrderByDescending(x => x.DocumentType);
+                }
+
+            }
+
+            return wr;
         }
     }
 }

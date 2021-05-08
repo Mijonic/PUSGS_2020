@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SmartEnergy.Contract.CustomExceptions;
 using SmartEnergy.Contract.CustomExceptions.Incident;
 using SmartEnergy.Contract.CustomExceptions.Multimedia;
 using SmartEnergy.Contract.CustomExceptions.WorkRequest;
 using SmartEnergy.Contract.DTO;
+using SmartEnergy.Contract.Enums;
 using SmartEnergy.Contract.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -30,12 +32,23 @@ namespace SmartEnergyAPI.Controllers
             _stateChangeService = stateChangeService;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<WorkRequestDto>))]
-        public IActionResult Get()
+        public IActionResult GetAll()
         {
             return Ok(_workRequestService.GetAll());
         }
+
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<WorkRequestDto>))]
+        public IActionResult GetPaged([FromQuery] string searchParam, [FromQuery] WorkRequestField sortBy, [FromQuery] SortingDirection direction,
+                                    [FromQuery][BindRequired] int page, [FromQuery][BindRequired] int perPage, [FromQuery] DocumentStatusFilter status,
+                                    [FromQuery] OwnerFilter owner)
+        {
+            return Ok(_workRequestService.GetWorkRequestsPaged(sortBy, direction, page, perPage, status, owner, searchParam));
+        }
+
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestDto))]

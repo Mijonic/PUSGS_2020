@@ -1,12 +1,13 @@
 import { StateChange } from './../shared/models/state-change.model';
 import { IMultimediaService } from './../shared/interfaces/multimedia-service';
 import { MultimediaAttachment } from './../shared/models/multimedia-attachment.model';
-import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpParams, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Device } from 'app/shared/models/device.model';
 import { WorkRequest } from 'app/shared/models/work-request.model';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
+import { WorkRequestList } from 'app/shared/models/work-request-list.model';
 
 @Injectable({
   providedIn: 'root'
@@ -31,8 +32,26 @@ export class WorkRequestService implements IMultimediaService {
   }
 
   getAll():Observable<WorkRequest[]>{
-    let requestUrl = environment.serverURL.concat(`work-requests`);
+    let requestUrl = environment.serverURL.concat(`work-requests/all`);
     return this.http.get<WorkRequest[]>(requestUrl);
+  }
+
+  getWorkrequestsPaged( page: number, perPage:number,sort?: string, order?: string, documentStatus?:string, searchParam?:string, documentOwner?:string):Observable<WorkRequestList>{
+    let requestUrl = environment.serverURL.concat("work-requests");
+    let params = new HttpParams();
+    if(sort)
+      params = params.append('sortBy', sort);
+    if(order)
+      params = params.append('direction', order);
+    params = params.append('page', page.toString());
+    params = params.append('perPage', perPage.toString());
+    if(searchParam)
+      params = params.append('searchParam', searchParam);
+    if(documentOwner)
+      params = params.append('owner', documentOwner);
+    if(documentStatus)
+      params = params.append('status', documentStatus);
+    return this.http.get<WorkRequestList>(requestUrl, {params:params});
   }
 
   getWorkRequestDevices(id:number):Observable<Device[]>{

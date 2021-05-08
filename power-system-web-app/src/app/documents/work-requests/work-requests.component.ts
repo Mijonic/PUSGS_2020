@@ -1,13 +1,15 @@
+import { WorkRequest } from 'app/shared/models/work-request.model';
 import { UserService } from './../../services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { DisplayService } from './../../services/display.service';
 import { WorkRequestService } from './../../services/work-request.service';
-import { WorkRequest } from './../../shared/models/work-request.model';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource} from '@angular/material/table';
+import { merge, Observable, of } from 'rxjs';
+import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 
 
 @Component({
@@ -15,10 +17,9 @@ import { MatTableDataSource} from '@angular/material/table';
   templateUrl: './work-requests.component.html',
   styleUrls: ['./work-requests.component.css']
 })
-export class WorkRequestsComponent implements  AfterViewInit {
+export class WorkRequestsComponent implements OnInit,  AfterViewInit {
   displayedColumns: string[] = ['action', 'id', 'type', 'status', 'incident', 'street', 'startdate', 'enddate', 'createdby', 'emergency','company', 'phoneno', 'creationdate'];
-  dataSource: MatTableDataSource<WorkRequest>;
-  toppings = new FormControl();
+  dataSource:Observable<WorkRequest[]>;
   documentStatuses: any[] = 
   [ {status:'All', value:'all'},
     {status:'Draft', value:'draft'},
@@ -27,6 +28,13 @@ export class WorkRequestsComponent implements  AfterViewInit {
     {status:'Denied', value:'denied'},
     ];
   isLoading:boolean = true;
+  workRequestsForm = new FormGroup(
+    {
+      search:new FormControl(''),
+      documentStatus:new FormControl('all'),
+      documentOwner:new FormControl('all')
+    }
+  );
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -34,46 +42,47 @@ export class WorkRequestsComponent implements  AfterViewInit {
   constructor(private workRequestService:WorkRequestService, public display:DisplayService, private toastr:ToastrService,
     private userService:UserService) {
   }
-
-  loadWorkRequests()
-  {
-    this.workRequestService.getAll().subscribe(
-      data =>{
-          this.dataSource = new MatTableDataSource(data);
-          this.isLoading = false;
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-      }, 
-      error =>{
-        this.loadWorkRequests();
-      }
-    )
+  ngAfterViewInit(): void {
+    if(this.isLoading)
+      this.getWorkRequests();
   }
 
   ngOnInit(): void {
-    window.dispatchEvent(new Event('resize'));
-    this.loadWorkRequests();
-  }
-
-  ngAfterViewInit() {
 
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  getWorkRequests() {
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+    let status = this.workRequestsForm.controls['documentStatus'].value;
+    let owner = this.workRequestsForm.controls['documentOwner'].value;
+    let search = this.workRequestsForm.controls['search'].value;
+    this.dataSource = merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          this.isLoading = true;
+          return this.workRequestService.getWorkrequestsPaged(
+             this.paginator.pageIndex, this.paginator.pageSize, this.sort.active, this.sort.direction,status, search, owner );
+        }),
+        map(data => {
+          // Flip flag to show that loading has finished.
+          this.isLoading = false;
+          this.paginator.length = data.totalCount;
 
+          return data.workRequests;
+        }),
+        catchError(() => {
+          this.isLoading = false;
+          return of([]);
+        })
+      );
   }
+
 
   delete(id:number)
   {
     this.workRequestService.deleteWorkRequest(id).subscribe(
       data =>{
-        this.loadWorkRequests();
         this.toastr.success("Work request successfully deleted.");
         this.toastr.info("All media attached to this work request is also deleted.");
       },
@@ -87,6 +96,15 @@ export class WorkRequestsComponent implements  AfterViewInit {
                 }
       }
     );
+  }
+
+  resetPaging(): void {
+    this.paginator.pageIndex = 0;
+  }
+
+  reload()
+  {
+    this.getWorkRequests();
   }
 }
 
