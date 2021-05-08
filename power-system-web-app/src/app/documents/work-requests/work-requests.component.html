@@ -22,17 +22,17 @@
       </div> 
       <div class="row">
         <div class="col-md-4">
-          <mat-form-field appearance="fill">
-            <mat-label>Filter</mat-label>
-            <mat-select [formControl]="toppings" multiple>
-              <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+          <mat-form-field >
+            <mat-label>Document status</mat-label>
+            <mat-select [formControl]="toppings">
+              <mat-option *ngFor="let status of documentStatuses" [value]="status.value">{{status.status}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
         <div class="col-md-4 pt-3 d-flex justify-content-center">
           <mat-radio-group aria-label="Select an option">
-            <mat-radio-button color="primary" value="1">All</mat-radio-button>&nbsp;&nbsp;&nbsp;
-            <mat-radio-button color="primary" value="2">Only mine</mat-radio-button>
+            <mat-radio-button color="primary" value="all">All</mat-radio-button>&nbsp;&nbsp;&nbsp;
+            <mat-radio-button color="primary" value="mine">Only mine</mat-radio-button>
           </mat-radio-group>
         </div>
 

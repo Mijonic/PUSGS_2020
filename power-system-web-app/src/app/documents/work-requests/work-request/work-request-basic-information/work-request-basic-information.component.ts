@@ -33,7 +33,7 @@ export class WorkRequestBasicInformationComponent implements OnInit {
     details: new FormControl('', [Validators.maxLength(100)]),
     companyName: new FormControl('', [Validators.maxLength(50)]),
     phone: new FormControl('', [Validators.maxLength(30)]),
-    incident: new FormControl({value:3, disabled:true}, Validators.required),
+    incident: new FormControl("", Validators.required),
     emergency:new FormControl(false),
     createdOn: new FormControl({value: new Date(), disabled: true}),
     status: new FormControl({value:'DRAFT', disabled:true}),
@@ -143,7 +143,8 @@ export class WorkRequestBasicInformationComponent implements OnInit {
     const dialogRef = this.dialog.open(ChooseIncidentDialogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`The dialog was closed and choosen id is ${result}`);
+      if(result)
+        this.workRequestForm.controls['incident'].setValue(+result);
     });
   }
 

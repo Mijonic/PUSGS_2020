@@ -19,7 +19,13 @@ export class WorkRequestsComponent implements  AfterViewInit {
   displayedColumns: string[] = ['action', 'id', 'type', 'status', 'incident', 'street', 'startdate', 'enddate', 'createdby', 'emergency','company', 'phoneno', 'creationdate'];
   dataSource: MatTableDataSource<WorkRequest>;
   toppings = new FormControl();
-  toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato']; 
+  documentStatuses: any[] = 
+  [ {status:'All', value:'all'},
+    {status:'Draft', value:'draft'},
+    {status:'Canceled', value:"canceled"},
+    {status:'Approved', value:'approved'},
+    {status:'Denied', value:'denied'},
+    ];
   isLoading:boolean = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;

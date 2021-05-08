@@ -142,7 +142,7 @@ namespace SmartEnergy.Service.Services
             if (wr != null && wr.ID != entity.ID )
                 throw new WorkRequestInvalidStateException($"Work request already created for incident with id {entity.IncidentID}");
 
-            if (wr.DocumentStatus == DocumentStatus.APPROVED || wr.DocumentStatus == DocumentStatus.CANCELLED)
+            if (wr != null && (wr.DocumentStatus == DocumentStatus.APPROVED || wr.DocumentStatus == DocumentStatus.CANCELLED))
                 throw new WorkRequestInvalidStateException($"Work request is in {wr.DocumentStatus.ToString()} state and cannot be edited.");
 
             if (entity.StartDate.CompareTo(entity.EndDate) > 0)

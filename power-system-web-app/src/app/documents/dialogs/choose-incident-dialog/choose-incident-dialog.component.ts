@@ -1,26 +1,12 @@
+import { DisplayService } from './../../../services/display.service';
+import { ToastrService } from 'ngx-toastr';
+import { IncidentService } from './../../../services/incident.service';
 import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-  color: string;
-  confirmed: string;
-}
-
-/** Constants used to fill up our data base. */
-const COLORS: string[] = [
-  'maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple', 'fuchsia', 'lime', 'teal',
-  'aqua', 'blue', 'navy', 'black', 'gray'
-];
-const NAMES: string[] = [
-  'Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack', 'Charlotte', 'Theodore', 'Isla', 'Oliver',
-  'Isabella', 'Jasper', 'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'
-];
+import { Incident } from 'app/shared/models/incident.model';
 
 @Component({
   selector: 'app-choose-incident-dialog',
@@ -28,33 +14,35 @@ const NAMES: string[] = [
   styleUrls: ['./choose-incident-dialog.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ChooseIncidentDialogComponent implements OnInit, AfterViewInit  {
+export class ChooseIncidentDialogComponent implements OnInit {
 
-  displayedColumns: string[] = ['action', 'id', 'type', 'priority', 'confirmed', 'status', 'ETA', 'ATA', 'incidentOccurred', 'ETR', 'affectedConsumers', 'calls', 'voltageLevel', 'plannedWork' ];
-  dataSource: MatTableDataSource<UserData>;
+  displayedColumns: string[] = ['action', 'type', 'priority', 'confirmed', 'status', 'incidentOccurred', 'voltageLevel'];
+  dataSource: MatTableDataSource<Incident>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(public dialogRef: MatDialogRef<ChooseIncidentDialogComponent>) {
+  constructor(public dialogRef: MatDialogRef<ChooseIncidentDialogComponent>, private incidentService:IncidentService, private toastr:ToastrService,
+    public display:DisplayService) { }
 
-     // Create 100 users
-     const users = Array.from({length: 30}, (_, k) => createNewUser(k + 1));
-
-     // Assign the data to the data source for the table to render
-     this.dataSource = new MatTableDataSource(users);
-
+   loadIncidents()
+   {
+     this.incidentService.getUnassignedIncidents().subscribe(
+       data =>{
+        this.dataSource = new MatTableDataSource(data);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+       },
+       error =>{
+        this.toastr.error(error.error);
+        this.dialogRef.close();
+       }
+     )
    }
 
   
    ngOnInit(): void {
-  }
-
-  ngAfterViewInit() {
-
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-
+     this.loadIncidents();
   }
 
   onCancelClick(): void {
@@ -64,17 +52,4 @@ export class ChooseIncidentDialogComponent implements OnInit, AfterViewInit  {
 
 }
 
-/** Builds and returns a new User. */
-function createNewUser(id: number): UserData {
-  const name = NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
-
-  return {
-    id: id.toString(),
-    name: name,
-    progress: Math.round(Math.random() * 100).toString(),
-    color: COLORS[Math.round(Math.random() * (COLORS.length - 1))],
-    confirmed: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
-  };
-}
 

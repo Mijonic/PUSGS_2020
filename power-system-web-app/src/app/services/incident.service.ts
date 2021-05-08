@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Incident } from 'app/shared/models/incident.model';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 
@@ -13,5 +14,10 @@ export class IncidentService {
   getIncidentLocation(incidentId:number):Observable<Location>{
     let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/location`);
     return this.http.get<Location>(requestUrl);
+  }
+
+  getUnassignedIncidents():Observable<Incident[]>{
+    let requestUrl = environment.serverURL.concat(`incidents/unassigned`);
+    return this.http.get<Incident[]>(requestUrl);
   }
 }

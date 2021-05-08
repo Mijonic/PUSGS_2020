@@ -6002,23 +6002,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Mijonic\\.nuget\\packages\\": {},
+    "C:\\Users\\Predrag\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Mijonic\\Desktop\\Web\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Infrastructure\\SmartEnergy.Infrastructure.csproj",
+      "projectUniqueName": "C:\\Users\\Predrag\\source\\repos\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Infrastructure\\SmartEnergy.Infrastructure.csproj",
       "projectName": "SmartEnergy.Infrastructure",
-      "projectPath": "C:\\Users\\Mijonic\\Desktop\\Web\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Infrastructure\\SmartEnergy.Infrastructure.csproj",
-      "packagesPath": "C:\\Users\\Mijonic\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Mijonic\\Desktop\\Web\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Infrastructure\\obj\\",
+      "projectPath": "C:\\Users\\Predrag\\source\\repos\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Infrastructure\\SmartEnergy.Infrastructure.csproj",
+      "packagesPath": "C:\\Users\\Predrag\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Predrag\\source\\repos\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Mijonic\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Predrag\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -6026,15 +6026,15 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\Microsoft SDKs\\Azure\\.NET": {},
-        "C:\\Program Files\\Microsoft SDKs\\Azure\\.NET SDK": {},
+        "C:\\Program Files\\Microsoft SDKs\\Azure\\.NET SDK\\v2.9\\packages": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "C:\\Users\\Mijonic\\Desktop\\Web\\PUSGS_2020\\SmartEnergy\\SmartEnergyDomainModels\\SmartEnergyDomainModels.csproj": {
-              "projectPath": "C:\\Users\\Mijonic\\Desktop\\Web\\PUSGS_2020\\SmartEnergy\\SmartEnergyDomainModels\\SmartEnergyDomainModels.csproj"
+            "C:\\Users\\Predrag\\source\\repos\\PUSGS_2020\\SmartEnergy\\SmartEnergyDomainModels\\SmartEnergyDomainModels.csproj": {
+              "projectPath": "C:\\Users\\Predrag\\source\\repos\\PUSGS_2020\\SmartEnergy\\SmartEnergyDomainModels\\SmartEnergyDomainModels.csproj"
             }
           }
         }
@@ -6047,6 +6047,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "AutoMapper": {
             "target": "Package",
@@ -6090,7 +6091,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.200\\RuntimeIdentifierGraph.json"
       }
     }
   }
