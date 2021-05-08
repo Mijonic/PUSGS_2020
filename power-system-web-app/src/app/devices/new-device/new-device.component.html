@@ -21,8 +21,7 @@
                     <div class="p-3 py-5">
                         <mat-form-field class="w-100 m-auto"  appearance="fill">
                             <mat-label>Type</mat-label>
-                            <mat-select formControlName="deviceTypeControl" >
-                                <mat-option disabled selected value> -- select device type -- </mat-option>
+                            <mat-select required formControlName="deviceTypeControl" >                 
                                 <mat-option value="POWER_SWITCH">Power Switch</mat-option>
                                 <mat-option value="FUSE">Fuse</mat-option>
                                 <mat-option value="TRANSFORMER">Transformer</mat-option>
@@ -45,8 +44,7 @@
                     <div class="p-3 py-5">
                         <mat-form-field class="w-100 m-auto"  appearance="fill">
                             <mat-label>Address</mat-label>
-                            <mat-select  formControlName="deviceLocationControl">
-                                <mat-option disabled selected value> -- select an address -- </mat-option>
+                            <mat-select required formControlName="deviceLocationControl">
                                 <mat-option *ngFor="let location of allLocations" value="{{location.id}}">{{getAddressFromLocation(location)}}</mat-option>
                             </mat-select>
                         </mat-form-field>

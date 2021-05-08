@@ -64,6 +64,9 @@ namespace SmartEnergy.Service.Services
 
         public ResolutionDto Update(ResolutionDto entity)
         {
+
+            ValidateResolution(entity);
+
             Resolution updatedResolution = _mapper.Map<Resolution>(entity);
             Resolution oldResolution = _dbContext.Resolutions.FirstOrDefault(x => x.ID.Equals(updatedResolution.ID));
 
@@ -72,7 +75,7 @@ namespace SmartEnergy.Service.Services
             if (oldResolution == null)
                 throw new ResolutionNotFoundException($"Resolution with Id = {updatedResolution.ID} does not exists!");
 
-            ValidateResolution(entity);
+         
 
 
 
@@ -89,17 +92,42 @@ namespace SmartEnergy.Service.Services
                 throw new InvalidResolutionException("Undefined resolution cause!");
 
             if (!Enum.IsDefined(typeof(ConstructionType), entity.Construction))
-                throw new InvalidResolutionException("Undefined resolution cause!");
+                throw new InvalidResolutionException("Undefined resolution construction type!");
 
             if (!Enum.IsDefined(typeof(Material), entity.Material))
-                throw new InvalidResolutionException("Undefined resolution cause!");
+                throw new InvalidResolutionException("Undefined resolution material!");
 
             if (!Enum.IsDefined(typeof(Subcause), entity.Subcause))
-                throw new InvalidResolutionException("Undefined resolution cause!");
+                throw new InvalidResolutionException("Undefined resolution subcase!");
+
+
+            if(entity.Cause.Equals("FAILURE"))
+            {
+                if (!entity.Subcause.Equals("BURNED_OUT") && !entity.Subcause.Equals("SHORT_CIRCUIT") && !(entity.Subcause.Equals("MECHANICAL_FAILURE")))
+                    throw new InvalidResolutionException($"{entity.Subcause} is not subcase of Failure!");
+
+            }
+            else if(entity.Cause.Equals("WEATHER"))
+            {
+                if (!entity.Subcause.Equals("STORM") && !entity.Subcause.Equals("RAIN") && !entity.Subcause.Equals("WIND") && !entity.Subcause.Equals("SNOW"))
+                    throw new InvalidResolutionException($"{entity.Subcause} is not subcase of Weather!");
+        
+            }else
+            {
+
+                if (!entity.Subcause.Equals("BAD_INSTALL") && !entity.Subcause.Equals("NO_SUPERVISION") && !entity.Subcause.Equals("UNDER_VOLTAGE"))
+                    throw new InvalidResolutionException($"{entity.Subcause} is not subcase of Human error!");
+               
+
+            }
 
 
             if (_dbContext.Incidents.Any(x => x.ID == entity.IncidentID) == false)
                 throw new IncidentNotFoundException($"Incident with id = {entity.IncidentID} does not exists!");
+
+            if (_dbContext.Resolutions.Any(x => x.IncidentID == entity.IncidentID) == true)
+                throw new InvalidResolutionException($"Incident with id = {entity.IncidentID} already hase associated resolution!");
+
         }
 
     }

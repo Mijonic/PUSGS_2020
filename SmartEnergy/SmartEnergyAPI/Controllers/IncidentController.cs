@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartEnergy.Contract.CustomExceptions;
+using SmartEnergy.Contract.CustomExceptions.Device;
+using SmartEnergy.Contract.CustomExceptions.DeviceUsage;
 using SmartEnergy.Contract.CustomExceptions.Incident;
 using SmartEnergy.Contract.CustomExceptions.Location;
 using SmartEnergy.Contract.DTO;
@@ -161,6 +163,39 @@ namespace SmartEnergyAPI.Controllers
         }
 
 
+
+        [HttpPost("incident/{incidentId}/device/{deviceId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult AddDeviceToIncident(int incidentId, int deviceId)
+        {
+            try
+            {
+                _incidentService.AddDeviceToIncident(incidentId, deviceId);
+               
+                return Ok();
+            }
+            catch (IncidentNotFoundException incidentNotFound)
+            {
+                return NotFound(incidentNotFound.Message);
+            }
+            catch (InvalidIncidentException invalidIncident)
+            {
+                return BadRequest(invalidIncident.Message);
+            }
+            catch (DeviceNotFoundException deviceNotFound)
+            {
+                return NotFound(deviceNotFound.Message);
+            }
+            catch (InvalidDeviceUsageException invalidDeviceUsage)
+            {
+                return NotFound(invalidDeviceUsage.Message);
+            }
+
+
+            
+        }
 
 
 

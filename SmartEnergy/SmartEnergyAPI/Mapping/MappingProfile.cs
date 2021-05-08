@@ -59,21 +59,28 @@ namespace SmartEnergyAPI.Mapping
                .ForMember(mem => mem.IncidentStatus, op => op.MapFrom(o => o.IncidentStatus));
 
             CreateMap<IncidentDto, Incident>()
-             .ForMember(mem => mem.WorkType, op => op.MapFrom(o => o.WorkType))
-             .ForMember(mem => mem.IncidentStatus, op => op.MapFrom(o => o.IncidentStatus));
+                 .ForMember(mem => mem.WorkType, op => op.MapFrom(o => o.WorkType))
+                 .ForMember(mem => mem.IncidentStatus, op => op.MapFrom(o => o.IncidentStatus));
 
             CreateMap<Resolution, ResolutionDto>()
-            .ForMember(mem => mem.Cause, op => op.MapFrom(o => o.Cause))
-            .ForMember(mem => mem.Subcause, op => op.MapFrom(o => o.Subcause))
-            .ForMember(mem => mem.Material, op => op.MapFrom(o => o.Material))
-            .ForMember(mem => mem.Construction, op => op.MapFrom(o => o.Construction));
+                .ForMember(mem => mem.Cause, op => op.MapFrom(o => o.Cause))
+                .ForMember(mem => mem.Subcause, op => op.MapFrom(o => o.Subcause))
+                .ForMember(mem => mem.Material, op => op.MapFrom(o => o.Material))
+                .ForMember(mem => mem.Construction, op => op.MapFrom(o => o.Construction));
 
 
              CreateMap<ResolutionDto, Resolution>()
-            .ForMember(mem => mem.Cause, op => op.MapFrom(o => o.Cause))
-            .ForMember(mem => mem.Subcause, op => op.MapFrom(o => o.Subcause))
-            .ForMember(mem => mem.Material, op => op.MapFrom(o => o.Material))
-            .ForMember(mem => mem.Construction, op => op.MapFrom(o => o.Construction));
+                .ForMember(mem => mem.Cause, op => op.MapFrom(o => o.Cause))
+                .ForMember(mem => mem.Subcause, op => op.MapFrom(o => o.Subcause))
+                .ForMember(mem => mem.Material, op => op.MapFrom(o => o.Material))
+                .ForMember(mem => mem.Construction, op => op.MapFrom(o => o.Construction));
+
+
+            CreateMap<DeviceUsage, DeviceUsageDto>();
+            CreateMap<DeviceUsageDto, DeviceUsage>();
+
+
+            
 
         }
     }

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SmartEnergy.Contract.CustomExceptions;
+using SmartEnergy.Contract.CustomExceptions.Device;
+using SmartEnergy.Contract.CustomExceptions.DeviceUsage;
 using SmartEnergy.Contract.CustomExceptions.Incident;
 using SmartEnergy.Contract.CustomExceptions.Location;
 using SmartEnergy.Contract.DTO;
@@ -19,15 +21,16 @@ namespace SmartEnergy.Service.Services
     {
 
         private readonly SmartEnergyDbContext _dbContext;
-        private readonly ITimeService _timeService;
-        private readonly ICrewService _crewService;
+        private readonly ITimeService _timeService;   
+        private readonly IDeviceUsageService _deviceUsageService;
         private readonly IMapper _mapper;
+        
 
-        public IncidentService(SmartEnergyDbContext dbContext, ITimeService timeService, ICrewService crewService, IMapper mapper)
+        public IncidentService(SmartEnergyDbContext dbContext, ITimeService timeService, IDeviceUsageService deviceUsageService,  IMapper mapper)
         {
             _dbContext = dbContext;
             _timeService = timeService;
-            _crewService = crewService;
+            _deviceUsageService = deviceUsageService;
             _mapper = mapper;
 
 
@@ -189,6 +192,9 @@ namespace SmartEnergy.Service.Services
 
 
         }
+       
+        
+        
         /// <summary>
         /// Get priority for specific incident by finding device related to incident with highest priority.
         /// </summary>
@@ -312,6 +318,34 @@ namespace SmartEnergy.Service.Services
 
             
             return _mapper.Map<List<IncidentDto>>(unassignedIcidents);
+        }
+
+        public void AddDeviceToIncident(int incidentId, int deviceId)
+        {
+
+            Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
+                                                    .ThenInclude(p => p.Device)
+                                                    .ThenInclude(o => o.Location)
+                                                    .FirstOrDefault(x => x.ID == incidentId);
+            if (incident == null)
+                throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
+
+            Device device = _dbContext.Devices.Find(deviceId);
+
+            if (device == null)
+                throw new DeviceNotFoundException($"Device with id = { deviceId} does not exists!");
+
+
+            if (incident.IncidentDevices.Find(x => x.DeviceID == deviceId) != null)
+                throw new InvalidDeviceUsageException($"Device with id = {deviceId} is already added to incident!");
+
+
+
+            _deviceUsageService.Insert(new DeviceUsageDto { IncidentID = incidentId, DeviceID = deviceId });
+
+
+
+
         }
     }
 }

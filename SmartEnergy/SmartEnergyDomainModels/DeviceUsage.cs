@@ -17,5 +17,13 @@ namespace SmartEnergyDomainModels
         public SafetyDocument SafetyDocument { get; set; }
         public int DeviceID { get; set; }
         public Device Device { get; set; }
+
+        public void UpdateDeviceUsage(DeviceUsage modified)
+        {
+            WorkRequestID = modified.WorkRequestID;
+            WorkPlanID = modified.WorkPlanID;
+            SafetyDocumentID = modified.SafetyDocumentID;
+            DeviceID = modified.DeviceID;
+        }
     }
 }
