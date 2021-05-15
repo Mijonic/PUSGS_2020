@@ -18,7 +18,8 @@ namespace SmartEnergy.Contract.Interfaces
         void AddDeviceToIncident(int incidentId, int deviceId);
 
         void RemoveDeviceFromIncindet(int incidentId, int deviceId);
+        List<IncidentMapDisplayDto> GetUnresolvedIncidentsForMap();
 
-        
+
     }
 }

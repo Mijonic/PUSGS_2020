@@ -9,6 +9,7 @@ namespace SmartEnergyDomainModels
         public int ID { get; set; }
         public string Street { get; set; }
         public string City { get; set; }
+        public int Number { get; set; }
         public string Zip { get; set; }
         public int MorningPriority { get; set; }
         public int NoonPriority { get; set; }

@@ -1,7 +1,8 @@
-import { AppModule } from './../app.module';
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WorkMapComponent } from './work-map/work-map.component';
+
 
 
 
@@ -10,7 +11,6 @@ import { WorkMapComponent } from './work-map/work-map.component';
   declarations: [WorkMapComponent],
   imports: [
     CommonModule,
-    AppModule
   ]
 })
 export class MapModule { }

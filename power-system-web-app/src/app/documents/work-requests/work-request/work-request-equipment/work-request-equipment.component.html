@@ -5,7 +5,7 @@
     </div>
   </div>
 
-<div class="container-fluid " *ngIf="isLoading == false">
+<div class="container-fluid " [hidden]="isLoading">
     <div class="row"  >
         <div class="col-md-12">
             <div class="row"> 
@@ -15,38 +15,37 @@
                         
                             <!-- ID Column -->
                             <ng-container matColumnDef="id">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                            <th mat-header-cell *matHeaderCellDef> ID </th>
                             <td mat-cell *matCellDef="let row"> {{row.id}}</td>
                             </ng-container>
                         
                             <!-- Name Column -->
                             <ng-container matColumnDef="name" >
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                            <th mat-header-cell *matHeaderCellDef> Name </th>
                             <td mat-cell *matCellDef="let row"> {{row.name}} </td>
                             </ng-container>
                         
                             <!-- Type Column -->
-                            <ng-container matColumnDef="type">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+                            <ng-container matColumnDef="deviceType">
+                            <th mat-header-cell *matHeaderCellDef> Type </th>
                             <td mat-cell *matCellDef="let row"> {{row.deviceType}} </td>
                             </ng-container>
                         
                             <!-- Coordinates Column -->
                             <ng-container matColumnDef="coordinates">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Coordinates </th>
+                            <th mat-header-cell *matHeaderCellDef> Coordinates </th>
                             <td mat-cell *matCellDef="let row" > {{display.getCoordinatesDisplay(row.location)}} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="address">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Address</th>
+                            <th mat-header-cell *matHeaderCellDef> Address</th>
                             <td mat-cell *matCellDef="let row" > {{display.getAddressDisplay(row.location)}} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="actions">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Actions </th>
+                                <th mat-header-cell *matHeaderCellDef>Actions </th>
                                 <td mat-cell *matCellDef="let row">
                                     <a class="clickable"><mat-icon>location_on</mat-icon></a> 
-                                    <a class="clickable"><mat-icon>remove</mat-icon></a></td>
                             </ng-container>
                             
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -62,7 +61,7 @@
                     <div class="row">
                         <div class="col-md-12 mt-0 ">
                             <div class="mat-elevation-z8">
-                                <mat-paginator [pageSizeOptions]="[10, 15, 20]"></mat-paginator> 
+                                <mat-paginator [pageSizeOptions]="[1,3,5,10,15,20,25,30]"></mat-paginator> 
                             </div>
                         </div>
                     </div>

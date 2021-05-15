@@ -47,6 +47,7 @@ export class CrewComponent implements OnInit {
     this.crewService.getCrewById(id).subscribe(
       data =>{
         this.crew = data;
+        this.crewForm.controls['crewNameControl'].setValue(data.crewName);
         this.isLoadingCrew = false;
       },
       error =>{
@@ -76,6 +77,7 @@ export class CrewComponent implements OnInit {
     this.showCrewError = true;
     if(this.crewForm.valid && this.crew.crewMembers.length > 0)
     {
+      this.crew.crewName = this.crewForm.controls['crewNameControl'].value;
       if(this.isNew)
       {
         this.crewService.createNewCrew(this.crew).subscribe(
@@ -133,17 +135,5 @@ export class CrewComponent implements OnInit {
       this.crew.crewMembers.indexOf(member),
       0);
   }
-
-  /*validateAllFields(formGroup: FormGroup) {         
-    Object.keys(formGroup.controls).forEach(field => {  
-        const control = formGroup.get(field);            
-        if (control instanceof FormControl) {             
-            control.markAsTouched({ onlySelf: true });
-        } else if (control instanceof FormGroup) {        
-            this.validateAllFields(control);  
-            console.log(this.validateAllFields(control));
-        }
-    });
-  }*/
 
 }

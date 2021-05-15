@@ -84,6 +84,7 @@ namespace SmartEnergy.Service.Services
         /// <returns>LocationDto</returns>
         public LocationDto GetIncidentLocation(int incidentId)
         {
+            //TODO:
             Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
                                                     .ThenInclude(p => p.Device)
                                                     .ThenInclude(o => o.Location)
@@ -91,8 +92,18 @@ namespace SmartEnergy.Service.Services
             if (incident == null)
                 throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
 
+            DayPeriod currentDayPeriod = _timeService.GetCurrentDayPeriod();
+
             //Try getting location from devices
-            foreach (DeviceUsage d in incident.IncidentDevices)
+            List<DeviceUsage> devices = new List<DeviceUsage>();
+            if (currentDayPeriod == DayPeriod.MORNING)
+                devices = incident.IncidentDevices.OrderByDescending(x => x.Device.Location.MorningPriority).ToList();
+            else if (currentDayPeriod == DayPeriod.NOON)
+                devices = incident.IncidentDevices.OrderByDescending(x => x.Device.Location.NoonPriority).ToList();
+            else
+                devices = incident.IncidentDevices.OrderByDescending(x => x.Device.Location.NightPriority).ToList();
+
+            foreach (DeviceUsage d in devices)
             {
                 return _mapper.Map<LocationDto>(d.Device.Location);
             }
@@ -402,6 +413,33 @@ namespace SmartEnergy.Service.Services
 
 
             _dbContext.SaveChanges();
+        }
+
+        public List<IncidentMapDisplayDto> GetUnresolvedIncidentsForMap()
+        {
+            List<Incident> incidents = _dbContext.Incidents.Include(x => x.Crew)
+                                                           .Where(x => x.IncidentStatus == IncidentStatus.UNRESOLVED).ToList();
+            List<IncidentMapDisplayDto> returnValue = new List<IncidentMapDisplayDto>();
+
+            foreach(Incident incident in incidents)
+            {
+                try
+                {
+                    returnValue.Add(new IncidentMapDisplayDto()
+                    {
+                        ID = incident.ID,
+                        IncidentDateTime = incident.IncidentDateTime,
+                        Priority = incident.Priority,
+                        Location = GetIncidentLocation(incident.ID),
+                        Crew = _mapper.Map<CrewDto>(incident.Crew)
+                    }) ;
+                }catch
+                {
+
+                }
+            }
+
+            return returnValue;
         }
     }
 }

@@ -51,9 +51,16 @@ namespace SmartEnergyAPI.Controllers
 
         [HttpGet("unassigned")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<IncidentDto>))]
-        public IActionResult GetUnassignedIcidents()
+        public IActionResult GetUnassignedIncidents()
         {
             return Ok(_incidentService.GetUnassignedIncidents());
+        }
+
+        [HttpGet("unresolved")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<IncidentMapDisplayDto>))]
+        public IActionResult GetUnresolvedIncidents()
+        {
+            return Ok(_incidentService.GetUnresolvedIncidentsForMap());
         }
 
         [HttpGet("{id}")]
