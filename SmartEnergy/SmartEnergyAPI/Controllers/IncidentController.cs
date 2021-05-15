@@ -100,7 +100,7 @@ namespace SmartEnergyAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IncidentDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult CreateIncident(int id, [FromBody] IncidentDto incident)
+        public IActionResult UpdateIncident(int id, [FromBody] IncidentDto incident)
         {
             if (id != incident.ID)
                 return BadRequest($"Request id and entity id don't match");
@@ -164,6 +164,34 @@ namespace SmartEnergyAPI.Controllers
 
 
 
+        [HttpPut("remove-crew/incident/{incidentId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IncidentDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult RemoveCrewFromIncidet(int incidentId)
+        {
+
+            try
+            {
+
+                IncidentDto updatedIncindet = _incidentService.RemoveCrewFromIncidet(incidentId);
+
+                return Ok(updatedIncindet);
+            }
+            catch (IncidentNotFoundException incidentNotFound)
+            {
+                return NotFound(incidentNotFound.Message);
+            }
+            catch (CrewNotFoundException crewNotFound)
+            {
+                return NotFound(crewNotFound.Message);
+            }
+            catch (InvalidDeviceUsageException deviceUsageExcpetion)
+            {
+                return BadRequest(deviceUsageExcpetion.Message);
+            }
+        }
+
+
         [HttpPost("incident/{incidentId}/device/{deviceId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -195,6 +223,36 @@ namespace SmartEnergyAPI.Controllers
 
 
             
+        }
+
+
+        [HttpPut("remove-device/incident/{incidentId}/device/{deviceId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult RemoveDeviceFromIncindet(int incidentId, int deviceId)
+        {
+            try
+            {
+                _incidentService.RemoveDeviceFromIncindet(incidentId, deviceId);
+
+                return Ok();
+            }
+            catch (IncidentNotFoundException incidentNotFound)
+            {
+                return NotFound(incidentNotFound.Message);
+            }          
+            catch (DeviceNotFoundException deviceNotFound)
+            {
+                return NotFound(deviceNotFound.Message);
+            }
+            catch (InvalidDeviceUsageException invalidDeviceUsage)
+            {
+                return NotFound(invalidDeviceUsage.Message);
+            }
+
+
+
         }
 
 
