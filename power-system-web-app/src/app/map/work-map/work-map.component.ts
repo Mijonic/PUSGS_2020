@@ -122,7 +122,7 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
     this.hazardIcon = L.icon({
       iconUrl,
       shadowUrl,
-      iconSize: [41, 41],
+      iconSize: [60, 60],
       iconAnchor: [12, 41],
       popupAnchor: [1, -34],
       tooltipAnchor: [16, -28],
@@ -192,7 +192,7 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
       if(!inc.crew)
         return;
 
-      let crewMarker = L.marker([inc.location.latitude + 0.00005, inc.location.longitude], {icon:this.crewIcon});
+      let crewMarker = L.marker([inc.location.latitude + 0.00002, inc.location.longitude], {icon:this.crewIcon});
       crewMarker.bindTooltip(`Crew<br>
                               Name: ${inc.crew.crewName}`);
       crewMarker.on('click', (e) => {
