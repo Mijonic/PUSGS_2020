@@ -32,6 +32,6 @@ export class DisplayService {
   }
 
   getAddressDisplay(location:Location){
-    return `${location.street}, ${location.city}`;
+    return `${location.street} ${location.number}, ${location.city}`;
   }
 }

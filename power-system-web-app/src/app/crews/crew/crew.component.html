@@ -14,7 +14,7 @@
                             <div class="col-md-10">
                                 <mat-form-field class="w-100"> 
                                     <mat-label>Crew name</mat-label>
-                                    <input matInput placeholder="Write a crew name" [(ngModel)]="crew.crewName" formControlName="crewNameControl">
+                                    <input matInput placeholder="Write a crew name" formControlName="crewNameControl">
                                     <mat-error *ngIf="crewForm.hasError('required', 'crewNameControl')">
                                         Crew name is required
                                     </mat-error>

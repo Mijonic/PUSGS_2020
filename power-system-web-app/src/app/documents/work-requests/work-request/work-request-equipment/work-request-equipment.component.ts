@@ -20,12 +20,12 @@ import { TabMessagingService } from 'app/services/tab-messaging.service';
 })
 export class WorkRequestEquipmentComponent implements OnInit, AfterViewInit{
 
-  displayedColumns: string[] = ['id', 'name', 'type', 'coordinates', 'address', 'actions'];
+  displayedColumns: string[] = ['id', 'name', 'deviceType', 'coordinates', 'address', 'actions'];
   dataSource: MatTableDataSource<Device>;
   isLoading:boolean = true;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(public dialog:MatDialog, private wrService:WorkRequestService, private route:ActivatedRoute, private toastr:ToastrService,
     private tabMessaging:TabMessagingService, public display:DisplayService) {
@@ -63,14 +63,6 @@ export class WorkRequestEquipmentComponent implements OnInit, AfterViewInit{
   ngAfterViewInit() {
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
 
 
 }

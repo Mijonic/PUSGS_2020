@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { MatSort } from '@angular/material/sort';
 import { Crew } from 'app/shared/models/crew.model';
 import { CrewService } from './../services/crew.service';
@@ -13,7 +14,7 @@ import { catchError, map, startWith, switchMap } from 'rxjs/operators';
   templateUrl: './crews.component.html',
   styleUrls: ['./crews.component.css']
 })
-export class CrewsComponent implements OnInit, AfterViewInit {
+export class CrewsComponent implements OnInit, AfterViewInit{
   displayedColumns: string[] = ['action', 'crewName', 'members'];
   dataSource: MatTableDataSource<Crew>;
   filteredAndPagedCrews: Observable<Crew[]>;
@@ -22,14 +23,20 @@ export class CrewsComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private crewService:CrewService) {
-
+  constructor(private crewService:CrewService, private toastr:ToastrService) {
+  }
+  ngAfterViewInit(): void {
+    if(this.isLoading)
+      this.loadCrews();
   }
 
   ngOnInit(): void {
+      
   }
 
-  ngAfterViewInit() {
+
+
+  loadCrews() {
 
     this.filteredAndPagedCrews = merge(this.sort.sortChange, this.paginator.page)
       .pipe(
@@ -53,24 +60,15 @@ export class CrewsComponent implements OnInit, AfterViewInit {
       );
   }
 
- /* getCrews(){
-    this.crewService.getAllCrews().subscribe(
-      data => {
-      this.dataSource = new MatTableDataSource(data);
-      this.dataSource.paginator = this.paginator; 
-      this.isLoading = false;
-    },
-    error =>{
-      this.getCrews();
-    });
-
-  }*/
-
-
   delete(crewId:number)
   {
-    this.crewService.deleteCrew(crewId).subscribe(x =>{
-        //this.getCrews();
+    this.crewService.deleteCrew(crewId).subscribe(
+      data =>{
+        this.toastr.success("Crew deleted successfully.");
+        this.loadCrews();
+    },
+    error => {
+        this.toastr.error(error.error);
     });
   }
 

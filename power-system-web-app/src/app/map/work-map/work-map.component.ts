@@ -1,6 +1,12 @@
+import { DisplayService } from './../../services/display.service';
+import { DeviceService } from './../../services/device.service';
+import { ToastrService } from 'ngx-toastr';
+import { IncidentMapDisplay } from './../../shared/models/incident-map-display.model';
+import { IncidentService } from './../../services/incident.service';
 import { Component, OnInit, AfterViewInit, HostListener, ViewChild, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import * as L from 'leaflet';
+import { Device } from 'app/shared/models/device.model';
 
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
 const iconUrl = 'assets/marker-icon.png';
@@ -28,7 +34,11 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
   public containerHeight!:number;
   private hazardIcon:any;
   private crewIcon:any;
+  private deviceIcon:any;
   ngZone:any;
+  isLoading:boolean = true;
+  incidents:IncidentMapDisplay[] = [];     
+  devices:Device[] = [];         
 
   
   @HostListener('window:resize', ['$event'])
@@ -37,17 +47,45 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
     this.containerHeight = this.innerHeight - 76;
   }
 
-  constructor(private _router: Router, ngZone:NgZone) {
+  constructor(private _router: Router, ngZone:NgZone, private incidentService:IncidentService, private deviceService:DeviceService,
+     private toastr:ToastrService, private displayService:DisplayService) {
     this.ngZone = ngZone;
    } 
 
   ngAfterViewInit(): void {
   }
 
+  loadDevices()
+  {
+    this.deviceService.getAllDevices().subscribe(
+      data =>{
+        this.devices = data;
+        this.addDeviceMarkers(data);
+      },
+      error=>{
+        this.toastr.error("Cannot load devices"); 
+     }
+    )
+  }
+
+  loadIncidents()
+  {
+    this.incidentService.getUnresolvedIncidents().subscribe(
+      data=>{
+          this.incidents = data;
+          this.addIncidentCrewMarkers(data);
+      },
+      error=>{
+         this.toastr.error("Cannot load incidents"); 
+      }
+    )
+  }
+
   ngOnInit(): void {
     this.initMap();
     this.defineIcons();
-    this.addMarkers();
+    this.loadDevices();
+    this.loadIncidents();
     window.dispatchEvent(new Event('resize'));
   }
 
@@ -58,7 +96,8 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
     });
 
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
+    maxNativeZoom:19,
+    maxZoom: 22,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     });
 
@@ -89,23 +128,78 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
       tooltipAnchor: [16, -28],
       shadowSize: [41, 41]
     });
-  }
 
-  private addMarkers()
-  {
-    const circle = L.marker([45.2534882, 19.8335543], {icon:this.hazardIcon}).addTo(this.map);
-    let marker = L.marker([45.2546674, 19.8209292], {icon:this.hazardIcon});
-    marker.bindTooltip("Nesto se iskundacilo bato");
-    marker.on('click', (e) => {
-      this._router.navigate(['/']);
+    iconUrl = '../../assets/Images/device.png';
+    shadowUrl = 'assets/marker-shadow.png';
+    this.deviceIcon = L.icon({
+      iconUrl,
+      iconSize: [41, 21],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      tooltipAnchor: [16, -28],
+      shadowSize: [41, 41]
     });
-    marker.addTo(this.map);  
-    L.marker([45.257395, 19.801418], {icon:this.crewIcon}).addTo(this.map);    
   }
 
-  private routeOnClick(url:string)
+  private addDeviceMarkers(devices:Device[])
   {
+    let processedLocations = new Map<number, number>();
+    devices.forEach(device=> {
+      if(processedLocations.has(device.location.id))
+      {
+        let numberOfDevices =  processedLocations.get(device.location.id)!;
+        device.location.latitude += numberOfDevices * 0.00005;
+        device.location.longitude += numberOfDevices * 0.00001;
+        processedLocations.set(device.location.id, numberOfDevices++);
+      }else
+      {
+        processedLocations.set(device.location.id, 1);
+      }
+      let marker = L.marker([device.location.latitude, device.location.longitude], {icon:this.deviceIcon});
+      marker.bindTooltip(`Name: ${device.name} <br/>
+                          Type: ${device.deviceType} <br/>
+                          Address: ${device.location.street} ${device.location.number}`);
+      /*marker.on('click', (e) => {
+        this._router.navigate(['/']);
+      });*/
+      marker.addTo(this.map);  
+    });
+  }
 
+  private addIncidentCrewMarkers(incidentDisplay:IncidentMapDisplay[])
+  {
+    let processedLocations = new Map<number, number>();
+    incidentDisplay.forEach(inc=> {
+      if(processedLocations.has(inc.location.id))
+      {
+        let numberOfIncidents =  processedLocations.get(inc.location.id)!;
+        inc.location.latitude += numberOfIncidents * 0.00005;
+        inc.location.longitude += numberOfIncidents * 0.00001;
+        processedLocations.set(inc.location.id, numberOfIncidents++);
+      }else
+      {
+        processedLocations.set(inc.location.id, 1);
+      }
+      let marker = L.marker([inc.location.latitude, inc.location.longitude], {icon:this.hazardIcon});
+      marker.bindTooltip(`Incident<br>
+                          Date: ${this.displayService.getDateDisplay(inc.incidentDateTime)} <br/>
+                          Priority: ${inc.priority} <br/>
+                          Address: ${inc.location.street} ${inc.location.number}`);
+      marker.on('click', (e) => {
+        this._router.navigate(['/incident', inc.id]);
+      });
+      marker.addTo(this.map);  
+      if(!inc.crew)
+        return;
+
+      let crewMarker = L.marker([inc.location.latitude + 0.00005, inc.location.longitude], {icon:this.crewIcon});
+      crewMarker.bindTooltip(`Crew<br>
+                              Name: ${inc.crew.crewName}`);
+      crewMarker.on('click', (e) => {
+        this._router.navigate(['/incident', inc.id]);
+      });
+      crewMarker.addTo(this.map);  
+    });
   }
 
 }
