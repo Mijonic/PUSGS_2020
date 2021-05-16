@@ -4,7 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { IncidentMapDisplay } from './../../shared/models/incident-map-display.model';
 import { IncidentService } from './../../services/incident.service';
 import { Component, OnInit, AfterViewInit, HostListener, ViewChild, NgZone } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import * as L from 'leaflet';
 import { Device } from 'app/shared/models/device.model';
 
@@ -38,7 +38,8 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
   ngZone:any;
   isLoading:boolean = true;
   incidents:IncidentMapDisplay[] = [];     
-  devices:Device[] = [];         
+  devices:Device[] = [];        
+  zoomDeviceID:number = -1;
 
   
   @HostListener('window:resize', ['$event'])
@@ -48,7 +49,7 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
   }
 
   constructor(private _router: Router, ngZone:NgZone, private incidentService:IncidentService, private deviceService:DeviceService,
-     private toastr:ToastrService, private displayService:DisplayService) {
+     private toastr:ToastrService, private displayService:DisplayService, private route:ActivatedRoute) {
     this.ngZone = ngZone;
    } 
 
@@ -82,6 +83,11 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    const deviceID = this.route.snapshot.paramMap.get('deviceid');
+    if(deviceID && deviceID != "")
+    {
+      this.zoomDeviceID = +deviceID;
+    }
     this.initMap();
     this.defineIcons();
     this.loadDevices();
@@ -106,10 +112,8 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
 
   private defineIcons():void{
     let iconUrl = '../../assets/Images/crew-icon.png';
-    let shadowUrl = 'assets/marker-shadow.png';
     this.crewIcon = L.icon({
       iconUrl,
-      shadowUrl,
       iconSize: [41, 41],
       iconAnchor: [12, 41],
       popupAnchor: [1, -34],
@@ -118,10 +122,8 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
     });
 
     iconUrl = '../../assets/Images/hazard-icon.png';
-    shadowUrl = 'assets/marker-shadow.png';
     this.hazardIcon = L.icon({
       iconUrl,
-      shadowUrl,
       iconSize: [60, 60],
       iconAnchor: [12, 41],
       popupAnchor: [1, -34],
@@ -130,7 +132,6 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
     });
 
     iconUrl = '../../assets/Images/device.png';
-    shadowUrl = 'assets/marker-shadow.png';
     this.deviceIcon = L.icon({
       iconUrl,
       iconSize: [41, 21],
@@ -145,10 +146,11 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
   {
     let processedLocations = new Map<number, number>();
     devices.forEach(device=> {
+
       if(processedLocations.has(device.location.id))
       {
         let numberOfDevices =  processedLocations.get(device.location.id)!;
-        device.location.latitude += numberOfDevices * 0.00005;
+        device.location.latitude += numberOfDevices * 0.00001;
         device.location.longitude += numberOfDevices * 0.00001;
         processedLocations.set(device.location.id, numberOfDevices++);
       }else
@@ -163,6 +165,12 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
         this._router.navigate(['/']);
       });*/
       marker.addTo(this.map);  
+
+      if(this.zoomDeviceID == device.id)
+      {
+        this.map.flyTo([ device.location.latitude, device.location.longitude], 20) 
+      }
+
     });
   }
 

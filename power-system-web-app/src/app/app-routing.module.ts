@@ -58,6 +58,7 @@ const routes: Routes = [
   { path: 'work-plans', component: WorkPlansComponent,  outlet:"primary"  },
   { path: 'work-requests', component: WorkRequestsComponent,  outlet:"primary"  },
   { path: 'dashboard', component: DashboardComponent,  outlet:"primary" },
+  { path: 'map/:deviceid', component: WorkMapComponent,  outlet:"primary" },
   { path: 'map', component: WorkMapComponent,  outlet:"primary" },
   { path: 'crews', component: CrewsComponent, outlet: "primary" },
   { path: 'crew/:id', component: CrewComponent, outlet: "primary" } ,

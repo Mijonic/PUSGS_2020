@@ -45,7 +45,7 @@
                             <ng-container matColumnDef="actions">
                                 <th mat-header-cell *matHeaderCellDef>Actions </th>
                                 <td mat-cell *matCellDef="let row">
-                                    <a class="clickable"><mat-icon>location_on</mat-icon></a> 
+                                    <a class="clickable" [routerLink]="['/map', row.id]"><mat-icon>location_on</mat-icon></a> 
                             </ng-container>
                             
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

@@ -28,6 +28,21 @@ namespace SmartEnergy.Service.Services
             _mapper = mapper;
         }
 
+        public void CopyIncidentDevicesToWorkRequest(int incidentID, int workRequestID)
+        {
+            WorkRequest wr = _dbContext.WorkRequests.Find(workRequestID);
+            if (wr == null)
+                throw new WorkRequestNotFound($"Work request with ID {workRequestID} does not exist");
+            List<DeviceUsage> usages = _dbContext.DeviceUsages.Where(x => x.IncidentID == incidentID).ToList();
+
+            foreach(DeviceUsage deviceUsage in usages)
+            {
+                deviceUsage.WorkRequestID = workRequestID;
+            }
+
+            _dbContext.SaveChanges();
+        }
+
         public void Delete(int id)
         {
             DeviceUsage deviceUsage = _dbContext.DeviceUsages.FirstOrDefault(x => x.ID.Equals(id));

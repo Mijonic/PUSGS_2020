@@ -21,12 +21,14 @@ namespace SmartEnergy.Service.Services
         private readonly SmartEnergyDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IIncidentService _incidentService;
+        private readonly IDeviceUsageService _deviceUsageService;
 
-        public WorkRequestService(SmartEnergyDbContext dbContext, IMapper mapper, IIncidentService incidentService)
+        public WorkRequestService(SmartEnergyDbContext dbContext, IMapper mapper, IIncidentService incidentService, IDeviceUsageService deviceUsageService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _incidentService = incidentService;
+            _deviceUsageService = deviceUsageService;
         }
 
         public void Delete(int id)
@@ -130,6 +132,8 @@ namespace SmartEnergy.Service.Services
             _dbContext.WorkRequests.Add(workRequest);
 
             _dbContext.SaveChanges();
+
+            _deviceUsageService.CopyIncidentDevicesToWorkRequest(workRequest.IncidentID, workRequest.ID);
 
             return _mapper.Map<WorkRequestDto>(workRequest);
         }
