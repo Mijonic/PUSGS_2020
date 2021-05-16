@@ -354,9 +354,65 @@ namespace SmartEnergy.Service.Services
 
             _deviceUsageService.Insert(new DeviceUsageDto { IncidentID = incidentId, DeviceID = deviceId });
 
+            incident.Priority = GetIncidentPriority(incident.ID);
+
+
+            _dbContext.SaveChanges();
 
 
 
+
+
+
+        }
+
+        public IncidentDto RemoveCrewFromIncidet(int incidentId)
+        {
+            Incident incident = _dbContext.Incidents.Find(incidentId);
+
+            if (incident == null)
+                throw new IncidentNotFoundException($"Incident with id = {incidentId} does not exists!");
+
+
+            
+
+            incident.CrewID = null;
+            _dbContext.SaveChanges();
+
+
+            return _mapper.Map<IncidentDto>(incident);
+        }
+
+        public void RemoveDeviceFromIncindet(int incidentId, int deviceId)
+        {
+            Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
+                                                   .ThenInclude(p => p.Device)
+                                                   .ThenInclude(o => o.Location)
+                                                   .FirstOrDefault(x => x.ID == incidentId);
+            if (incident == null)
+                throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
+
+            Device device = _dbContext.Devices.Find(deviceId);
+
+            if (device == null)
+                throw new DeviceNotFoundException($"Device with id = { deviceId} does not exists!");
+
+
+            DeviceUsage toRemove = incident.IncidentDevices.Find(x => x.DeviceID == deviceId);
+
+            if ( toRemove == null)
+                throw new InvalidDeviceUsageException($"Device with id = {deviceId} is not connected with incident with id = {incidentId}");
+
+
+
+
+            //_deviceUsageService.Insert(new DeviceUsageDto { IncidentID = incidentId, DeviceID = deviceId });
+            _deviceUsageService.Delete(toRemove.ID);
+
+            incident.Priority = GetIncidentPriority(incident.ID);
+
+
+            _dbContext.SaveChanges();
         }
 
         public List<IncidentMapDisplayDto> GetUnresolvedIncidentsForMap()
