@@ -12,6 +12,8 @@ using SmartEnergyDomainModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
 
 namespace SmartEnergy.Service.Services
@@ -22,13 +24,15 @@ namespace SmartEnergy.Service.Services
         private readonly IMapper _mapper;
         private readonly IIncidentService _incidentService;
         private readonly IDeviceUsageService _deviceUsageService;
+        private readonly IAuthHelperService _authHelperService;
 
-        public WorkRequestService(SmartEnergyDbContext dbContext, IMapper mapper, IIncidentService incidentService, IDeviceUsageService deviceUsageService)
+        public WorkRequestService(SmartEnergyDbContext dbContext, IMapper mapper, IIncidentService incidentService, IDeviceUsageService deviceUsageService, IAuthHelperService authHelperService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _incidentService = incidentService;
             _deviceUsageService = deviceUsageService;
+            _authHelperService = authHelperService;
         }
 
         public void Delete(int id)
@@ -82,12 +86,13 @@ namespace SmartEnergy.Service.Services
             return _mapper.Map<List<DeviceDto>>(devices);
         }
 
-        public WorkRequestsListDto GetWorkRequestsPaged(WorkRequestField sortBy, SortingDirection direction, int page, int perPage, DocumentStatusFilter status, OwnerFilter owner, string searchParam)
+        public WorkRequestsListDto GetWorkRequestsPaged(WorkRequestField sortBy, SortingDirection direction, int page, int perPage,
+            DocumentStatusFilter status, OwnerFilter owner, string searchParam, ClaimsPrincipal user)
         {
             IQueryable<WorkRequest> wrPaged = _dbContext.WorkRequests.Include(x => x.User).AsQueryable();
 
             wrPaged = FilterWorkRequestsByStatus(wrPaged, status);
-            wrPaged = FilterWorkRequestsByOwner(wrPaged, owner);
+            wrPaged = FilterWorkRequestsByOwner(wrPaged, owner, user);
             wrPaged = SearchWorkRequests(wrPaged, searchParam);
             wrPaged = SortWorkRequests(wrPaged, sortBy, direction);
 
@@ -225,9 +230,11 @@ namespace SmartEnergy.Service.Services
             return wr;
         }
 
-        private IQueryable<WorkRequest> FilterWorkRequestsByOwner(IQueryable<WorkRequest> wr, OwnerFilter owner)
+        private IQueryable<WorkRequest> FilterWorkRequestsByOwner(IQueryable<WorkRequest> wr, OwnerFilter owner, ClaimsPrincipal user)
         {
-            //TODO: Add filtering after authorization and authentication
+            int userId = _authHelperService.GetUserIDFromPrincipal(user);
+            if (owner == OwnerFilter.mine)
+                wr = wr.Where(x => x.User.ID == userId);
             return wr;
         }
 

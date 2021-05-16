@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SmartEnergy.Contract.CustomExceptions;
@@ -28,24 +29,34 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpGet("all")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<UserDto>))]
+        [Authorize(Roles = "ADMIN, DISPATCHER")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<UserDto>))]     
         public IActionResult GetAll()
         {
-            return Ok(_userService.GetAll());
+            List<UserDto> users = _userService.GetAll();
+            foreach (UserDto u in users) u.StripConfidentialData();
+            return Ok(users);
 
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<CrewsListDto>))]
-        public IActionResult GetAll([FromQuery] string searchParam, [FromQuery] UserField sortBy, [FromQuery] SortingDirection direction,
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsersListDto))]
+        public IActionResult GetAllPaged([FromQuery] string searchParam, [FromQuery] UserField sortBy, [FromQuery] SortingDirection direction,
                                     [FromQuery][BindRequired] int page, [FromQuery][BindRequired] int perPage, [FromQuery] UserStatusFilter status,
                                     [FromQuery] UserTypeFilter type)
         {
-            return Ok(_userService.GetUsersPaged(sortBy, direction, page, perPage, status, type, searchParam));
+            UsersListDto users = _userService.GetUsersPaged(sortBy, direction, page, perPage, status, type, searchParam);
+            users.StripConfidentialData();
+            return Ok(users);
 
         }
 
         [HttpGet("{id}/avatar/{filename}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetFile(int id, string filename)
@@ -66,15 +77,21 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet("unassigned-crew-members")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<UserDto>))]
         public IActionResult GetUnassignedCrewMembers()
         {
-            return Ok(_userService.GetAllUnassignedCrewMembers());
+            List<UserDto> users = _userService.GetAllUnassignedCrewMembers();
+            foreach (UserDto u in users) u.StripConfidentialData();
+            return Ok(users);
 
         }
 
 
         [HttpPut("{id}/approve")]
+        [Authorize(Roles ="ADMIN")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -82,7 +99,7 @@ namespace SmartEnergyAPI.Controllers
         {
             try
             {
-                UserDto user = _userService.ApproveUser(id);
+                UserDto user = _userService.ApproveUser(id).StripConfidentialData();
                 return Ok(user);
             }catch(UserNotFoundException unf)
             {
@@ -97,6 +114,8 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPut("{id}/deny")]
+        [Authorize(Roles ="ADMIN")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -104,7 +123,7 @@ namespace SmartEnergyAPI.Controllers
         {
             try
             {
-                UserDto user = _userService.DenyUser(id);
+                UserDto user = _userService.DenyUser(id).StripConfidentialData();
                 return Ok(user);
             }
             catch (UserNotFoundException unf)
@@ -119,13 +138,15 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetUserById(int id)
         {
             try
             {
-                UserDto user = _userService.Get(id);
+                UserDto user = _userService.Get(id).StripConfidentialData();
                 return Ok(user);
             }
             catch (UserNotFoundException unf)
@@ -137,6 +158,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPost]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -144,7 +166,7 @@ namespace SmartEnergyAPI.Controllers
         {
             try
             {
-                UserDto user = _userService.Insert(newUser);
+                UserDto user = _userService.Insert(newUser).StripConfidentialData();
                 return CreatedAtAction(nameof(GetUserById), new { id = user.ID}, user);
             }
             catch (CrewNotFoundException unf)
@@ -154,6 +176,35 @@ namespace SmartEnergyAPI.Controllers
             catch (InvalidUserDataException ius)
             {
                 return BadRequest(ius.Message);
+            }
+
+        }
+
+        [HttpPost("login")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public IActionResult Login([FromBody] LoginDto userInfo)
+        {
+            try
+            {
+                UserDto userData;
+                string tokenString = _userService.Login(userInfo, out userData);
+                return Ok(new { Token = tokenString, UserData = userData });
+            }
+            catch (UserNotFoundException unf)
+            {
+                return NotFound(unf.Message);
+            }
+            catch (InvalidUserDataException ius)
+            {
+                return BadRequest(ius.Message);
+            }
+            catch (UserInvalidStatusException ius)
+            {
+                return Unauthorized(ius.Message);
             }
 
         }

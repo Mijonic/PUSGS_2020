@@ -1,5 +1,6 @@
 import { HttpClient, HttpEvent, HttpParams, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Login } from 'app/shared/models/login.model';
 import { User } from 'app/shared/models/user.model';
 import { UsersList } from 'app/shared/models/users-list.model';
 import { environment } from 'environments/environment';
@@ -77,6 +78,11 @@ export class UserService {
   getUserAvatar(userId:number, filename:string): Observable<any> {
     let requestUrl = environment.serverURL.concat(`users/${userId}/avatar/${filename}`);
 		return this.http.get(requestUrl, {responseType: 'blob'});
+  }
+
+  login(credentials:Login):Observable<any>{
+    let requestUrl = environment.serverURL.concat(`users/login`);
+    return this.http.post<any>(requestUrl, credentials);
   }
 
 }

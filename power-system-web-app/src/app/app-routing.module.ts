@@ -1,3 +1,4 @@
+import { AuthGuardService } from './auth/auth-guard.service';
 
 import { IncidentDevicesComponent } from './incidents/devices/devices.component';
 import { GlobalSettingsStreetsPriorityComponent } from './settings/global-settings-streets-priority/global-settings-streets-priority.component';
@@ -55,16 +56,22 @@ export const SAFETY_DOCUMENTS_SERVICE_TOKEN = new InjectionToken<IMultimediaServ
 const routes: Routes = [
   { path: 'register', component: RegistrationComponent,  outlet:"primary"  },
   { path: '', component: FrontPageComponent,  outlet:"front" },
-  { path: 'work-plans', component: WorkPlansComponent,  outlet:"primary"  },
-  { path: 'work-requests', component: WorkRequestsComponent,  outlet:"primary"  },
-  { path: 'dashboard', component: DashboardComponent,  outlet:"primary" },
-  { path: 'map/:deviceid', component: WorkMapComponent,  outlet:"primary" },
-  { path: 'map', component: WorkMapComponent,  outlet:"primary" },
-  { path: 'crews', component: CrewsComponent, outlet: "primary" },
-  { path: 'crew/:id', component: CrewComponent, outlet: "primary" } ,
-  { path: 'crew', component: CrewComponent, outlet: "primary" } ,
+  { path: 'work-plans', component: WorkPlansComponent,  outlet:"primary" },
+  { path: 'work-requests', component: WorkRequestsComponent,  outlet:"primary", canActivate: [AuthGuardService]  },
+  { path: 'dashboard', component: DashboardComponent,  outlet:"primary", canActivate: [AuthGuardService] },
+  { path: 'map/:deviceid', component: WorkMapComponent,  outlet:"primary", canActivate: [AuthGuardService] },
+  { path: 'map', component: WorkMapComponent,  outlet:"primary", canActivate: [AuthGuardService] },
+  { path: 'crews', component: CrewsComponent, outlet: "primary", canActivate: [AuthGuardService] },
+  { path: 'crew/:id', component: CrewComponent, outlet: "primary", canActivate: [AuthGuardService] } ,
+  { path: 'crew', component: CrewComponent, outlet: "primary", canActivate: [AuthGuardService] } ,
   { path: 'edit-profile', component: EditProfileComponent, outlet: "primary"},
-  { path: 'users', component: UsersComponent, outlet: "primary"},
+  { path: 'users', component: UsersComponent,
+    outlet: "primary",
+    canActivate: [AuthGuardService],
+    data:{
+      roles: ['ADMIN']
+    }
+  },
   { path: 'incidents', component: IncidentsComponent, outlet: "primary"},
   { path: 'incident',  redirectTo: '/incident/basic-info', pathMatch: 'full', outlet: "primary"},
   { path: 'incident', component: IncidentComponent, outlet: "primary",
@@ -102,22 +109,27 @@ const routes: Routes = [
     {
       path: 'basic-info',
       component: WorkPlanBasicInformationComponent, 
+      canActivate: [AuthGuardService]
     },
     {
       path: 'multimedia',
       component: MultimediaAttachmentsComponent, 
+      canActivate: [AuthGuardService]
     },
     {
       path: 'state-changes',
       component: WorkPlanStateChangesComponent, 
+      canActivate: [AuthGuardService]
     },
     {
       path: 'equipment',
       component: WorkPlanEquipmentComponent,
+      canActivate: [AuthGuardService]
     },
     {
       path: 'switching-instructions',
       component: WorkPlanSwitchingInstructionsComponent,
+      canActivate: [AuthGuardService]
     },
   ],
 },
@@ -156,23 +168,28 @@ const routes: Routes = [
       {
         path: 'basic-info',
         component: WorkRequestBasicInformationComponent, 
+        canActivate: [AuthGuardService]
       },
       {
         path: 'basic-info/:id',
         component: WorkRequestBasicInformationComponent, 
+        canActivate: [AuthGuardService]
       },
       {
         path: 'multimedia/:id',
         component: MultimediaAttachmentsComponent,
+        canActivate: [AuthGuardService],
         data:{requiredService: WORK_REQUEST_SERVICE_TOKEN}
       },
       {
         path: 'state-changes/:id',
         component: WorkRequestStateChangesComponent, 
+        canActivate: [AuthGuardService]
       },
      {
         path: 'equipment/:id',
         component: WorkRequestEquipmentComponent,
+        canActivate: [AuthGuardService]
       },
     ],
   },
@@ -212,7 +229,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes,)],
   exports: [RouterModule]
 })
 export class AppRoutingModule {

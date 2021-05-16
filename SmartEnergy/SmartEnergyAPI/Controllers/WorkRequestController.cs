@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SmartEnergy.Contract.CustomExceptions;
@@ -33,6 +34,8 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpGet("all")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<WorkRequestDto>))]
         public IActionResult GetAll()
         {
@@ -41,16 +44,20 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<WorkRequestDto>))]
         public IActionResult GetPaged([FromQuery] string searchParam, [FromQuery] WorkRequestField sortBy, [FromQuery] SortingDirection direction,
                                     [FromQuery][BindRequired] int page, [FromQuery][BindRequired] int perPage, [FromQuery] DocumentStatusFilter status,
                                     [FromQuery] OwnerFilter owner)
         {
-            return Ok(_workRequestService.GetWorkRequestsPaged(sortBy, direction, page, perPage, status, owner, searchParam));
+            return Ok(_workRequestService.GetWorkRequestsPaged(sortBy, direction, page, perPage, status, owner, searchParam, User));
         }
 
 
         [HttpGet("{id}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetById(int id)
@@ -66,6 +73,8 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpGet("{id}/devices")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetWorkRequestDevices(int id)
@@ -81,6 +90,8 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -107,6 +118,8 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPut("{id}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -135,6 +148,8 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpDelete("{id}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult DeleteWorkRequest(int id)
@@ -151,6 +166,8 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpPost("{id}/attachments")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -181,6 +198,8 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpGet("{id}/attachments/{filename}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type= typeof(FileStreamResult))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetFile(int id, string filename)
@@ -201,6 +220,8 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet("{id}/attachments")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<MultimediaAttachmentDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult  GetWorkRequestAttachments(int id)
@@ -217,6 +238,8 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet("{id}/state-changes")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<StateChangeHistoryDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetWorkRequestStateChanges(int id)
@@ -233,6 +256,8 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpDelete("{id}/attachments/{filename}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult DeleteAttachment(int id, string filename)
@@ -258,6 +283,8 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpPut("{id}/approve")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type=typeof(WorkRequestDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -265,7 +292,7 @@ namespace SmartEnergyAPI.Controllers
         {
             try
             {
-                WorkRequestDto wr = _stateChangeService.ApproveWorkRequest(id);
+                WorkRequestDto wr = _stateChangeService.ApproveWorkRequest(id, User);
                 return Ok(wr);
             }
             catch (WorkRequestNotFound wnf)
@@ -279,6 +306,8 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpPut("{id}/cancel")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -286,7 +315,7 @@ namespace SmartEnergyAPI.Controllers
         {
             try
             {
-                WorkRequestDto wr = _stateChangeService.CancelWorkRequest(id);
+                WorkRequestDto wr = _stateChangeService.CancelWorkRequest(id, User);
                 return Ok(wr);
             }
             catch (WorkRequestNotFound wnf)
@@ -301,6 +330,8 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPut("{id}/deny")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -308,7 +339,7 @@ namespace SmartEnergyAPI.Controllers
         {
             try
             {
-                WorkRequestDto wr = _stateChangeService.DenyWorkRequest(id);
+                WorkRequestDto wr = _stateChangeService.DenyWorkRequest(id, User);
                 return Ok(wr);
             }
             catch (WorkRequestNotFound wnf)

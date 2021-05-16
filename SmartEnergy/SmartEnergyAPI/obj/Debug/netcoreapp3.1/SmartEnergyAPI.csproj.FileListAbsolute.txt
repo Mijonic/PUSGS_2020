@@ -79,6 +79,12 @@ C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\obj\Debug\net
 C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\obj\Debug\netcoreapp3.1\SmartEnergyAPI.dll
 C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\obj\Debug\netcoreapp3.1\SmartEnergyAPI.pdb
 C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\obj\Debug\netcoreapp3.1\SmartEnergyAPI.genruntimeconfig.cache
+C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\Microsoft.Win32.SystemEvents.dll
+C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\nClam.dll
+C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\System.Drawing.Common.dll
+C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
+C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\appsettings.json
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\SmartEnergyAPI.exe
@@ -166,9 +172,4 @@ C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\obj\Debug\ne
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\obj\Debug\netcoreapp3.1\SmartEnergyAPI.dll
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\obj\Debug\netcoreapp3.1\SmartEnergyAPI.pdb
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\obj\Debug\netcoreapp3.1\SmartEnergyAPI.genruntimeconfig.cache
-C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\Microsoft.Win32.SystemEvents.dll
-C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\nClam.dll
-C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\System.Drawing.Common.dll
-C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
-C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
-C:\Users\Mijonic\Desktop\Web\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
+C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll

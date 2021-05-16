@@ -15,5 +15,7 @@ namespace SmartEnergy.Contract.Interfaces
                                           string searchParam);
         public UserDto ApproveUser(int userId);
         public UserDto DenyUser(int userId);
+
+        public string Login(LoginDto userInfo, out UserDto user);
     }
 }

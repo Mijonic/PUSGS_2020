@@ -25,5 +25,11 @@ namespace SmartEnergy.Contract.DTO
          public List<SafetyDocument> SafetyDocuments { get; set; }
          public List<WorkPlan> WorkPlans { get; set; }
          public List<Notification> Notifications { get; set; }*/
+
+        public UserDto StripConfidentialData()
+        {
+            Password = null;
+            return this;
+        }
     }
 }

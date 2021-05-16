@@ -100,11 +100,6 @@
             <td mat-cell *matCellDef="let row" > {{display.getDateDisplay(row.endDate)}} </td>
           </ng-container>
 
-          <!-- Created by collumn -->
-          <ng-container matColumnDef="createdby">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Created by</th>
-            <td mat-cell *matCellDef="let row" > {{row.userID}} </td>
-          </ng-container>
 
           <!-- End Date collumn -->
           <ng-container matColumnDef="emergency">

@@ -1,3 +1,4 @@
+import { AuthGuardService } from './auth/auth-guard.service';
 
 import { WorkRequestService } from './services/work-request.service';
 import { SettingsModule } from './settings/settings.module';
@@ -18,7 +19,11 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { DevicesModule } from './devices/devices.module';
 import { ToastrModule } from 'ngx-toastr';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { JwtModule } from "@auth0/angular-jwt";
 
+export function tokenGetter() {
+  return localStorage.getItem("jwt");
+}
 
 @NgModule({
   declarations: [
@@ -40,6 +45,12 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     DevicesModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains:['localhost:44372']
+      }
+    })
   ],
 
   providers: [
@@ -54,6 +65,8 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
       useClass: WorkRequestService
    }
    /*Define other services here*/
+   ,
+   AuthGuardService
   ],
   bootstrap: [AppComponent]
 })
