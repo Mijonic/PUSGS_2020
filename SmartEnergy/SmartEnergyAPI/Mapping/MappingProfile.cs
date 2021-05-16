@@ -80,7 +80,16 @@ namespace SmartEnergyAPI.Mapping
             CreateMap<DeviceUsageDto, DeviceUsage>();
 
 
-            
+            CreateMap<Call, CallDto>()
+                .ForMember(mem => mem.CallReason, op => op.MapFrom(o => o.CallReason));
+
+            CreateMap<CallDto, Call>()
+                 .ForMember(mem => mem.CallReason, op => op.MapFrom(o => o.CallReason));
+
+
+
+
+
 
         }
     }

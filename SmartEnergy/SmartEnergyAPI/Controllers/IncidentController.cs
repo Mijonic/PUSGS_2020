@@ -264,7 +264,73 @@ namespace SmartEnergyAPI.Controllers
 
 
 
+        [HttpGet("calls/incident/{incidentId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<IncidentDto>))]
+        public IActionResult GetIncidentCalls(int incidentId)
+        {
+            return Ok(_incidentService.GetIncidentCalls(incidentId));
+        }
 
+
+        [HttpGet("calls-counter/incident/{incidentId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+        public IActionResult GetNumberOfIncidentCalls(int incidentId)
+        {
+            return Ok(_incidentService.GetNumberOfCalls(incidentId));
+        }
+
+        [HttpGet("affected-consumers/incident/{incidentId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+        public IActionResult GetNumberOfAffectedConsumers(int incidentId)
+        {
+            try
+            {
+                return Ok(_incidentService.GetNumberOfAffectedConsumers(incidentId));
+            }
+            catch (IncidentNotFoundException incidentNotFound)
+            {
+                return NotFound(incidentNotFound.Message);
+            }
+        }
+
+
+        [HttpGet("devices/incident/{incidentId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
+        public IActionResult GetIncidentDevices(int incidentId)
+        {
+            try
+            {
+                return Ok(_incidentService.GetIncidentDevices(incidentId));
+            }
+            catch (IncidentNotFoundException incidentNotFound)
+            {
+                return NotFound(incidentNotFound.Message);
+            }
+        }
+
+
+
+
+        [HttpPut("set-priority/incident/{incidentId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult SetIncidentPriority(int incidentId)
+        {
+
+            try
+            {
+
+                 _incidentService.RemoveCrewFromIncidet(incidentId);
+
+                return Ok("Updated incident priority.");
+            }
+            catch (IncidentNotFoundException incidentNotFound)
+            {
+                return NotFound(incidentNotFound.Message);
+            }
+
+           
+        }
 
 
     }

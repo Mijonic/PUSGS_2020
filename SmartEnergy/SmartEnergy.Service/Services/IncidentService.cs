@@ -23,14 +23,16 @@ namespace SmartEnergy.Service.Services
         private readonly SmartEnergyDbContext _dbContext;
         private readonly ITimeService _timeService;   
         private readonly IDeviceUsageService _deviceUsageService;
+        private readonly ICallService _callService;
         private readonly IMapper _mapper;
         
 
-        public IncidentService(SmartEnergyDbContext dbContext, ITimeService timeService, IDeviceUsageService deviceUsageService,  IMapper mapper)
+        public IncidentService(SmartEnergyDbContext dbContext, ITimeService timeService, IDeviceUsageService deviceUsageService,  IMapper mapper, ICallService callService)
         {
             _dbContext = dbContext;
             _timeService = timeService;
             _deviceUsageService = deviceUsageService;
+            _callService = callService;
             _mapper = mapper;
 
 
@@ -404,11 +406,8 @@ namespace SmartEnergy.Service.Services
                 throw new InvalidDeviceUsageException($"Device with id = {deviceId} is not connected with incident with id = {incidentId}");
 
 
-
-
-            //_deviceUsageService.Insert(new DeviceUsageDto { IncidentID = incidentId, DeviceID = deviceId });
+            
             _deviceUsageService.Delete(toRemove.ID);
-
             incident.Priority = GetIncidentPriority(incident.ID);
 
 
@@ -440,6 +439,85 @@ namespace SmartEnergy.Service.Services
             }
 
             return returnValue;
+        }
+
+        public List<CallDto> GetIncidentCalls(int incidentId)
+        {
+            return _callService.GetAll().Where(x => x.IncidentID == incidentId).ToList();
+
+        }
+
+        public int GetNumberOfCalls(int incidentId)
+        {
+            return _callService.GetAll().Where(x => x.IncidentID == incidentId).Count();
+        }
+
+        public int GetNumberOfAffectedConsumers(int incidentId)
+        {
+            int affectedConsumers = 0;
+
+            Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
+                                                   .ThenInclude(p => p.Device)
+                                                   .ThenInclude(o => o.Location)
+                                                   .FirstOrDefault(x => x.ID == incidentId);
+            if (incident == null)
+                throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
+
+            List<string> deviceStreets = new List<string>();
+
+            foreach (DeviceUsage device in incident.IncidentDevices)
+            {
+                if (!deviceStreets.Contains(device.Device.Location.Street.ToLower().Trim()))
+                    deviceStreets.Add(device.Device.Location.Street.ToLower().Trim());
+
+            }
+
+            List<Consumer> consumers = _dbContext.Consumers.Include("Location").ToList();
+
+            foreach(string deviceStreet in deviceStreets)
+            {
+                foreach(Consumer consumer in consumers)
+                {
+                    if (consumer.Location.Street.ToLower().Trim().Equals(deviceStreet))
+                        affectedConsumers++;
+                }
+            }
+
+           
+
+
+
+            return affectedConsumers;
+            
+        }
+
+        public List<DeviceDto> GetIncidentDevices(int incidentId)
+        {
+            Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
+                                                   .ThenInclude(p => p.Device)
+                                                   .ThenInclude(o => o.Location)
+                                                   .FirstOrDefault(x => x.ID == incidentId);
+            if (incident == null)
+                throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
+
+            List<Device> incidentDevices = new List<Device>();
+
+            foreach (DeviceUsage deviceUsage in incident.IncidentDevices)
+                incidentDevices.Add(deviceUsage.Device);
+
+            return _mapper.Map<List<DeviceDto>>(incidentDevices);
+
+        }
+
+        public void SetIncidentPriority(int incidentId)
+        {
+            int incidentPriority = GetIncidentPriority(incidentId);
+
+            Incident incident = _dbContext.Incidents.Find(incidentId);
+
+            incident.Priority = incidentPriority;
+            _dbContext.SaveChanges();
+
         }
     }
 }

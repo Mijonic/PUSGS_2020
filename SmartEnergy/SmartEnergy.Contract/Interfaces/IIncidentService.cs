@@ -20,6 +20,16 @@ namespace SmartEnergy.Contract.Interfaces
         void RemoveDeviceFromIncindet(int incidentId, int deviceId);
         List<IncidentMapDisplayDto> GetUnresolvedIncidentsForMap();
 
+        List<CallDto> GetIncidentCalls(int incidentId);
+
+        int GetNumberOfCalls(int incidentId);
+
+        int GetNumberOfAffectedConsumers(int incidentId);
+
+        List<DeviceDto> GetIncidentDevices(int incidentId);
+
+        void SetIncidentPriority(int incidentId);
+
 
     }
 }
