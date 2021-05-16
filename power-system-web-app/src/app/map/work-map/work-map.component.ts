@@ -168,7 +168,7 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
 
       if(this.zoomDeviceID == device.id)
       {
-        this.map.flyTo([ device.location.latitude, device.location.longitude], 20) 
+        this.map.flyTo([ device.location.latitude, device.location.longitude], 22) 
       }
 
     });
