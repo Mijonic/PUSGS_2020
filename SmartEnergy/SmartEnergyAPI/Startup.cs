@@ -100,6 +100,8 @@ namespace SmartEnergyAPI
             services.AddScoped<IStateChangeService, StateChangeService>();
             services.AddScoped<IResolutionService, ResolutionService>();
             services.AddScoped<IDeviceUsageService, DeviceUsageService>();
+            services.AddScoped<ICallService, CallService>();
+
             services.AddScoped<IAuthHelperService, AuthHelperService>();
 
 
