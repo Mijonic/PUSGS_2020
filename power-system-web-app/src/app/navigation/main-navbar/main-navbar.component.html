@@ -59,18 +59,18 @@
     <ul class="navbar-nav ml-auto">
       <li>
         <div class="mr-4 mt-2 nav-div-username ">
-           <p class="nav-username">Imenko</p> 
-           <p class=" nav-username">Prezimenkovic</p> 
+           <p class="nav-username">{{user.name}}</p> 
+           <p class=" nav-username">{{user.lastname}}</p> 
         
         </div>
       </li>
       <li class="nav-item dropleft">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg" width="40" height="40" class="rounded-circle">
+          <img #avatar src="../../../assets/Images/zmaj.jpg" width="40" height="40" class="rounded-circle">
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a [routerLink]="['/edit-profile']" class="dropdown-item d-flex align-items-center justify-content-left" ><mat-icon>account_circle</mat-icon> Edit Profile</a>
-          <a class="dropdown-item d-flex align-items-center justify-content-left" ><mat-icon>logout</mat-icon> Log Out</a>
+          <a class="dropdown-item d-flex align-items-center justify-content-left clickable" (click)="onLogout()" ><mat-icon>logout</mat-icon> Log Out</a>
         </div>
       </li>   
     </ul>

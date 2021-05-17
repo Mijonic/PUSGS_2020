@@ -2,6 +2,7 @@
 using SmartEnergy.Contract.Enums;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Text;
 
 namespace SmartEnergy.Contract.Interfaces
@@ -11,6 +12,6 @@ namespace SmartEnergy.Contract.Interfaces
         public List<DeviceDto> GetWorkRequestDevices(int workRequestId);
         public WorkRequestsListDto GetWorkRequestsPaged(WorkRequestField sortBy, SortingDirection direction, int page,
                                   int perPage, DocumentStatusFilter status, OwnerFilter owner,
-                                  string searchParam);
+                                  string searchParam, ClaimsPrincipal user);
     }
 }

@@ -1,5 +1,6 @@
 ﻿
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -35,7 +36,9 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CrewsListDto))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult GetCrewsPaged([FromQuery] CrewField sortBy, [FromQuery] SortingDirection direction, [FromQuery][BindRequired] int page, [FromQuery][BindRequired] int perPage)
         {
             return Ok(_crewService.GetCrewsPaged(sortBy, direction, page, perPage));
@@ -44,8 +47,10 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet("{id}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CrewDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult GetCrewById(int id)
         {
             CrewDto crew = _crewService.Get(id);
@@ -56,9 +61,11 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPost]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult AddCrew([FromBody] CrewDto newCrew)
         {
             try
@@ -86,9 +93,11 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPut("{id}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CrewDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult UpdateCrew(int id, [FromBody] CrewDto modifiedCrew)
         {
             try
@@ -116,8 +125,10 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult RemoveCrew(int id)
         {
             try

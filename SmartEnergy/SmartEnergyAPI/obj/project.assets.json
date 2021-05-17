@@ -38,6 +38,21 @@
           "lib/netstandard2.0/Humanizer.dll": {}
         }
       },
+      "Microsoft.AspNetCore.Authentication.JwtBearer/3.1.15": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.IdentityModel.Protocols.OpenIdConnect": "5.5.0"
+        },
+        "compile": {
+          "lib/netcoreapp3.1/Microsoft.AspNetCore.Authentication.JwtBearer.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/Microsoft.AspNetCore.Authentication.JwtBearer.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
       "Microsoft.AspNetCore.Http.Features/5.0.5": {
         "type": "package",
         "dependencies": {
@@ -1748,6 +1763,21 @@
         "lib/netstandard2.0/Humanizer.dll",
         "lib/netstandard2.0/Humanizer.xml",
         "logo.png"
+      ]
+    },
+    "Microsoft.AspNetCore.Authentication.JwtBearer/3.1.15": {
+      "sha512": "/xWvG7feK5lyuaKT+DTXad9X5prGIgAhmfXYtGIr9eElb42N8c63wblGUJXGk4n38opLjE8gMLf5jnfHOWbsIQ==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.authentication.jwtbearer/3.1.15",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/netcoreapp3.1/Microsoft.AspNetCore.Authentication.JwtBearer.dll",
+        "lib/netcoreapp3.1/Microsoft.AspNetCore.Authentication.JwtBearer.xml",
+        "microsoft.aspnetcore.authentication.jwtbearer.3.1.15.nupkg.sha512",
+        "microsoft.aspnetcore.authentication.jwtbearer.nuspec"
       ]
     },
     "Microsoft.AspNetCore.Http.Features/5.0.5": {
@@ -6209,6 +6239,7 @@
     ".NETCoreApp,Version=v3.1": [
       "AutoMapper >= 10.1.1",
       "AutoMapper.Extensions.Microsoft.DependencyInjection >= 8.1.1",
+      "Microsoft.AspNetCore.Authentication.JwtBearer >= 3.1.15",
       "Microsoft.EntityFrameworkCore >= 5.0.5",
       "Microsoft.EntityFrameworkCore.Design >= 5.0.5",
       "SmartEnergy.Contract >= 1.0.0",
@@ -6218,23 +6249,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Mijonic\\.nuget\\packages\\": {},
+    "C:\\Users\\Predrag\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Mijonic\\Desktop\\Web\\PUSGS_2020\\SmartEnergy\\SmartEnergyAPI\\SmartEnergyAPI.csproj",
+      "projectUniqueName": "C:\\Users\\Predrag\\source\\repos\\PUSGS_2020\\SmartEnergy\\SmartEnergyAPI\\SmartEnergyAPI.csproj",
       "projectName": "SmartEnergyAPI",
-      "projectPath": "C:\\Users\\Mijonic\\Desktop\\Web\\PUSGS_2020\\SmartEnergy\\SmartEnergyAPI\\SmartEnergyAPI.csproj",
-      "packagesPath": "C:\\Users\\Mijonic\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Mijonic\\Desktop\\Web\\PUSGS_2020\\SmartEnergy\\SmartEnergyAPI\\obj\\",
+      "projectPath": "C:\\Users\\Predrag\\source\\repos\\PUSGS_2020\\SmartEnergy\\SmartEnergyAPI\\SmartEnergyAPI.csproj",
+      "packagesPath": "C:\\Users\\Predrag\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Predrag\\source\\repos\\PUSGS_2020\\SmartEnergy\\SmartEnergyAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Mijonic\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Predrag\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -6242,21 +6273,21 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\Microsoft SDKs\\Azure\\.NET": {},
-        "C:\\Program Files\\Microsoft SDKs\\Azure\\.NET SDK": {},
+        "C:\\Program Files\\Microsoft SDKs\\Azure\\.NET SDK\\v2.9\\packages": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "C:\\Users\\Mijonic\\Desktop\\Web\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Contract\\SmartEnergy.Contract.csproj": {
-              "projectPath": "C:\\Users\\Mijonic\\Desktop\\Web\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Contract\\SmartEnergy.Contract.csproj"
+            "C:\\Users\\Predrag\\source\\repos\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Contract\\SmartEnergy.Contract.csproj": {
+              "projectPath": "C:\\Users\\Predrag\\source\\repos\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Contract\\SmartEnergy.Contract.csproj"
             },
-            "C:\\Users\\Mijonic\\Desktop\\Web\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Infrastructure\\SmartEnergy.Infrastructure.csproj": {
-              "projectPath": "C:\\Users\\Mijonic\\Desktop\\Web\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Infrastructure\\SmartEnergy.Infrastructure.csproj"
+            "C:\\Users\\Predrag\\source\\repos\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Infrastructure\\SmartEnergy.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\Predrag\\source\\repos\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Infrastructure\\SmartEnergy.Infrastructure.csproj"
             },
-            "C:\\Users\\Mijonic\\Desktop\\Web\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Service\\SmartEnergy.Service.csproj": {
-              "projectPath": "C:\\Users\\Mijonic\\Desktop\\Web\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Service\\SmartEnergy.Service.csproj"
+            "C:\\Users\\Predrag\\source\\repos\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Service\\SmartEnergy.Service.csproj": {
+              "projectPath": "C:\\Users\\Predrag\\source\\repos\\PUSGS_2020\\SmartEnergy\\SmartEnergy.Service\\SmartEnergy.Service.csproj"
             }
           }
         }
@@ -6269,6 +6300,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "AutoMapper": {
             "target": "Package",
@@ -6277,6 +6309,10 @@
           "AutoMapper.Extensions.Microsoft.DependencyInjection": {
             "target": "Package",
             "version": "[8.1.1, )"
+          },
+          "Microsoft.AspNetCore.Authentication.JwtBearer": {
+            "target": "Package",
+            "version": "[3.1.15, )"
           },
           "Microsoft.EntityFrameworkCore": {
             "target": "Package",
@@ -6311,7 +6347,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.203\\RuntimeIdentifierGraph.json"
       }
     }
   }

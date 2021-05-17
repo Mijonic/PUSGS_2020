@@ -124,7 +124,7 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
     iconUrl = '../../assets/Images/hazard-icon.png';
     this.hazardIcon = L.icon({
       iconUrl,
-      iconSize: [60, 60],
+      iconSize: [50, 50],
       iconAnchor: [12, 41],
       popupAnchor: [1, -34],
       tooltipAnchor: [16, -28],

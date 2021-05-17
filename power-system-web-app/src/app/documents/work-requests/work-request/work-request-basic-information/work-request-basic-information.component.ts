@@ -11,6 +11,7 @@ import { ChooseIncidentDialogComponent } from 'app/documents/dialogs/choose-inci
 import { User } from 'app/shared/models/user.model';
 import { WorkRequest } from 'app/shared/models/work-request.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-work-request-basic-information',
@@ -37,7 +38,7 @@ export class WorkRequestBasicInformationComponent implements OnInit {
     emergency:new FormControl(false),
     createdOn: new FormControl({value: new Date(), disabled: true}),
     status: new FormControl({value:'DRAFT', disabled:true}),
-    createdBy: new FormControl({value:'Predrag Glavas', disabled:true}),
+    createdBy: new FormControl({value:'', disabled:true}),
 
   }, {validators:this.logicalDates});
   isNew = true;
@@ -60,9 +61,12 @@ export class WorkRequestBasicInformationComponent implements OnInit {
         this.isNew = false;
         this.workReqId = +wrId;
         this.loadWorkRequest(this.workReqId);
+      }else
+      {
+        this.user = JSON.parse(localStorage.getItem("user")!);
+        this.workRequestForm.controls['createdBy'].setValue(`${this.user.name} ${this.user.lastname}`);
       }
     
-    this.user.id = 7;
   }
 
   loadWorkRequest(id:number)
@@ -125,6 +129,7 @@ export class WorkRequestBasicInformationComponent implements OnInit {
     this.userService.getById(id).subscribe(
       data =>{
         this.workRequestForm.controls['createdBy'].setValue(`${data.name} ${data.lastname}`);
+        this.user  = data;
       },
       error =>{
         if(error.error instanceof ProgressEvent)

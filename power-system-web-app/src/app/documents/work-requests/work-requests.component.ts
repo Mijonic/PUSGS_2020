@@ -18,7 +18,7 @@ import { catchError, map, startWith, switchMap } from 'rxjs/operators';
   styleUrls: ['./work-requests.component.css']
 })
 export class WorkRequestsComponent implements OnInit,  AfterViewInit {
-  displayedColumns: string[] = ['action', 'id', 'type', 'status', 'incident', 'street', 'startdate', 'enddate', 'createdby', 'emergency','company', 'phoneno', 'creationdate'];
+  displayedColumns: string[] = ['action', 'id', 'type', 'status', 'incident', 'street', 'startdate', 'enddate', 'emergency','company', 'phoneno', 'creationdate'];
   dataSource:Observable<WorkRequest[]>;
   documentStatuses: any[] = 
   [ {status:'All', value:'all'},

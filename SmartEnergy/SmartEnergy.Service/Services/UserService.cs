@@ -11,17 +11,23 @@ using Microsoft.EntityFrameworkCore;
 using SmartEnergyDomainModels;
 using SmartEnergy.Contract.CustomExceptions;
 using SmartEnergy.Contract.CustomExceptions.User;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Configuration;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace SmartEnergy.Service.Services
 {
     public class UserService : IUserService
     {
         private readonly SmartEnergyDbContext _dbContext;
+        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
 
-        public UserService(SmartEnergyDbContext dbContext, IMapper mapper)
+        public UserService(SmartEnergyDbContext dbContext, IConfiguration configuration, IMapper mapper)
         {
             _dbContext = dbContext;
+            _configuration = configuration;
             _mapper = mapper;
         }
 
@@ -134,8 +140,43 @@ namespace SmartEnergy.Service.Services
             _dbContext.Users.Add(user);
             _dbContext.SaveChanges();
 
-            return _mapper.Map<UserDto>(user);
+            return _mapper.Map<UserDto>(user).StripConfidentialData();
 
+        }
+
+        public string Login(LoginDto userInfo, out UserDto userData)
+        {
+            //TODO: Add password hashing
+            User user = _dbContext.Users.Where(x => x.Username == userInfo.Username).FirstOrDefault();
+
+            if (user == null)
+                throw new UserNotFoundException($"User with username {userInfo.Username} does not exist.");
+
+            if (user.Password != userInfo.Password)
+                throw new InvalidUserDataException($"Incorrect password.");
+
+            if(user.UserStatus == UserStatus.DENIED)
+                throw new UserInvalidStatusException($"User is blocked by admin.");
+
+            List<Claim> claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.Role, user.UserType.ToString())); //Add user type to claim
+            claims.Add(new Claim(ClaimTypes.Email, user.Email)); //Add user email
+            claims.Add(new Claim(ClaimTypes.Name, user.Name)); //Add name 
+            claims.Add(new Claim(ClaimTypes.Surname, user.Lastname)); //Add lastname
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.ID.ToString())); //Add ID
+
+            SymmetricSecurityKey secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecretKey"]));
+            var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+            var tokeOptions = new JwtSecurityToken(
+                issuer: "http://localhost:44372",
+                audience: "http://localhost:44372",
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(5),
+                signingCredentials: signinCredentials
+            );
+            string tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+            userData = _mapper.Map<UserDto>(user).StripConfidentialData();
+            return tokenString;
         }
 
         public UserDto Update(UserDto entity)

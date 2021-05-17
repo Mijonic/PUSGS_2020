@@ -9,6 +9,7 @@ using SmartEnergyDomainModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 
 namespace SmartEnergy.Service.Services
@@ -17,16 +18,18 @@ namespace SmartEnergy.Service.Services
     {
         private readonly SmartEnergyDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IAuthHelperService _authHelperService;
 
-        public StateChangeService(SmartEnergyDbContext dbContext, IMapper mapper)
+        public StateChangeService(SmartEnergyDbContext dbContext, IMapper mapper, IAuthHelperService authHelperService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _authHelperService = authHelperService;
         }
 
-
-        public WorkRequestDto ApproveWorkRequest(int workRequestId)
+        public WorkRequestDto ApproveWorkRequest(int workRequestId, ClaimsPrincipal user)
         {
+            int userID = _authHelperService.GetUserIDFromPrincipal(user);
             // TODO: Add user after authentication! 
             WorkRequest wr = _dbContext.WorkRequests.Include(x => x.StateChangeAnchor)
                                                     .ThenInclude(x => x.StateChangeHistories)
@@ -43,7 +46,7 @@ namespace SmartEnergy.Service.Services
 
             StateChangeHistory state = new StateChangeHistory()
             {
-                UserID = 7, // TODO:Change before production
+                UserID = userID, 
                 DocumentStatus = DocumentStatus.APPROVED
             };
 
@@ -56,8 +59,9 @@ namespace SmartEnergy.Service.Services
             return _mapper.Map<WorkRequestDto>(wr);
         }
 
-        public WorkRequestDto CancelWorkRequest(int workRequestId)
+        public WorkRequestDto CancelWorkRequest(int workRequestId, ClaimsPrincipal user)
         {
+            int userID = _authHelperService.GetUserIDFromPrincipal(user);
             // TODO: Add user after authentication! 
             WorkRequest wr = _dbContext.WorkRequests.Include(x => x.StateChangeAnchor)
                                                     .ThenInclude(x => x.StateChangeHistories)
@@ -74,7 +78,7 @@ namespace SmartEnergy.Service.Services
 
             StateChangeHistory state = new StateChangeHistory()
             {
-                UserID = 7, // TODO:Change before production
+                UserID = userID,
                 DocumentStatus = DocumentStatus.CANCELLED
             };
 
@@ -86,9 +90,9 @@ namespace SmartEnergy.Service.Services
             return _mapper.Map<WorkRequestDto>(wr);
         }
 
-        public WorkRequestDto DenyWorkRequest(int workRequestId)
+        public WorkRequestDto DenyWorkRequest(int workRequestId, ClaimsPrincipal user)
         {
-
+            int userID = _authHelperService.GetUserIDFromPrincipal(user);
             // TODO: Add user after authentication! 
             WorkRequest wr = _dbContext.WorkRequests.Include(x => x.StateChangeAnchor)
                                                     .ThenInclude(x => x.StateChangeHistories)
@@ -108,7 +112,7 @@ namespace SmartEnergy.Service.Services
 
             StateChangeHistory state = new StateChangeHistory()
             {
-                UserID = 7, // TODO:Change before production
+                UserID = userID, 
                 DocumentStatus = DocumentStatus.DENIED
             };
 
