@@ -33,6 +33,8 @@ export class FrontPageComponent implements OnInit, OnDestroy {
       }
 
     });
+    localStorage.removeItem("jwt");
+    localStorage.removeItem("user");
   }
 
   showLoginForm()

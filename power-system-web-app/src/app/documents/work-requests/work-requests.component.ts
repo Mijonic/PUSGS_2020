@@ -81,12 +81,17 @@ export class WorkRequestsComponent implements OnInit,  AfterViewInit {
 
   delete(id:number)
   {
+    this.isLoading = true;
     this.workRequestService.deleteWorkRequest(id).subscribe(
       data =>{
+        this.isLoading = false;
+        this.getWorkRequests();
         this.toastr.success("Work request successfully deleted.");
         this.toastr.info("All media attached to this work request is also deleted.");
       },
       error =>{
+
+        this.isLoading = false;
         if(error.error instanceof ProgressEvent)
                 {
                   this.toastr.error("Server is unreachable");
@@ -94,6 +99,7 @@ export class WorkRequestsComponent implements OnInit,  AfterViewInit {
                 {
                   this.toastr.error(error.error);
                 }
+        this.getWorkRequests();
       }
     );
   }

@@ -138,13 +138,15 @@ export class MultimediaAttachmentsComponent implements OnInit {
   }
 
   downloadFile(filename:string) {
-		this.multimediaService.downloadAttachment(this.documentId, filename).subscribe((response: Blob) => { 
+		this.multimediaService.downloadAttachment(this.documentId, filename).subscribe(
+      (response: Blob) => { 
       fileSaver.saveAs(response, filename);
-		}),
-     (error: any) =>
+		},
+     error =>
      {
         this.toastr.error(error.error);
      }
+    )
   }
 
   formatBytes(bytes: number, decimals = 2) {

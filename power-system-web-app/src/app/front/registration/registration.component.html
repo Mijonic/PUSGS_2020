@@ -1,6 +1,11 @@
 
-
 <div class="modal fade" id="registrationModalCenter" tabindex="-1" role="dialog" aria-labelledby="registerModalCenterTitle" aria-hidden="true" >
+    
+ <div class='w-100 d-flex justify-content-center '*ngIf="isLoading">
+    <div class="loading-shade">
+      <mat-spinner color='primary' [diameter]= "'200'" ></mat-spinner>
+    </div>
+  </div>
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document" >
       <div class="modal-content">
         <div class="modal-header" hidden="true">
@@ -187,15 +192,6 @@
                             <div class="col-md-4 mb-3">
                                 
                             </div>
-
-                            <div class="col-md-4 mb-3">
-                                <input class="form-check-input is-invalid" type="checkbox" value="" id="invalidCheck3" required>
-                                <label class="form-check-label" for="invalidCheck3" style="color: rgba(255, 255, 255, 0.9); ">
-                                Receive email confirmation
-                                </label>
-                            
-                            </div>
-
                         </div>
                         <button class="btn btn-light" type="submit">Register</button>
                         <button hidden=true type="reset" #resetBtn>Reset</button> 

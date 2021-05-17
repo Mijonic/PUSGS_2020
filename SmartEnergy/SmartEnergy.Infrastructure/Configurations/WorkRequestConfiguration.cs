@@ -74,7 +74,8 @@ namespace SmartEnergy.Infrastructure.Configurations
             builder.HasOne(i => i.Incident)
                 .WithOne(p => p.WorkRequest)
                 .HasForeignKey<WorkRequest>(i => i.IncidentID)
-                .IsRequired();
+                .IsRequired()
+                .OnDelete(DeleteBehavior.ClientCascade);
 
             builder.HasOne(i => i.MultimediaAnchor)
                 .WithOne(p => p.WorkRequest)

@@ -20,7 +20,11 @@ import { DevicesModule } from './devices/devices.module';
 import { ToastrModule } from 'ngx-toastr';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { JwtModule } from "@auth0/angular-jwt";
-
+import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
+import {
+  GoogleLoginProvider,
+  FacebookLoginProvider
+} from 'angularx-social-login';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -43,6 +47,7 @@ export function tokenGetter() {
     SettingsModule,
     NotificationsModule,
     DevicesModule,
+    SocialLoginModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     JwtModule.forRoot({
@@ -50,7 +55,7 @@ export function tokenGetter() {
         tokenGetter: tokenGetter,
         allowedDomains:['localhost:44372']
       }
-    })
+    }),
   ],
 
   providers: [
@@ -66,7 +71,21 @@ export function tokenGetter() {
    }
    /*Define other services here*/
    ,
-   AuthGuardService
+   AuthGuardService,
+   {
+    provide: 'SocialAuthServiceConfig',
+    useValue: {
+      autoLogin: false,
+      providers: [
+        {
+          id: GoogleLoginProvider.PROVIDER_ID,
+          provider: new GoogleLoginProvider(
+            '985075988575-5dq1o575mkheantia2vblvskuav2d052.apps.googleusercontent.com'
+          )
+        }
+      ]
+    } as SocialAuthServiceConfig,
+  }    
   ],
   bootstrap: [AppComponent]
 })

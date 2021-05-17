@@ -126,6 +126,16 @@ namespace SmartEnergy.Service.Services
             _dbContext.SaveChanges();
         }
 
+        public void DeleteWorkRequestFileOnDisk(int workRequestID, string filePath)
+        {
+
+            if (File.Exists(@$"Attachments/WR{workRequestID}/{filePath}"))
+            {
+                File.Delete(@$"Attachments/WR{workRequestID}/{filePath}");
+            }
+
+        }
+
         public FileStream GetUserAvatarStream(int userId, string imageURL)
         {
             User user = _dbContext.Users.Find(userId);

@@ -194,7 +194,7 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
                           Priority: ${inc.priority} <br/>
                           Address: ${inc.location.street} ${inc.location.number}`);
       marker.on('click', (e) => {
-        this._router.navigate(['/incident', inc.id]);
+        this._router.navigate(['/incident/basic-info', inc.id]);
       });
       marker.addTo(this.map);  
       if(!inc.crew)

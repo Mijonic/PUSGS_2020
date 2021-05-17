@@ -28,6 +28,7 @@
     "angular-bootstrap-md": "^11.0.0",
     "angular-material-fileupload": "^3.0.2",
     "angular-particle": "^1.0.4",
+    "angularx-social-login": "^3.5.7",
     "apexcharts": "^3.26.0",
     "bootstrap": "^4.6.0",
     "file-saver": "^2.0.5",

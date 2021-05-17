@@ -35,8 +35,8 @@ namespace SmartEnergy.Infrastructure.Configurations
                   .IsRequired(false);
 
             builder.Property(i => i.CreatedOn)
-                  .IsRequired()
-                  .ValueGeneratedOnAdd();
+                  .IsRequired(false)
+                  .HasDefaultValueSql("getdate()");
 
             builder.Property(i => i.Purpose)
                   .HasMaxLength(100)
@@ -67,7 +67,8 @@ namespace SmartEnergy.Infrastructure.Configurations
             builder.HasOne(i => i.WorkRequest)
                 .WithOne(p => p.WorkPlan)
                 .HasForeignKey<WorkPlan>(i => i.WorkRequestID)
-                .IsRequired();
+                .IsRequired()
+                .OnDelete(DeleteBehavior.ClientCascade);//Restrict user delete chain;
 
             builder.HasOne(i => i.MultimediaAnchor)
                 .WithOne(p => p.WorkPlan)

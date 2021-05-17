@@ -17,5 +17,6 @@ namespace SmartEnergy.Contract.Interfaces
         public void DeleteWorkRequestAttachment(int workRequestId, string filename);
         public Task AttachUserAvatar(IFormFile formFile, int userId);
         public FileStream GetUserAvatarStream(int userId, string imageURL);
+        public void DeleteWorkRequestFileOnDisk(int workRequestID, string filePath);
     }
 }

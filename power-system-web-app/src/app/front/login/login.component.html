@@ -1,8 +1,13 @@
-<!--<app-particles></app-particles>
-<app-register-login-navbar></app-register-login-navbar>-->
+
 
 
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    
+ <div class='w-100 d-flex justify-content-center '*ngIf="isLoading">
+    <div class="loading-shade">
+      <mat-spinner color='primary' [diameter]= "'200'" ></mat-spinner>
+    </div>
+  </div>
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         
@@ -53,7 +58,7 @@
                         <ul class="social-network social-circle">
                             <li><a href="#" class="icoGithub" title="Github"><i class="fab fa-github"></i></a></li>
                             <li><a href="#" class="icoInstagram" title="Instagram"><i class="fab fa-instagram"></i></a></li>
-                            <li><a class="icoGoogle" title="Google"><i class="fab fa-google"></i></a></li>
+                            <li><a class="icoGoogle" title="Google" (click)="loginGoogle()"><i class="fab fa-google"></i></a></li>
                         </ul>
                     </div>
             

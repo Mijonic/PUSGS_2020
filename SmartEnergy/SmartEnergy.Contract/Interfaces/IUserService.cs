@@ -3,6 +3,7 @@ using SmartEnergy.Contract.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SmartEnergy.Contract.Interfaces
 {
@@ -17,5 +18,6 @@ namespace SmartEnergy.Contract.Interfaces
         public UserDto DenyUser(int userId);
 
         public string Login(LoginDto userInfo, out UserDto user);
+        public Task<LoginResponseDto> LoginExternalGoogle(ExternalLoginDto userInfo);
     }
 }

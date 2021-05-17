@@ -206,7 +206,7 @@ namespace SmartEnergyAPI.Controllers
         {
             try
             {
-                return File(_multimediaService.GetUserAvatarStream(id, filename), "application/octet-stream", filename);
+                return File(_multimediaService.GetWorkRequestAttachmentStream(id, filename), "application/octet-stream", filename);
             }
             catch (WorkRequestNotFound wnf)
             {

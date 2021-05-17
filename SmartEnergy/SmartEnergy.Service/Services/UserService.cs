@@ -15,6 +15,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Threading.Tasks;
+using SmartEnergy.Contract.CustomExceptions.Auth;
+using static Google.Apis.Auth.GoogleJsonWebSignature;
 
 namespace SmartEnergy.Service.Services
 {
@@ -22,13 +25,17 @@ namespace SmartEnergy.Service.Services
     {
         private readonly SmartEnergyDbContext _dbContext;
         private readonly IConfiguration _configuration;
+        private readonly IMailService _mailService;
         private readonly IMapper _mapper;
+        private readonly IAuthHelperService _authHelperService;
 
-        public UserService(SmartEnergyDbContext dbContext, IConfiguration configuration, IMapper mapper)
+        public UserService(SmartEnergyDbContext dbContext, IConfiguration configuration, IMailService mailService, IMapper mapper, IAuthHelperService authHelperService)
         {
             _dbContext = dbContext;
             _configuration = configuration;
+            _mailService = mailService;
             _mapper = mapper;
+            _authHelperService = authHelperService;
         }
 
         public UserDto ApproveUser(int userId)
@@ -40,8 +47,10 @@ namespace SmartEnergy.Service.Services
                 throw new UserInvalidStatusException("User can't be approved , as his status is not Pending.");
 
             user.UserStatus = UserStatus.APPROVED;
+            _mailService.SendMail(user.Email, "Registration status", "Your registration to our site has been approved.");
             _dbContext.SaveChanges();
 
+            
             return _mapper.Map<UserDto>(user);
         }
 
@@ -60,8 +69,10 @@ namespace SmartEnergy.Service.Services
 
             user.UserStatus = UserStatus.DENIED;
             user.CrewID = null;
-            _dbContext.SaveChanges();
+            
 
+            _mailService.SendMail(user.Email, "Registration status", "Your registration to our site has been denied.");
+            _dbContext.SaveChanges();
             return _mapper.Map<UserDto>(user);
         }
 
@@ -138,8 +149,10 @@ namespace SmartEnergy.Service.Services
             
 
             _dbContext.Users.Add(user);
-            _dbContext.SaveChanges();
+            
 
+            _mailService.SendMail(user.Email, "Registration status", "Your registration to our site is pending, when admins approve you you will have full access.");
+            _dbContext.SaveChanges();
             return _mapper.Map<UserDto>(user).StripConfidentialData();
 
         }
@@ -177,6 +190,28 @@ namespace SmartEnergy.Service.Services
             string tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
             userData = _mapper.Map<UserDto>(user).StripConfidentialData();
             return tokenString;
+        }
+
+        public async Task<LoginResponseDto> LoginExternalGoogle(ExternalLoginDto userInfo)
+        {
+            Payload payload = await _authHelperService.VerifyGoogleToken(userInfo);
+            if (payload == null)
+                throw new InvalidTokenException("Token invalid");
+            User userInDb = _dbContext.Users.FirstOrDefault(x => x.Email == payload.Email);
+            if(userInDb == null)
+            {
+                //What now?
+            }
+
+            return new LoginResponseDto()
+            { 
+                User = _mapper.Map<UserDto>(userInDb),
+                Token = "",
+                IsSuccessfull = true
+
+            };
+
+            //var token = await _jwtHandler.GenerateToken(user);
         }
 
         public UserDto Update(UserDto entity)

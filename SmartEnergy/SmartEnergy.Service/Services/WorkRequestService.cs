@@ -25,34 +25,52 @@ namespace SmartEnergy.Service.Services
         private readonly IIncidentService _incidentService;
         private readonly IDeviceUsageService _deviceUsageService;
         private readonly IAuthHelperService _authHelperService;
+        private readonly IMultimediaService _multimediaService;
 
-        public WorkRequestService(SmartEnergyDbContext dbContext, IMapper mapper, IIncidentService incidentService, IDeviceUsageService deviceUsageService, IAuthHelperService authHelperService)
+        public WorkRequestService(SmartEnergyDbContext dbContext, IMapper mapper,
+            IIncidentService incidentService, IDeviceUsageService deviceUsageService,
+            IAuthHelperService authHelperService, IMultimediaService multimedia)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _incidentService = incidentService;
             _deviceUsageService = deviceUsageService;
             _authHelperService = authHelperService;
+            _multimediaService = multimedia;
         }
 
         public void Delete(int id)
         {
             WorkRequest wr = _dbContext.WorkRequests.Include( x => x.WorkPlan)
+                                                    .Include(x => x.WorkPlan.MultimediaAnchor)
+                                                    .Include(x => x.WorkPlan.StateChangeAnchor)
+                                                    .Include(x => x.WorkPlan.NotificationAnchor)
                                                     .Include(x => x.MultimediaAnchor)
+                                                    .ThenInclude( x => x.MultimediaAttachments)
                                                     .Include(x => x.NotificationsAnchor)
                                                     .Include(x => x.StateChangeAnchor)
                                                     .Include( x => x.DeviceUsage)
                                                     .FirstOrDefault( x=> x.ID == id);
             if (wr == null)
-                throw new WorkRequestNotFound($"Work request with id {id} dos not exist.");
+                throw new WorkRequestNotFound($"Work request with id {id} does not exist.");
             _dbContext.WorkRequests.Remove(wr);
+            List<string> files = new List<string>();
+            foreach (MultimediaAttachment att in wr.MultimediaAnchor.MultimediaAttachments)
+                files.Add(att.Url);
 
             //Remove anchors
             _dbContext.MultimediaAnchors.Remove(wr.MultimediaAnchor);
             _dbContext.NotificationAnchors.Remove(wr.NotificationsAnchor);
             _dbContext.StateChangeAnchors.Remove(wr.StateChangeAnchor);
+            //Remove work plan anchors
+            _dbContext.MultimediaAnchors.Remove(wr.WorkPlan.MultimediaAnchor);
+            _dbContext.NotificationAnchors.Remove(wr.WorkPlan.NotificationAnchor);
+            _dbContext.StateChangeAnchors.Remove(wr.WorkPlan.StateChangeAnchor);
 
             _dbContext.SaveChanges();
+
+            foreach (string file in files)
+                _multimediaService.DeleteWorkRequestFileOnDisk(id, file);
         }
 
         public WorkRequestDto Get(int id)

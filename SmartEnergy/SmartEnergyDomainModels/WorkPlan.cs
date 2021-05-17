@@ -13,7 +13,7 @@ namespace SmartEnergyDomainModels
         public string Phone { get; set; }
         public string Street { get; set; }
         public string CompanyName { get; set; }
-        public DateTime CreatedOn { get; set; }
+        public DateTime? CreatedOn { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public WorkType DocumentType { get; set; }

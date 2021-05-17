@@ -40,6 +40,7 @@ export class RegistrationComponent implements OnInit {
   @ViewChild('closeBtn') closeBtn: ElementRef;
   @ViewChild('resetBtn') resetBtn: ElementRef;
   imagePreview:string = '';
+  isLoading:boolean = true;
 
   constructor(private validation:ValidationService, private toastr:ToastrService, private locationService:LocationService, 
     private crewService:CrewService, private userService:UserService, private navbarService:NavbarMessagingService) {
@@ -69,6 +70,7 @@ export class RegistrationComponent implements OnInit {
   {
     this.locationService.getAllLocations().subscribe(
       data =>{
+        this.isLoading = false;
         this.locations = data;
       }
     )
@@ -104,6 +106,7 @@ export class RegistrationComponent implements OnInit {
 
   uploadImage(image:File, userId:number)
   {
+    this.isLoading = true;
     this.userService.uploadAvatar(image, userId).subscribe(
       (event)=>{
         if(event.type === HttpEventType.Response && event.status == 200)
@@ -113,9 +116,11 @@ export class RegistrationComponent implements OnInit {
         this.closeBtn.nativeElement.click();
         this.navbarService.activateLogin();
         this.toastr.info("You can log in now.");
+        this.isLoading = false;
         }
       },
       error =>{
+        this.isLoading = false;
         this.toastr.error(error.error);
       }
     )
@@ -125,7 +130,7 @@ export class RegistrationComponent implements OnInit {
   {
     if(this.registrationForm.valid)
     {
-
+      this.isLoading = true;
       this.populateModelFromFields();
       this.userService.createUser(this.user).subscribe(
         data =>{
@@ -139,6 +144,7 @@ export class RegistrationComponent implements OnInit {
               this.closeBtn.nativeElement.click();
               this.navbarService.activateLogin();
               this.toastr.info("You can log in now.");
+              this.isLoading = false;
             }
         },
         error =>{

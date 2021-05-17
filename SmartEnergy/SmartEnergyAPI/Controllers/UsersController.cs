@@ -209,6 +209,19 @@ namespace SmartEnergyAPI.Controllers
 
         }
 
+
+        [HttpPost("google-login")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> ExternalLogin([FromBody] ExternalLoginDto externalAuth)
+        {
+            //TODO: Implement google auth in controller
+            return Ok(new LoginResponseDto { Token = "", IsSuccessfull = true });
+        }
+
         [HttpPost("{id}/avatar")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
