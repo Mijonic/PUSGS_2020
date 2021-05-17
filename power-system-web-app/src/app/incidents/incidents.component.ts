@@ -3,66 +3,50 @@ import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { DisplayService } from 'app/services/display.service';
+import { IncidentService } from 'app/services/incident.service';
+import { Incident } from 'app/shared/models/incident.model';
+import { ToastrService } from 'ngx-toastr';
 
 
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-  color: string;
-  confirmed: string;
-}
 
-/** Constants used to fill up our data base. */
-const COLORS: string[] = [
-  'maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple', 'fuchsia', 'lime', 'teal',
-  'aqua', 'blue', 'navy', 'black', 'gray'
-];
-const NAMES: string[] = [
-  'Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack', 'Charlotte', 'Theodore', 'Isla', 'Oliver',
-  'Isabella', 'Jasper', 'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'
-];
+
+
 
 @Component({
   selector: 'app-incidents',
   templateUrl: './incidents.component.html',
   styleUrls: ['./incidents.component.css']
 })
-export class IncidentsComponent implements OnInit, AfterViewInit  {
+export class IncidentsComponent implements OnInit  {
 
-  displayedColumns: string[] = ['id', 'type', 'priority', 'confirmed', 'status', 'ETA', 'ATA', 'incidentOccurred', 'ETR', 'affectedConsumers', 'calls', 'voltageLevel', 'plannedWork', 'solveIncident' ];
-  dataSource: MatTableDataSource<UserData>;
+  displayedColumns: string[] = ['action', 'id', 'type', 'priority', 'confirmed', 'status', 'ETA', 'ATA', 'incidentOccurred', 'ETR', 'voltageLevel', 'plannedWork', 'solveIncident' ];
+  dataSource: MatTableDataSource<Incident>;
+
+  isLoading:boolean = true;
+
   toppings = new FormControl();
   toppingList: string[] = ['Incident Type', 'Confirmed']; 
-  isLoading:boolean = true;
+
+
+  incidents:Incident[] = [];
+  allIncidents:Incident[] = [];
+  
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor() {
+  constructor(private incidentService:IncidentService,  private toastr: ToastrService, public display:DisplayService) {
 
-     // Create 100 users
-     const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
+  }
 
-     // Assign the data to the data source for the table to render
-     this.dataSource = new MatTableDataSource(users);
-
-   }
-
-  
-   ngOnInit(): void {
+  ngOnInit(): void {
     window.dispatchEvent(new Event('resize'));
-    this.isLoading = false;
+    this.getIncidents();
+    
+    
   }
 
-  ngAfterViewInit() {
-
-    setTimeout(() => {
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    });
-   
-  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -73,19 +57,41 @@ export class IncidentsComponent implements OnInit, AfterViewInit  {
     }
   }
 
+ 
+  getIncidents()
+  {
+    this.incidentService.getAllIncidents().subscribe(
+      data =>{
+        this.allIncidents = data;
+        this.incidents = data;
+        this.dataSource = new MatTableDataSource(data);
+        this.isLoading = false;
+
+        console.log(this.allIncidents);
+       
+      },
+      error =>{
+
+        this.getIncidents();
+      }
+    )
+  }
+
+ 
+
+  
+
+  delete(incidentId: number)
+  {
+   
+    this.incidentService.deleteIncident(incidentId).subscribe(x =>{
+        this.getIncidents();
+        this.toastr.success("Incident successfully deleted","", {positionClass: 'toast-bottom-left'});
+    });
+  }
+
+  
+
 }
 
-/** Builds and returns a new User. */
-function createNewUser(id: number): UserData {
-  const name = NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
-
-  return {
-    id: id.toString(),
-    name: name,
-    progress: Math.round(Math.random() * 100).toString(),
-    color: COLORS[Math.round(Math.random() * (COLORS.length - 1))],
-    confirmed: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
-  };
-}
 

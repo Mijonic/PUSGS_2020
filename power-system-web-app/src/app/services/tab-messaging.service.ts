@@ -13,9 +13,9 @@ export class TabMessagingService implements OnDestroy{
     this.subject.unsubscribe();
   }
 
-  showEdit(wrId:number)
+  showEdit(id :number)
   {
-    this.subject.next(wrId);
+    this.subject.next(id);
   }
 
   getMessage():Observable<any>{

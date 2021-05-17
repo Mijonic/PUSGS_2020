@@ -3,6 +3,8 @@ import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute } from '@angular/router';
+import { TabMessagingService } from 'app/services/tab-messaging.service';
 
 export interface UserData {
   id: string;
@@ -36,7 +38,7 @@ export class CallsComponent implements  AfterViewInit, OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor() {
+  constructor(private tabMessaging:TabMessagingService, private route:ActivatedRoute) {
     // Create 100 users
     const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
 
@@ -44,7 +46,19 @@ export class CallsComponent implements  AfterViewInit, OnInit {
     this.dataSource = new MatTableDataSource(users);
   }
 
+ 
+
   ngOnInit(): void {
+
+    const incidentId = this.route.snapshot.paramMap.get('id');
+    if(incidentId && incidentId != "")
+    {
+      this.tabMessaging.showEdit(+incidentId);
+     // this.isNew = false;
+      //this.workReqId = +wrId;
+     /// this.loadWorkRequest(this.workReqId);
+    }
+    
   }
 
   ngAfterViewInit() {

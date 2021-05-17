@@ -4,18 +4,32 @@
     
     <div class="wrapper-incident ">
 
+        <div class="row">
+            <div class="col-md-12 d-flex justify-content-start">
+                <h1 class="p-3 pb-5" *ngIf="isNew">New incident</h1>
+                <h1 class="p-3 pb-5" *ngIf="isNew == false">Edit incident</h1>
+            </div>
+         </div>
+         <div class='w-100 d-flex justify-content-center '*ngIf="isLoading">
+          <div class="loading-shade">
+            <mat-spinner color='primary' [diameter]= "'120'" ></mat-spinner>
+          </div>
+        </div>
         
+        <form [formGroup]="incidentForm" (ngSubmit)="onSave()">
         <div class="row m-5">
+            
             
             <div class="col-md-6  mt-4">
                 <div class="d-flex justify-content-center">
                     <mat-form-field class="m-auto w-100" appearance="legacy">
                         <mat-label>Type</mat-label>
-                        <mat-select>
-                            <mat-option value="planned">Planned Work</mat-option>
-                            <mat-option value="unplanned">Unplanned Work</mat-option>
-
-                        </mat-select>
+                        <mat-select  required formControlName="workType">
+                            <mat-option *ngFor="let documentType of documentTypes" value="{{documentType.value}}">{{documentType.display}}</mat-option>
+                          </mat-select>
+                          <mat-error >
+                            Please select type.
+                          </mat-error>
                     </mat-form-field>
                 </div>
             </div>
@@ -28,7 +42,7 @@
                 <div class="d-flex justify-content-center">
                     <mat-form-field class="w-100">
                         <mat-label>Affected Consumers</mat-label>
-                        <input matInput placeholder="Affected Consumers" value="">
+                        <input matInput placeholder="Affected Consumers" value="0" readonly>
                     </mat-form-field>
                 </div>
             </div>
@@ -40,16 +54,10 @@
             <div class="col-md-6">
                 <div class="d-flex justify-content-center">
                     <mat-form-field class="m-auto w-100" appearance="legacy" class="w-100"> 
-                        <mat-label>Priority</mat-label>
-                        <mat-select>
-                            <mat-option value="0">0</mat-option>
-                            <mat-option value="1">1</mat-option>
-                            <mat-option value="2">2</mat-option>
-                            <mat-option value="3">3</mat-option>
-                            <mat-option value="4">4</mat-option>
-                            
                         
-                        </mat-select>
+                            <mat-label>Priority</mat-label>
+                            <input matInput placeholder="Priority" value="0" readonly>
+                     
                     </mat-form-field>
                 </div>
             </div>
@@ -59,10 +67,11 @@
             <div class="col-md-6">
                 <div class="d-flex justify-content-center">
                     <mat-form-field appearance="legacy" class="w-100">
-                        <mat-label>Outage Time</mat-label>
-                        <input matInput [matDatepicker]="outageTime">
+                        <mat-label>Outage Date</mat-label>
+                        <input matInput [matDatepicker]="outageTime" formControlName="incidentDateTime">
                         <mat-datepicker-toggle matSuffix [for]="outageTime" class="date-picker-image"></mat-datepicker-toggle>
                         <mat-datepicker #outageTime></mat-datepicker>
+                        
                       </mat-form-field>
                 </div>
             </div>
@@ -77,9 +86,10 @@
                 <div class="d-flex justify-content-center">
                     <mat-form-field appearance="legacy" class="w-100">
                         <mat-label>Scheduled Time</mat-label>
-                        <input matInput [matDatepicker]="sheduledTime">
+                        <input matInput [matDatepicker]="sheduledTime" formControlName="workBeginDate">
                         <mat-datepicker-toggle matSuffix [for]="sheduledTime" class="date-picker-image"></mat-datepicker-toggle>
                         <mat-datepicker #sheduledTime></mat-datepicker>
+                       
                       </mat-form-field>
                 </div>
             </div>
@@ -90,10 +100,14 @@
                 <div class="d-flex justify-content-center">
                     <mat-form-field appearance="legacy" class="w-100">
                         <mat-label>ETR</mat-label>
-                        <input matInput [matDatepicker]="ETR">
+                        <input matInput  [matDatepicker]="ETR" formControlName="etr">
                         <mat-datepicker-toggle matSuffix [for]="ETR" class="date-picker-image"></mat-datepicker-toggle>
                         <mat-datepicker #ETR></mat-datepicker>
+
+                      
                       </mat-form-field>
+
+                     
                 </div>
             </div>
 
@@ -107,7 +121,12 @@
                 <div class="d-flex justify-content-center">
                     <mat-form-field class="w-100">
                         <mat-label>Status</mat-label>
-                        <input matInput placeholder="Status" value="">
+                        <mat-select  required formControlName="incidentStatus">
+                            <mat-option *ngFor="let incidentStatus of incidentStatuses" value="{{incidentStatus.value}}">{{incidentStatus.display}}</mat-option>
+                          </mat-select>
+                          <mat-error >
+                            Please select status.
+                          </mat-error>
                     </mat-form-field>
                 </div>
             </div>
@@ -119,7 +138,7 @@
                 <div class="d-flex justify-content-center">
                     <mat-form-field class="w-100">
                         <mat-label>Calls</mat-label>
-                        <input matInput placeholder="Calls" value="">
+                        <input matInput placeholder="Calls" value="0" readonly>
                     </mat-form-field>
                 </div>
             </div>
@@ -135,8 +154,12 @@
                 <div class="d-flex justify-content-center">
                     <mat-form-field class="w-100">
                         <mat-label>Description</mat-label>
-                        <input matInput placeholder="Description" value="">
+                        <textarea matInput formControlName="description" placeholder="More info about incident"></textarea>
+                        <mat-error>
+                            Description must not exceed 100 characters.
+                        </mat-error>
                     </mat-form-field>
+                    
                 </div>
             </div>
 
@@ -145,7 +168,10 @@
                 <div class="d-flex justify-content-center">
                     <mat-form-field class="w-100">
                         <mat-label>Voltage [kV]</mat-label>
-                        <input matInput placeholder="Voltage [kV]" value="">
+                        <input matInput placeholder="Voltage [kV]" value="" formControlName="voltageLevel">
+                        <mat-error>
+                            Voltage has to be positive number.
+                        </mat-error>
                     </mat-form-field>
                 </div>
             </div>
@@ -161,7 +187,7 @@
                 <div class="d-flex justify-content-center">
                     <mat-form-field appearance="legacy" class="w-100">
                         <mat-label>ETA</mat-label>
-                        <input matInput [matDatepicker]="ETA">
+                        <input matInput [matDatepicker]="ETA" formControlName="eta">
                         <mat-datepicker-toggle matSuffix [for]="ETA" class="date-picker-image"></mat-datepicker-toggle>
                         <mat-datepicker #ETA></mat-datepicker>
                       </mat-form-field>
@@ -174,7 +200,7 @@
                 <div class="d-flex justify-content-center">
                     <mat-form-field appearance="legacy" class="w-100">
                         <mat-label>ATA</mat-label>
-                        <input matInput [matDatepicker]="ATA">
+                        <input matInput [matDatepicker]="ATA" formControlName="ata">
                         <mat-datepicker-toggle matSuffix [for]="ATA" class="date-picker-image"></mat-datepicker-toggle>
                         <mat-datepicker #ATA></mat-datepicker>
                       </mat-form-field>
@@ -193,7 +219,7 @@
 
                        
                         <span class="label label-primary mt-1 mr-1">Confirmed &nbsp;</span>
-                        <mat-slide-toggle   color="primary"></mat-slide-toggle>
+                        <mat-slide-toggle   color="primary" formControlName="confirmed"></mat-slide-toggle>
                         
                         <!--
                         <mat-slide-toggle #slide formControlName="enabled" color="primary">
@@ -210,10 +236,10 @@
             <div class="col-md-8">
                 <div class="p-3">
                     <div class="save-button" >
-                        <button class="button-add" >Save</button>                       
+                        <button type="submit" class="button-add" >Save</button>                       
                     </div>
                     <div class="save-button" >
-                        <button class="button-add" >Cancel</button>                       
+                        <button  type="reset" [routerLink]="['/incidents']" class="button-add" >Cancel</button>                       
                     </div>
             
                    
@@ -226,7 +252,7 @@
         </div>
 
        
-
+    </form>
 
 
 

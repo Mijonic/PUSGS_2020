@@ -37,3 +37,7 @@ a {
   background-color: black; /* Green */
   color: white;
 }
+
+td.mat-cell {
+  padding: 5px;
+}
