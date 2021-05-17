@@ -46,19 +46,23 @@ export class LoginComponent implements OnInit {
   }
 
   private validateExternalAuth(externalAuth: ExternalAuth) {
-    /*this.authService.externalLogin('api/accounts/externallogin', externalAuth)
+    this.isLoading = true;
+    this.usersService.loginGoogle( externalAuth)
       .subscribe(res => {
-        localStorage.setItem("token", res.token);
-        this._authService.sendAuthStateChangeNotification(res.isAuthSuccessful);
+        localStorage.setItem("jwt", res.token);
+        localStorage.setItem("user", JSON.stringify(res.user));
+        //this._authService.sendAuthStateChangeNotification(res.isAuthSuccessful);
+        this.isLoading = false;
         this.resetBtn.nativeElement.click();
           this.closeBtn.nativeElement.click();
           this.router.navigate(["/dashboard"]);
           this.toastr.success("Login successfull");
       },
       error => {
+        this.isLoading = false;
         this.toastr.error(error.error);
         this.authService.signOutExternal();
-      });*/
+      });
   }
 
   onSubmit()

@@ -1,3 +1,5 @@
+import { LoginResponse } from './../shared/models/login-response.model';
+import { ExternalAuth } from './../shared/models/external-auth.model';
 import { HttpClient, HttpEvent, HttpParams, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Login } from 'app/shared/models/login.model';
@@ -83,6 +85,11 @@ export class UserService {
   login(credentials:Login):Observable<any>{
     let requestUrl = environment.serverURL.concat(`users/login`);
     return this.http.post<any>(requestUrl, credentials);
+  }
+
+  loginGoogle(credentials:ExternalAuth):Observable<LoginResponse>{
+    let requestUrl = environment.serverURL.concat(`users/google-login`);
+    return this.http.post<LoginResponse>(requestUrl, credentials);
   }
 
 }

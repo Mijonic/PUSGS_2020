@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SmartEnergy.Contract.CustomExceptions;
+using SmartEnergy.Contract.CustomExceptions.Auth;
 using SmartEnergy.Contract.CustomExceptions.Multimedia;
 using SmartEnergy.Contract.CustomExceptions.User;
 using SmartEnergy.Contract.DTO;
@@ -212,14 +213,20 @@ namespace SmartEnergyAPI.Controllers
 
         [HttpPost("google-login")]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type=typeof(LoginResponseDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> ExternalLogin([FromBody] ExternalLoginDto externalAuth)
         {
-            //TODO: Implement google auth in controller
-            return Ok(new LoginResponseDto { Token = "", IsSuccessfull = true });
+            try
+            {
+                LoginResponseDto response = await _userService.LoginExternalGoogle(externalAuth);
+                return Ok(response);
+            }catch(InvalidTokenException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
+            
         }
 
         [HttpPost("{id}/avatar")]

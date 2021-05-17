@@ -1,9 +1,11 @@
 ﻿using Google.Apis.Auth;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using SmartEnergy.Contract.DTO;
 using SmartEnergy.Contract.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -14,10 +16,34 @@ namespace SmartEnergy.Service.Services
     public class AuthHelperService : IAuthHelperService
     {
         private readonly IConfigurationSection _googleSettings;
+        private readonly IConfigurationSection _secretKey;
 
         public AuthHelperService(IConfiguration config)
         {
             _googleSettings = config.GetSection("GoogleAuthSettings");
+            _secretKey = config.GetSection("SecretKey");
+        }
+
+        public string CreateToken(UserDto user)
+        {
+            List<Claim> claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.Role, user.UserType.ToString())); //Add user type to claim
+            claims.Add(new Claim(ClaimTypes.Email, user.Email)); //Add user email
+            claims.Add(new Claim(ClaimTypes.Name, user.Name)); //Add name 
+            claims.Add(new Claim(ClaimTypes.Surname, user.Lastname)); //Add lastname
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.ID.ToString())); //Add ID
+
+            SymmetricSecurityKey secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey.Value));
+            var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+            var tokeOptions = new JwtSecurityToken(
+                issuer: "http://localhost:44372",
+                audience: "http://localhost:44372",
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(20),
+                signingCredentials: signinCredentials
+            );
+            string tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+            return tokenString;
         }
 
         public int GetUserIDFromPrincipal(ClaimsPrincipal user)

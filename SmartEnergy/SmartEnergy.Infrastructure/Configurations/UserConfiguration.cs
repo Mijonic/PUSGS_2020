@@ -31,8 +31,7 @@ namespace SmartEnergy.Infrastructure.Configurations
                 .HasMaxLength(30);
 
             builder.Property(i => i.Password)
-                 .IsRequired()
-                 .HasMaxLength(30);
+                 .IsRequired();
 
             builder.Property(i => i.Name)
                 .IsRequired()

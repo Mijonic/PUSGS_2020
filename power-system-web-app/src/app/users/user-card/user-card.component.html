@@ -17,7 +17,7 @@
     </div>
     <div class="card-body pb-2 pt-0">
       <p class="m-0"><mat-icon [inline]="true">person</mat-icon>&nbsp;{{user.username}}</p>
-      <p class="m-0"><mat-icon [inline]="true"> email</mat-icon>&nbsp;{{user.email}}</p>
+      <p class="m-0" style="max-height:35px; overflow:auto;"><mat-icon [inline]="true" > email</mat-icon>&nbsp;{{user.email}}</p>
       <p class="m-0"><mat-icon [inline]="true">date_range</mat-icon>&nbsp;{{ getDateForDisplay(user.birthDay)}}</p>
       <p class="m-0"><mat-icon [inline]="true">location_on</mat-icon>&nbsp;{{getLocationDisplayString(user.location)}}</p>
     </div>

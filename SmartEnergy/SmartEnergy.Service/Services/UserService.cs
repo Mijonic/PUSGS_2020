@@ -171,23 +171,7 @@ namespace SmartEnergy.Service.Services
             if(user.UserStatus == UserStatus.DENIED)
                 throw new UserInvalidStatusException($"User is blocked by admin.");
 
-            List<Claim> claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Role, user.UserType.ToString())); //Add user type to claim
-            claims.Add(new Claim(ClaimTypes.Email, user.Email)); //Add user email
-            claims.Add(new Claim(ClaimTypes.Name, user.Name)); //Add name 
-            claims.Add(new Claim(ClaimTypes.Surname, user.Lastname)); //Add lastname
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.ID.ToString())); //Add ID
-
-            SymmetricSecurityKey secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecretKey"]));
-            var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-            var tokeOptions = new JwtSecurityToken(
-                issuer: "http://localhost:44372",
-                audience: "http://localhost:44372",
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(5),
-                signingCredentials: signinCredentials
-            );
-            string tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+            string tokenString = _authHelperService.CreateToken(_mapper.Map<UserDto>(user));
             userData = _mapper.Map<UserDto>(user).StripConfidentialData();
             return tokenString;
         }
@@ -200,18 +184,32 @@ namespace SmartEnergy.Service.Services
             User userInDb = _dbContext.Users.FirstOrDefault(x => x.Email == payload.Email);
             if(userInDb == null)
             {
-                //What now?
+                userInDb = new User()
+                {
+                    Email = payload.Email,
+                    Username = payload.Email.Substring(0,payload.Email.IndexOf("@")),
+                    Name = payload.GivenName,
+                    Lastname = payload.FamilyName,
+                    Password = payload.JwtId,
+                    BirthDay = DateTime.Now, //Because user might have made this data private on google account
+                    UserType = UserType.CONSUMER,
+                    LocationID = 1, //Some default location untill specified
+                    UserStatus = UserStatus.PENDING
+                };
+                _dbContext.Users.Add(userInDb);
+                _dbContext.SaveChanges();
+
             }
 
+            string token = _authHelperService.CreateToken(_mapper.Map<UserDto>(userInDb));
             return new LoginResponseDto()
-            { 
-                User = _mapper.Map<UserDto>(userInDb),
-                Token = "",
+            {
+                User = _mapper.Map<UserDto>(userInDb).StripConfidentialData(),
+                Token = token,
                 IsSuccessfull = true
 
             };
 
-            //var token = await _jwtHandler.GenerateToken(user);
         }
 
         public UserDto Update(UserDto entity)

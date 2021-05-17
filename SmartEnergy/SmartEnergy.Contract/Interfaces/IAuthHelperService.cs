@@ -12,5 +12,6 @@ namespace SmartEnergy.Contract.Interfaces
     {
         int GetUserIDFromPrincipal(ClaimsPrincipal user);
         Task<GoogleJsonWebSignature.Payload> VerifyGoogleToken(ExternalLoginDto externalLogin);
+        string CreateToken(UserDto user);
     }
 }
