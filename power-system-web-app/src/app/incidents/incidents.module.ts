@@ -29,9 +29,7 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { NewCallComponent } from './calls/new-call/new-call.component';
 import { SelectDeviceDialogComponent } from './incident-dialogs/select-device-dialog/select-device-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
-
-
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -72,7 +70,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatDatepickerModule,     
     MatNativeDateModule,
     MatSlideToggleModule,
-    MatDialogModule
+    MatDialogModule,
+    MatProgressSpinnerModule,
+   
    
   
   ]

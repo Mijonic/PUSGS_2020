@@ -2,6 +2,8 @@ import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute } from '@angular/router';
+import { TabMessagingService } from 'app/services/tab-messaging.service';
 
 export interface UserData {
   id: string;
@@ -39,7 +41,7 @@ export class IncidentCrewComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor() {
+  constructor(private tabMessaging:TabMessagingService, private route:ActivatedRoute) {
     // Create 100 users
     const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
 
@@ -49,8 +51,20 @@ export class IncidentCrewComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+
+    const incidentId = this.route.snapshot.paramMap.get('id');
+    if(incidentId && incidentId != "")
+    {
+      this.tabMessaging.showEdit(+incidentId);
+     // this.isNew = false;
+      //this.workReqId = +wrId;
+     /// this.loadWorkRequest(this.workReqId);
+    }
+
     window.dispatchEvent(new Event('resize'));
+    
   }
+  
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;    //this.isLoading = false;

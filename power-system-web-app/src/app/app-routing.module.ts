@@ -75,23 +75,27 @@ const routes: Routes = [
       component: BasicInformationComponent, 
     },
     {
-      path: 'multimedia',
+      path: 'basic-info/:id',
+      component: BasicInformationComponent, 
+    },
+    {
+      path: 'multimedia/:id',
       component: MultimediaAttachmentsComponent, 
     },
     {
-      path: 'calls',
+      path: 'calls/:id',
       component: CallsComponent, 
     },
     {
-      path: 'crew',
+      path: 'crew/:id',
       component: IncidentCrewComponent,
     },
     {
-      path: 'devices',
+      path: 'devices/:id',
       component: IncidentDevicesComponent,
     },
     {
-      path: 'resolution',
+      path: 'resolution/:id',
       component: ResolutionComponent,
     },
   ],},

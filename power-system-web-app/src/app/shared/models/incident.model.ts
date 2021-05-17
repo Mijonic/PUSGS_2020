@@ -11,6 +11,7 @@ export class Incident{
     voltageLevel:number;
     description:string;
     userId:number;
+    crewId:number;
     workType:string;
     incidentStatus:string;
 }

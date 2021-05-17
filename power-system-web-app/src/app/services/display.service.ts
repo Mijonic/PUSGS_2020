@@ -22,10 +22,28 @@ export class DisplayService {
     return this.datePipe.transform(date, "dd/MM/yyyy");
   }
 
+  getDateDisplayIncident(date:Date)
+  {
+    return this.datePipe.transform(date, "M/d/yy, h:mm a");
+  }
+
+  getTimeDisplayIncidentETR(dateETR: string)
+  {
+
+    let date: Date = new Date(dateETR);
+     
+    
+    if(date.getDay() == 1)
+      return date.getDay() + " d, " + date.getHours() + " h, " + date.getMinutes() + " min";
+    else
+    return date.getDay() + " d, " + date.getHours() + " h, " + date.getMinutes() + " min";
+  }
+
   getStateChangeDateDisplay(date:Date)
   {
     return this.datePipe.transform(date, "dd/MM/yyyy hh:mm");
   }
+  
 
   getCoordinatesDisplay(location:Location){
     return `${location.latitude}, ${location.longitude}`;

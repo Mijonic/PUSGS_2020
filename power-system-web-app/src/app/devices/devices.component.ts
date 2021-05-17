@@ -55,13 +55,6 @@ export class DevicesComponent implements OnInit {
   toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato']; 
 
 
-  
-
-
-
-  
- 
- 
 
   constructor(private deviceService:DeviceService,  private toastr: ToastrService) {
 
