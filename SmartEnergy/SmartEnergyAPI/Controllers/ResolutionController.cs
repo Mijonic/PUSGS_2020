@@ -43,6 +43,20 @@ namespace SmartEnergyAPI.Controllers
             return Ok(resolution);
         }
 
+        [HttpGet("incident/{incidentId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResolutionDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetResolutionIncident(int incidentId)
+        {
+            ResolutionDto resolution = _resolutionService.GetResolutionIncident(incidentId);
+           
+            if (resolution == null)
+                return NotFound();
+
+            return Ok(resolution);
+        }
+
+
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]

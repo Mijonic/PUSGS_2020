@@ -46,6 +46,11 @@ namespace SmartEnergy.Service.Services
             return _mapper.Map<List<ResolutionDto>>(_dbContext.Resolutions.ToList());
         }
 
+        public ResolutionDto GetResolutionIncident(int incidentId)
+        {
+            return _mapper.Map<ResolutionDto>(_dbContext.Resolutions.FirstOrDefault(x => x.IncidentID == incidentId));
+        }
+
         public ResolutionDto Insert(ResolutionDto entity)
         {
 
@@ -125,8 +130,8 @@ namespace SmartEnergy.Service.Services
             if (_dbContext.Incidents.Any(x => x.ID == entity.IncidentID) == false)
                 throw new IncidentNotFoundException($"Incident with id = {entity.IncidentID} does not exists!");
 
-            if (_dbContext.Resolutions.Any(x => x.IncidentID == entity.IncidentID) == true)
-                throw new InvalidResolutionException($"Incident with id = {entity.IncidentID} already hase associated resolution!");
+            //if (_dbContext.Resolutions.Any(x => x.IncidentID == entity.IncidentID) == true)
+            //    throw new InvalidResolutionException($"Incident with id = {entity.IncidentID} already has associated resolution!");
 
         }
 

@@ -7,6 +7,6 @@ namespace SmartEnergy.Contract.Interfaces
 {
     public interface IResolutionService : IGenericService<ResolutionDto>
     {
-
+        ResolutionDto GetResolutionIncident(int incidentId);
     }
 }
