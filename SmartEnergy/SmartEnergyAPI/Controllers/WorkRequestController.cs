@@ -72,6 +72,17 @@ namespace SmartEnergyAPI.Controllers
             }
         }
 
+        [HttpGet("statistics/{userId}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestStatisticsDto))]
+        public IActionResult GetWorkRequestStatisticsForUser(int userId)
+        {
+
+            return Ok(_workRequestService.GetStatisticsForUser(userId));
+
+        }
+
         [HttpGet("{id}/devices")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

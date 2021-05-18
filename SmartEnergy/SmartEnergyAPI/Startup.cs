@@ -79,7 +79,7 @@ namespace SmartEnergyAPI
             services.AddCors(options =>
             {
                 options.AddPolicy(name: _cors, builder => {
-                    builder.SetIsOriginAllowed(_ => true).AllowAnyHeader()
+                    builder.WithOrigins("https://localhost:4200", "http://localhost:4200").AllowAnyHeader()
                                         .AllowAnyMethod().AllowCredentials();
                 });
             });

@@ -1,3 +1,4 @@
+import { WorkRequestStatistics } from './../shared/models/work-request-statistics.model';
 import { StateChange } from './../shared/models/state-change.model';
 import { IMultimediaService } from './../shared/interfaces/multimedia-service';
 import { MultimediaAttachment } from './../shared/models/multimedia-attachment.model';
@@ -35,6 +36,12 @@ export class WorkRequestService implements IMultimediaService {
     let requestUrl = environment.serverURL.concat(`work-requests/all`);
     return this.http.get<WorkRequest[]>(requestUrl);
   }
+
+  getWorkRequestStatistics(userId:number):Observable<WorkRequestStatistics>{
+    let requestUrl = environment.serverURL.concat(`work-requests/statistics/${userId}`);
+    return this.http.get<WorkRequestStatistics>(requestUrl);
+  }
+
 
   getWorkrequestsPaged( page: number, perPage:number,sort?: string, order?: string, documentStatus?:string, searchParam?:string, documentOwner?:string):Observable<WorkRequestList>{
     let requestUrl = environment.serverURL.concat("work-requests");

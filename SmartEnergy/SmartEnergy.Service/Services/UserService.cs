@@ -146,7 +146,7 @@ namespace SmartEnergy.Service.Services
             user.UserStatus = UserStatus.PENDING;//Just in case
             user.LocationID = userLocation.ID;
             user.Location = null;
-            
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
             _dbContext.Users.Add(user);
             
@@ -165,7 +165,7 @@ namespace SmartEnergy.Service.Services
             if (user == null)
                 throw new UserNotFoundException($"User with username {userInfo.Username} does not exist.");
 
-            if (user.Password != userInfo.Password)
+            if (!BCrypt.Net.BCrypt.Verify(userInfo.Password, user.Password) )
                 throw new InvalidUserDataException($"Incorrect password.");
 
             if(user.UserStatus == UserStatus.DENIED)

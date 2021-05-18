@@ -1,3 +1,5 @@
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DashboardComponent } from './dashboard.component';
 import { NgModule } from '@angular/core';
@@ -17,7 +19,9 @@ import { NgApexchartsModule } from 'ng-apexcharts';
   imports: [
     CommonModule,
     NgApexchartsModule,  
-    MatIconModule
+    MatIconModule,
+    ReactiveFormsModule,
+    MatProgressSpinnerModule
   ]
 })
 export class DashboardModule { }

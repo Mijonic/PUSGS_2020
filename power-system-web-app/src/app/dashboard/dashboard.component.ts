@@ -1,4 +1,6 @@
+import { WorkRequestService } from './../services/work-request.service';
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { WorkRequestStatistics } from 'app/shared/models/work-request-statistics.model';
 import { ChartComponent } from 'ng-apexcharts';
 
 @Component({
@@ -15,6 +17,9 @@ export class DashboardComponent implements OnInit {
   public chartOptionsPie: any;
 
   public shouldReset: boolean = true;
+  isLoadingWorkReq:boolean = true;
+
+  workReqStats:WorkRequestStatistics =  new WorkRequestStatistics();
 
   public generateData(baseval: any, count: any, yrange: any) {
     var i = 0;
@@ -33,8 +38,22 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  constructor(private changeDetectorRef: ChangeDetectorRef) {
+  constructor(private changeDetectorRef: ChangeDetectorRef, private workReqService:WorkRequestService) {
 
+   }
+
+   loadWorkRequestStats()
+   {
+     this.isLoadingWorkReq = true;
+     let userId:number = +JSON.parse(localStorage.getItem("user")!).id;
+
+     this.workReqService.getWorkRequestStatistics(userId).subscribe(
+       data=>{
+         this.workReqStats = data;
+         this.isLoadingWorkReq = false;
+         this.initAreaChart("100%");
+       }
+     )
    }
 
   
@@ -48,7 +67,7 @@ export class DashboardComponent implements OnInit {
 
     initAreaChart(width: any) {
       this.chartOptionsPie = {
-        series: [55, 35, 10],
+        series: [55, this.workReqStats.total, 10],
         labels:  ['WP', 'WR', 'RD'],
         title: {
           text: 'DOCUMENTS',
@@ -166,6 +185,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
 
     window.dispatchEvent(new Event('resize'));
+    this.loadWorkRequestStats();
     this.initAreaChart(700);
     this.initPieChar(400);
 

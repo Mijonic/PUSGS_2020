@@ -180,3 +180,4 @@ C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\ne
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\Google.Apis.Auth.PlatformServices.dll
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\Google.Apis.Auth.dll
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\Google.Apis.Core.dll
+C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\BCrypt.Net-Next.dll

@@ -339,5 +339,22 @@ namespace SmartEnergy.Service.Services
 
             return wr;
         }
+
+        public WorkRequestStatisticsDto GetStatisticsForUser(int userId)
+        {
+            IQueryable<WorkRequest> workRequests = _dbContext.WorkRequests.Where(x => x.UserID == userId);
+
+            WorkRequestStatisticsDto statistics = new WorkRequestStatisticsDto()
+            {
+                Total = workRequests.Count(),
+                Approved = workRequests.Where(x => x.DocumentStatus == DocumentStatus.APPROVED).Count(),
+                Denied = workRequests.Where(x => x.DocumentStatus == DocumentStatus.DENIED).Count(),
+                Cancelled= workRequests.Where(x => x.DocumentStatus == DocumentStatus.CANCELLED).Count(),
+                Draft = workRequests.Where(x => x.DocumentStatus == DocumentStatus.DRAFT).Count(),
+            };
+
+            return statistics;
+
+        }
     }
 }

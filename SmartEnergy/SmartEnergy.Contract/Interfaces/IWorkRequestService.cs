@@ -13,5 +13,7 @@ namespace SmartEnergy.Contract.Interfaces
         public WorkRequestsListDto GetWorkRequestsPaged(WorkRequestField sortBy, SortingDirection direction, int page,
                                   int perPage, DocumentStatusFilter status, OwnerFilter owner,
                                   string searchParam, ClaimsPrincipal user);
+
+        public WorkRequestStatisticsDto GetStatisticsForUser(int userId);
     }
 }
