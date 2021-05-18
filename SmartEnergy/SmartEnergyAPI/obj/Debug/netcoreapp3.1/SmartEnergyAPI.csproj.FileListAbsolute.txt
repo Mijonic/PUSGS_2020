@@ -181,3 +181,6 @@ C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\ne
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\Google.Apis.Auth.dll
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\Google.Apis.Core.dll
 C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\BCrypt.Net-Next.dll
+C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\FacebookCore.dll
+C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.Facebook.dll
+C:\Users\Predrag\source\repos\PUSGS_2020\SmartEnergy\SmartEnergyAPI\bin\Debug\netcoreapp3.1\Rest.Net.dll

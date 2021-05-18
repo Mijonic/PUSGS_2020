@@ -124,12 +124,10 @@ export class ParticlesComponent implements OnInit {
   };
 
   particlesLoaded(container: any): void {
-      console.log(container);
     
   }
   
   particlesInit(main: Main): void {
-      console.log(main);
       
       // Starting from 1.19.0 you can add custom presets or shape here, using the current tsParticles instance (main)
   }

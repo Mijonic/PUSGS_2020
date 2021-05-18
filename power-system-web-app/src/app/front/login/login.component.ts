@@ -38,32 +38,47 @@ export class LoginComponent implements OnInit {
         provider: user.provider,
         idToken: user.idToken
       }
-      this.validateExternalAuth(externalAuth);
+      this.validateAndLoginWithExternal(externalAuth);
     }, error => {
-      console.log(error);
     })
 
   }
 
-  private validateExternalAuth(externalAuth: ExternalAuth) {
+  public loginFacebook = () =>
+  {
+    this.authService.signInWithFacebook()
+    .then(res => {
+      console.log(res);
+      const user: SocialUser = { ...res };
+      const externalAuth: ExternalAuth = {
+        provider: user.provider,
+        idToken: user.authToken
+      }
+      this.validateAndLoginWithExternal(externalAuth);
+    }, error => {
+    })
+
+  }
+
+  private validateAndLoginWithExternal(externalAuth: ExternalAuth) {
     this.isLoading = true;
-    this.usersService.loginGoogle( externalAuth)
+    this.usersService.loginExternal( externalAuth)
       .subscribe(res => {
         localStorage.setItem("jwt", res.token);
         localStorage.setItem("user", JSON.stringify(res.user));
-        //this._authService.sendAuthStateChangeNotification(res.isAuthSuccessful);
         this.isLoading = false;
         this.resetBtn.nativeElement.click();
           this.closeBtn.nativeElement.click();
           this.router.navigate(["/dashboard"]);
-          this.toastr.success("Login successfull");
+          this.toastr.success("Login successfull","", {positionClass: 'toast-bottom-left'});
       },
       error => {
         this.isLoading = false;
-        this.toastr.error(error.error);
-        this.authService.signOutExternal();
+        this.toastr.error(error.error,"", {positionClass: 'toast-bottom-left'});
+        this.authService.signOut();
       });
   }
+
 
   onSubmit()
   {
@@ -82,7 +97,7 @@ export class LoginComponent implements OnInit {
           this.resetBtn.nativeElement.click();
           this.closeBtn.nativeElement.click();
           this.router.navigate(["/dashboard"]);
-          this.toastr.success("Login successfull");
+          this.toastr.success("Login successfull","", {positionClass: 'toast-bottom-left'});
         },
         error =>{
           this.isLoading = false;
@@ -91,7 +106,7 @@ export class LoginComponent implements OnInit {
       )
     }else
     {
-      this.toastr.info("Please fill all form fields.");
+      this.toastr.info("Please fill all form fields.","", {positionClass: 'toast-bottom-left'});
     }
 
   }

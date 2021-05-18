@@ -1,3 +1,4 @@
+import { AuthGuardService } from './../../auth/auth-guard.service';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../services/user.service';
 import { DatePipe } from '@angular/common';
@@ -17,7 +18,7 @@ export class UserCardComponent implements OnInit {
   @ViewChild("avatar") avatar:ElementRef;
   isLoadingImage:boolean = true;
 
-  constructor(public datePipe:DatePipe, private userService:UserService, private toastr:ToastrService) { }
+  constructor(public datePipe:DatePipe, private userService:UserService, private toastr:ToastrService, public _authGuard:AuthGuardService) { }
 
   ngOnInit(): void {
     if(this.user.imageURL)
@@ -94,7 +95,7 @@ export class UserCardComponent implements OnInit {
     this.userService.approveUser(id).subscribe(
       data =>
         {
-          this.toastr.success("User approved.");
+          this.toastr.success("User approved.","", {positionClass: 'toast-bottom-left'});
           this.reload.emit();
         },
       error =>{
@@ -108,7 +109,7 @@ export class UserCardComponent implements OnInit {
     this.userService.denyUser(id).subscribe(
       data =>
         {
-          this.toastr.success("User denied.");
+          this.toastr.success("User denied.","", {positionClass: 'toast-bottom-left'});
           this.reload.emit();
         },
       error =>{

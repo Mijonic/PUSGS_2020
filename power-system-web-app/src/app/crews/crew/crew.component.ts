@@ -51,7 +51,7 @@ export class CrewComponent implements OnInit {
         this.isLoadingCrew = false;
       },
       error =>{
-        this.toastr.error('Could not load crew.')
+        this.toastr.error('Could not load crew.',"", {positionClass: 'toast-bottom-left'})
         console.log(error.error);
         this.isLoadingCrew = false;
       }
@@ -82,7 +82,7 @@ export class CrewComponent implements OnInit {
       {
         this.crewService.createNewCrew(this.crew).subscribe(
           data => {
-            this.toastr.success("Crew created successfully");
+            this.toastr.success("Crew created successfully","", {positionClass: 'toast-bottom-left'});
             this.router.navigate(['crews']);
             },
             error=>{
@@ -94,7 +94,7 @@ export class CrewComponent implements OnInit {
         this.crewService.updateCrew(this.crew).subscribe(
             data => {
             this.crew = data;
-            this.toastr.success("Crew updated successfully");
+            this.toastr.success("Crew updated successfully","", {positionClass: 'toast-bottom-left'});
             this.router.navigate(['crews']);
             },
             error=>{

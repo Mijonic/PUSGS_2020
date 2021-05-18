@@ -80,14 +80,14 @@ export class MultimediaAttachmentsComponent implements OnInit {
     this.multimediaService.deleteAttachment(filename, this.documentId).subscribe(
       data =>{
           this.loadAttachments();
-          this.toastr.success("File deleted successfully.");
+          this.toastr.success("File deleted successfully.","", {positionClass: 'toast-bottom-left'});
           this.isLoading = false;
       },
       error =>{
         this.isLoading = false;
         if(error.error instanceof ProgressEvent)
         {
-          this.toastr.error("Server is unreachable.");
+          this.toastr.error("Server is unreachable.","", {positionClass: 'toast-bottom-left'});
         }else
         {
           this.toastr.error(`${error.error}`); 
@@ -104,16 +104,16 @@ export class MultimediaAttachmentsComponent implements OnInit {
 
         }else if(event.type === HttpEventType.Response && event.status == 200)
         {
-          this.toastr.success(`File ${fileUpload.file.name} has been uploaded!`);
+          this.toastr.success(`File ${fileUpload.file.name} has been uploaded!`,"", {positionClass: 'toast-bottom-left'});
           this.loadAttachments();
         }
       }, (error) => {
         if(error.error instanceof ProgressEvent)
         {
-          this.toastr.error("File can't be uploaded, server is unreachable");
+          this.toastr.error("File can't be uploaded, server is unreachable","", {positionClass: 'toast-bottom-left'});
         }else
         {
-          this.toastr.error(`Error occured uploading file ${fileUpload.file.name} ${error.error}`); 
+          this.toastr.error(`Error occured uploading file ${fileUpload.file.name} ${error.error}`,"", {positionClass: 'toast-bottom-left'}); 
         }
         fileUpload.progress = 0;
         fileUpload.aborted = true;

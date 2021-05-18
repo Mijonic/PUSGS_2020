@@ -356,5 +356,21 @@ namespace SmartEnergy.Service.Services
             return statistics;
 
         }
+
+        public bool IsCrewMemberHandlingWorkRequest(int crewMemberId, int workRequestId)
+        {
+            WorkRequest wr = _dbContext.WorkRequests.Include(x => x.Incident)
+                                                    .ThenInclude(x => x.Crew)
+                                                    .ThenInclude(x => x.CrewMembers)
+                                                    .FirstOrDefault(x => x.ID == workRequestId);
+            if(wr == null)
+                throw new WorkRequestNotFound($"Work request with id {workRequestId} does not exist");
+
+            if (wr.Incident.Crew.CrewMembers.FirstOrDefault(x => x.ID == crewMemberId) == null)
+                return false;
+
+            return true;
+
+        }
     }
 }

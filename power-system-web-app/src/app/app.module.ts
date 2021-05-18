@@ -1,3 +1,4 @@
+import { ErrorInterceptorService } from './services/error-interceptor.service';
 import { AuthGuardService } from './auth/auth-guard.service';
 
 import { WorkRequestService } from './services/work-request.service';
@@ -25,6 +26,9 @@ import {
   GoogleLoginProvider,
   FacebookLoginProvider
 } from 'angularx-social-login';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+
+
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -60,6 +64,7 @@ export function tokenGetter() {
 
   providers: [
     DatePipe,
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptorService, multi: true },
     {provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
    /* {
       provide: INCIDENT_SERVICE_TOKEN,
@@ -81,6 +86,12 @@ export function tokenGetter() {
           id: GoogleLoginProvider.PROVIDER_ID,
           provider: new GoogleLoginProvider(
             '985075988575-5dq1o575mkheantia2vblvskuav2d052.apps.googleusercontent.com'
+          )
+        },
+        {
+          id: FacebookLoginProvider.PROVIDER_ID,
+          provider: new FacebookLoginProvider(
+            '1645577359165702'
           )
         }
       ]

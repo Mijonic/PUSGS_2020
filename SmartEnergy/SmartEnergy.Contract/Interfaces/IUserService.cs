@@ -18,6 +18,6 @@ namespace SmartEnergy.Contract.Interfaces
         public UserDto DenyUser(int userId);
 
         public string Login(LoginDto userInfo, out UserDto user);
-        public Task<LoginResponseDto> LoginExternalGoogle(ExternalLoginDto userInfo);
+        public Task<LoginResponseDto> LoginExternal(ExternalLoginDto userInfo);
     }
 }

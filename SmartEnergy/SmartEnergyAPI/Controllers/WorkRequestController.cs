@@ -25,16 +25,19 @@ namespace SmartEnergyAPI.Controllers
         private readonly IWorkRequestService _workRequestService;
         private readonly IMultimediaService _multimediaService;
         private readonly IStateChangeService _stateChangeService;
+        private readonly IAuthHelperService _authHelperService;
 
-        public WorkRequestController(IWorkRequestService workRequestService, IMultimediaService multimediaService, IStateChangeService stateChangeService)
+        public WorkRequestController(IWorkRequestService workRequestService, IMultimediaService multimediaService,
+            IStateChangeService stateChangeService, IAuthHelperService authHelperService)
         {
             _workRequestService = workRequestService;
             _multimediaService = multimediaService;
             _stateChangeService = stateChangeService;
+            _authHelperService = authHelperService;
         }
 
         [HttpGet("all")]
-        [Authorize]
+        [Authorize(Roles ="CREW_MEMBER, DISPATCHER, WORKER")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<WorkRequestDto>))]
         public IActionResult GetAll()
@@ -44,7 +47,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<WorkRequestDto>))]
         public IActionResult GetPaged([FromQuery] string searchParam, [FromQuery] WorkRequestField sortBy, [FromQuery] SortingDirection direction,
@@ -56,7 +59,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet("{id}")]
-        [Authorize]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -78,13 +81,14 @@ namespace SmartEnergyAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestStatisticsDto))]
         public IActionResult GetWorkRequestStatisticsForUser(int userId)
         {
-
+            if (_authHelperService.GetUserIDFromPrincipal(User) != userId)
+                return Unauthorized("You can view statitics only for yourself");
             return Ok(_workRequestService.GetStatisticsForUser(userId));
 
         }
 
         [HttpGet("{id}/devices")]
-        [Authorize]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -101,7 +105,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "DISPATCHER")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -129,17 +133,18 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPut("{id}")]
-        [Authorize]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult EditWorkRequest(int id,[FromBody] WorkRequestDto workRequest)
         {
-            if (id != workRequest.ID)
-                return BadRequest($"Request id and entity id don't match");
             try
             {
+                if (User.IsInRole("CREW_MEMBER") &&
+               _workRequestService.IsCrewMemberHandlingWorkRequest(_authHelperService.GetUserIDFromPrincipal(User), workRequest.ID))
+                    return Unauthorized("Only crew members assigned to work request are allowed to edit it.");
                 WorkRequestDto modified = _workRequestService.Update(workRequest);
                 return Ok(modified);
             }
@@ -159,14 +164,18 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult DeleteWorkRequest(int id)
         {
+
             try
             {
+                if (User.IsInRole("CREW_MEMBER") &&
+                _workRequestService.IsCrewMemberHandlingWorkRequest(_authHelperService.GetUserIDFromPrincipal(User), id))
+                    return Unauthorized("Only crew members assigned to work request are allowed to edit it.");
                 _workRequestService.Delete(id);
                 return NoContent();
             }
@@ -177,7 +186,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpPost("{id}/attachments")]
-        [Authorize]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -187,6 +196,9 @@ namespace SmartEnergyAPI.Controllers
         {
             try
             {
+                if (User.IsInRole("CREW_MEMBER") &&
+               _workRequestService.IsCrewMemberHandlingWorkRequest(_authHelperService.GetUserIDFromPrincipal(User), id))
+                    return Unauthorized("Only crew members assigned to work request are allowed to edit it.");
                 await _multimediaService.AttachFileToWorkRequestAsync(file, id);
                 return Ok();
             }
@@ -209,7 +221,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpGet("{id}/attachments/{filename}")]
-        [Authorize]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type= typeof(FileStreamResult))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -217,6 +229,9 @@ namespace SmartEnergyAPI.Controllers
         {
             try
             {
+                if (User.IsInRole("CREW_MEMBER") &&
+               _workRequestService.IsCrewMemberHandlingWorkRequest(_authHelperService.GetUserIDFromPrincipal(User), id))
+                    return Unauthorized("Only crew members assigned to work request are allowed to edit it.");
                 return File(_multimediaService.GetWorkRequestAttachmentStream(id, filename), "application/octet-stream", filename);
             }
             catch (WorkRequestNotFound wnf)
@@ -231,7 +246,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet("{id}/attachments")]
-        [Authorize]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<MultimediaAttachmentDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -239,6 +254,9 @@ namespace SmartEnergyAPI.Controllers
         {
             try
             {
+                if (User.IsInRole("CREW_MEMBER") &&
+               _workRequestService.IsCrewMemberHandlingWorkRequest(_authHelperService.GetUserIDFromPrincipal(User), id))
+                    return Unauthorized("Only crew members assigned to work request are allowed to edit it.");
                 return Ok(_multimediaService.GetWorkRequestAttachments(id));
             }
             catch (WorkRequestNotFound wnf)
@@ -249,7 +267,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet("{id}/state-changes")]
-        [Authorize]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<StateChangeHistoryDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -257,6 +275,9 @@ namespace SmartEnergyAPI.Controllers
         {
             try
             {
+                if (User.IsInRole("CREW_MEMBER") &&
+               _workRequestService.IsCrewMemberHandlingWorkRequest(_authHelperService.GetUserIDFromPrincipal(User), id))
+                    return Unauthorized("Only crew members assigned to work request are allowed to edit it.");
                 return Ok(_stateChangeService.GetWorkRequestStateHistory(id));
             }
             catch (WorkRequestNotFound wnf)
@@ -267,7 +288,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpDelete("{id}/attachments/{filename}")]
-        [Authorize]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -275,6 +296,9 @@ namespace SmartEnergyAPI.Controllers
         {
             try
             {
+                if (User.IsInRole("CREW_MEMBER") &&
+               _workRequestService.IsCrewMemberHandlingWorkRequest(_authHelperService.GetUserIDFromPrincipal(User), id))
+                    return Unauthorized("Only crew members assigned to work request are allowed to edit it.");
                 _multimediaService.DeleteWorkRequestAttachment(id, filename);
                 return Ok();
             }
@@ -294,7 +318,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpPut("{id}/approve")]
-        [Authorize]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type=typeof(WorkRequestDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -303,6 +327,9 @@ namespace SmartEnergyAPI.Controllers
         {
             try
             {
+                if (User.IsInRole("CREW_MEMBER") &&
+               _workRequestService.IsCrewMemberHandlingWorkRequest(_authHelperService.GetUserIDFromPrincipal(User), id))
+                    return Unauthorized("Only crew members assigned to work request are allowed to edit it.");
                 WorkRequestDto wr = _stateChangeService.ApproveWorkRequest(id, User);
                 return Ok(wr);
             }
@@ -317,7 +344,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpPut("{id}/cancel")]
-        [Authorize]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -326,6 +353,9 @@ namespace SmartEnergyAPI.Controllers
         {
             try
             {
+                if (User.IsInRole("CREW_MEMBER") &&
+               _workRequestService.IsCrewMemberHandlingWorkRequest(_authHelperService.GetUserIDFromPrincipal(User), id))
+                    return Unauthorized("Only crew members assigned to work request are allowed to edit it.");
                 WorkRequestDto wr = _stateChangeService.CancelWorkRequest(id, User);
                 return Ok(wr);
             }
@@ -341,7 +371,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPut("{id}/deny")]
-        [Authorize]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -350,6 +380,9 @@ namespace SmartEnergyAPI.Controllers
         {
             try
             {
+                if (User.IsInRole("CREW_MEMBER") &&
+               _workRequestService.IsCrewMemberHandlingWorkRequest(_authHelperService.GetUserIDFromPrincipal(User), id))
+                    return Unauthorized("Only crew members assigned to work request are allowed to edit it.");
                 WorkRequestDto wr = _stateChangeService.DenyWorkRequest(id, User);
                 return Ok(wr);
             }

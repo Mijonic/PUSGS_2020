@@ -1,3 +1,4 @@
+import { AuthService } from './../../services/auth.service';
 import { UserService } from './../../services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
@@ -11,7 +12,7 @@ import { User } from 'app/shared/models/user.model';
 })
 export class MainNavbarComponent implements OnInit {
 
-  constructor(private router:Router, private toastr:ToastrService, private userService:UserService) { }
+  constructor(private router:Router, private toastr:ToastrService, private userService:UserService, private auth:AuthService) { }
   user:User;
   @ViewChild("avatar") avatar:ElementRef;
 
@@ -22,9 +23,8 @@ export class MainNavbarComponent implements OnInit {
 
   onLogout()
   {
-    localStorage.removeItem("jwt");
-    localStorage.removeItem("user");
-    this.toastr.info("You have logged out");
+    this.auth.signOut();
+    this.toastr.info("You have logged out","", {positionClass: 'toast-bottom-left'});
     this.router.navigate(["/"]);
   }
 

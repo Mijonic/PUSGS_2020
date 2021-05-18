@@ -163,7 +163,7 @@ export class WorkRequestBasicInformationComponent implements OnInit {
         {
           this.workRequestService.createWorkRequest(this.workRequest).subscribe(
             data =>{
-              this.toastr.success("Work request created successfully");
+              this.toastr.success("Work request created successfully","", {positionClass: 'toast-bottom-left'});
               this.router.navigate(['work-request/basic-info', data.id])
             },
             error =>{
@@ -182,7 +182,7 @@ export class WorkRequestBasicInformationComponent implements OnInit {
         {
           this.workRequestService.updateWorkRequest(this.workRequest).subscribe(
             data =>{
-              this.toastr.success("Work request updated successfully");
+              this.toastr.success("Work request updated successfully","", {positionClass: 'toast-bottom-left'});
               this.workRequest = data;
               this.isLoading = false;
             },
@@ -190,7 +190,7 @@ export class WorkRequestBasicInformationComponent implements OnInit {
              this.isLoading = false;
               if(error.error instanceof ProgressEvent)
                 {
-                  this.toastr.error("Server is unreachable");
+                  this.toastr.error("Server is unreachable","", {positionClass: 'toast-bottom-left'});
                 }else
                 {
                   this.toastr.error(error.error);

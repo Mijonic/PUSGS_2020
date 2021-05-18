@@ -176,22 +176,32 @@ namespace SmartEnergy.Service.Services
             return tokenString;
         }
 
-        public async Task<LoginResponseDto> LoginExternalGoogle(ExternalLoginDto userInfo)
+
+        public async Task<LoginResponseDto> LoginExternal(ExternalLoginDto userInfo)
         {
-            Payload payload = await _authHelperService.VerifyGoogleToken(userInfo);
-            if (payload == null)
+            SocialInfoDto socialInfo;
+            if(userInfo.Provider == "FACEBOOK")
+            {
+                socialInfo = await _authHelperService.VerifyFacebookTokenAsync(userInfo);
+            }
+            else
+            {
+                socialInfo = await _authHelperService.VerifyGoogleToken(userInfo);
+            }
+
+            if (socialInfo == null)
                 throw new InvalidTokenException("Token invalid");
-            User userInDb = _dbContext.Users.FirstOrDefault(x => x.Email == payload.Email);
+            User userInDb = _dbContext.Users.FirstOrDefault(x => x.Email == socialInfo.Email);
             if(userInDb == null)
             {
                 userInDb = new User()
                 {
-                    Email = payload.Email,
-                    Username = payload.Email.Substring(0,payload.Email.IndexOf("@")),
-                    Name = payload.GivenName,
-                    Lastname = payload.FamilyName,
-                    Password = payload.JwtId,
-                    BirthDay = DateTime.Now, //Because user might have made this data private on google account
+                    Email = socialInfo.Email,
+                    Username = socialInfo.Email.Substring(0,socialInfo.Email.IndexOf("@")),
+                    Name = socialInfo.Name,
+                    Lastname = socialInfo.LastName,
+                    Password = socialInfo.ID,
+                    BirthDay = DateTime.Now, //Because user might have made this data private on account
                     UserType = UserType.CONSUMER,
                     LocationID = 1, //Some default location untill specified
                     UserStatus = UserStatus.PENDING

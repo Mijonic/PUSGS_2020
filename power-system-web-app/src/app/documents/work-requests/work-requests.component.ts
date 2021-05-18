@@ -86,18 +86,18 @@ export class WorkRequestsComponent implements OnInit,  AfterViewInit {
       data =>{
         this.isLoading = false;
         this.getWorkRequests();
-        this.toastr.success("Work request successfully deleted.");
-        this.toastr.info("All media attached to this work request is also deleted.");
+        this.toastr.success("Work request successfully deleted.","", {positionClass: 'toast-bottom-left'});
+        this.toastr.info("All media attached to this work request is also deleted.","", {positionClass: 'toast-bottom-left'});
       },
       error =>{
 
         this.isLoading = false;
         if(error.error instanceof ProgressEvent)
                 {
-                  this.toastr.error("Server is unreachable");
+                  this.toastr.error("Server is unreachable","", {positionClass: 'toast-bottom-left'});
                 }else
                 {
-                  this.toastr.error(error.error);
+                  this.toastr.error(error.error,"", {positionClass: 'toast-bottom-left'});
                 }
         this.getWorkRequests();
       }

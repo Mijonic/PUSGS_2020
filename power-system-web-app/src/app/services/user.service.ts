@@ -87,9 +87,10 @@ export class UserService {
     return this.http.post<any>(requestUrl, credentials);
   }
 
-  loginGoogle(credentials:ExternalAuth):Observable<LoginResponse>{
-    let requestUrl = environment.serverURL.concat(`users/google-login`);
+  loginExternal(credentials:ExternalAuth):Observable<LoginResponse>{
+    let requestUrl = environment.serverURL.concat(`users/external-login`);
     return this.http.post<LoginResponse>(requestUrl, credentials);
   }
+
 
 }

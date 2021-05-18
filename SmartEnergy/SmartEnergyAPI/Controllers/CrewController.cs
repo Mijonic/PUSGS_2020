@@ -28,6 +28,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpGet("all")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<CrewDto>))]
         public IActionResult GetCrews()
         {
@@ -61,7 +62,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles ="ADMIN")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -93,7 +94,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPut("{id}")]
-        [Authorize]
+        [Authorize(Roles = "ADMIN")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CrewDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -125,7 +126,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize(Roles = "ADMIN")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

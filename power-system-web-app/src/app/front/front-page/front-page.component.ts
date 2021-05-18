@@ -1,3 +1,5 @@
+import { ToastrService } from 'ngx-toastr';
+import { AuthService } from './../../services/auth.service';
 
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NavbarMessagingService } from 'app/services/navbar-messaging.service';
@@ -16,7 +18,7 @@ export class FrontPageComponent implements OnInit, OnDestroy {
   showReportOutage:boolean = false;
   @ViewChild('login') openBtn: ElementRef;
 
-  constructor(private navbarMessaging:NavbarMessagingService) { }
+  constructor(private navbarMessaging:NavbarMessagingService, private auth:AuthService, private toastr:ToastrService) { }
 
   ngOnDestroy(): void {
     if(this.navbarMessagingSubscription)
@@ -33,8 +35,12 @@ export class FrontPageComponent implements OnInit, OnDestroy {
       }
 
     });
-    localStorage.removeItem("jwt");
-    localStorage.removeItem("user");
+    if(localStorage.length > 0)
+    {
+      this.toastr.warning("You are logged out now.","", {positionClass: 'toast-bottom-left'});
+      this.auth.signOut();
+    }
+    
   }
 
   showLoginForm()

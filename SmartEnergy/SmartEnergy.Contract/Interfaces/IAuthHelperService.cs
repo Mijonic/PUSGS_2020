@@ -11,7 +11,9 @@ namespace SmartEnergy.Contract.Interfaces
     public interface IAuthHelperService
     {
         int GetUserIDFromPrincipal(ClaimsPrincipal user);
-        Task<GoogleJsonWebSignature.Payload> VerifyGoogleToken(ExternalLoginDto externalLogin);
+        Task<SocialInfoDto> VerifyGoogleToken(ExternalLoginDto externalLogin);
+        Task<SocialInfoDto> VerifyFacebookTokenAsync(ExternalLoginDto externalLogin);
         string CreateToken(UserDto user);
+
     }
 }

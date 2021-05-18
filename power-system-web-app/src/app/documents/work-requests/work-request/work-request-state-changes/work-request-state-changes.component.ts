@@ -32,13 +32,13 @@ export class WorkRequestStateChangesComponent implements OnInit {
   {
     this.workReqService.approveWorkRequest(this.workRequestId).subscribe(
       data =>{
-        this.toastr.success("Work request approved");
+        this.toastr.success("Work request approved","", {positionClass: 'toast-bottom-left'});
         this.loadStateChanges(this.workRequestId);
       },
       error =>{
         if(error.error instanceof ProgressEvent)
         {
-          this.toastr.error("Server unreachable");
+          this.toastr.error("Server unreachable","", {positionClass: 'toast-bottom-left'});
         }else{
           this.toastr.error(error.error);
         }
@@ -51,13 +51,13 @@ export class WorkRequestStateChangesComponent implements OnInit {
   {
     this.workReqService.denyWorkRequest(this.workRequestId).subscribe(
       data =>{
-        this.toastr.success("Work request denied.");
+        this.toastr.success("Work request denied.","", {positionClass: 'toast-bottom-left'});
         this.loadStateChanges(this.workRequestId);
       },
       error =>{
         if(error.error instanceof ProgressEvent)
         {
-          this.toastr.error("Server unreachable");
+          this.toastr.error("Server unreachable","", {positionClass: 'toast-bottom-left'});
         }else{
           this.toastr.error(error.error);
         }
@@ -70,13 +70,13 @@ export class WorkRequestStateChangesComponent implements OnInit {
   {
     this.workReqService.cancelWorkRequest(this.workRequestId).subscribe(
       data =>{
-        this.toastr.success("Work request cancelled");
+        this.toastr.success("Work request cancelled","", {positionClass: 'toast-bottom-left'});
         this.loadStateChanges(this.workRequestId);
       },
       error =>{
         if(error.error instanceof ProgressEvent)
         {
-          this.toastr.error("Server unreachable");
+          this.toastr.error("Server unreachable","", {positionClass: 'toast-bottom-left'});
         }else{
           this.toastr.error(error.error);
         }

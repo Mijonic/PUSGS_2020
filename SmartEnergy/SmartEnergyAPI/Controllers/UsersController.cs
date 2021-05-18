@@ -22,15 +22,17 @@ namespace SmartEnergyAPI.Controllers
     {
         private readonly IUserService _userService;
         private readonly IMultimediaService _multimediaService;
+        private readonly IAuthHelperService _authHelperService;
 
-        public UsersController(IUserService userService, IMultimediaService multimediaService)
+        public UsersController(IUserService userService, IMultimediaService multimediaService, IAuthHelperService authHelperService)
         {
             _userService = userService;
             _multimediaService = multimediaService;
+            _authHelperService = authHelperService;
         }
 
         [HttpGet("all")]
-        [Authorize(Roles = "ADMIN, DISPATCHER")]
+        [Authorize(Roles = "ADMIN, DISPATCHER, WORKER, CREW_MEMBER")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<UserDto>))]     
         public IActionResult GetAll()
@@ -42,7 +44,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "ADMIN, DISPATCHER, WORKER, CREW_MEMBER")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsersListDto))]
         public IActionResult GetAllPaged([FromQuery] string searchParam, [FromQuery] UserField sortBy, [FromQuery] SortingDirection direction,
@@ -62,6 +64,7 @@ namespace SmartEnergyAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetFile(int id, string filename)
         {
+ 
             try
             {
                 return File(_multimediaService.GetUserAvatarStream(id, filename), "application/octet-stream", filename);
@@ -78,7 +81,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet("unassigned-crew-members")]
-        [Authorize]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER, ADMIN")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<UserDto>))]
         public IActionResult GetUnassignedCrewMembers()
@@ -145,6 +148,8 @@ namespace SmartEnergyAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetUserById(int id)
         {
+            if (_authHelperService.GetUserIDFromPrincipal(User) != id && User.IsInRole("CONSUMER"))
+                return Unauthorized("Consumer can only retreive his own information.");
             try
             {
                 UserDto user = _userService.Get(id).StripConfidentialData();
@@ -211,7 +216,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
 
-        [HttpPost("google-login")]
+        [HttpPost("external-login")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type=typeof(LoginResponseDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -219,7 +224,7 @@ namespace SmartEnergyAPI.Controllers
         {
             try
             {
-                LoginResponseDto response = await _userService.LoginExternalGoogle(externalAuth);
+                LoginResponseDto response = await _userService.LoginExternal(externalAuth);
                 return Ok(response);
             }catch(InvalidTokenException ex)
             {
@@ -229,7 +234,10 @@ namespace SmartEnergyAPI.Controllers
             
         }
 
+       
+
         [HttpPost("{id}/avatar")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

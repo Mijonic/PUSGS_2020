@@ -112,10 +112,10 @@ export class RegistrationComponent implements OnInit {
         if(event.type === HttpEventType.Response && event.status == 200)
         {
         this.resetBtn.nativeElement.click();
-        this.toastr.success("Profile image uploaded");
+        this.toastr.success("Profile image uploaded","", {positionClass: 'toast-bottom-left'});
         this.closeBtn.nativeElement.click();
         this.navbarService.activateLogin();
-        this.toastr.info("You can log in now.");
+        this.toastr.info("You can log in now.","", {positionClass: 'toast-bottom-left'});
         this.isLoading = false;
         }
       },
@@ -134,7 +134,7 @@ export class RegistrationComponent implements OnInit {
       this.populateModelFromFields();
       this.userService.createUser(this.user).subscribe(
         data =>{
-            this.toastr.success("Registration successfull");
+            this.toastr.success("Registration successfull","", {positionClass: 'toast-bottom-left'});
             if(this.imagePreview != '')
             {
               this.uploadImage(this.registrationForm.value.picture , data.id);
@@ -143,7 +143,7 @@ export class RegistrationComponent implements OnInit {
               this.resetBtn.nativeElement.click();
               this.closeBtn.nativeElement.click();
               this.navbarService.activateLogin();
-              this.toastr.info("You can log in now.");
+              this.toastr.info("You can log in now.","", {positionClass: 'toast-bottom-left'});
               this.isLoading = false;
             }
         },
@@ -155,7 +155,7 @@ export class RegistrationComponent implements OnInit {
     }
     else{
         this.validation.validateAllFields(this.registrationForm);
-        this.toastr.info("Please check form fields again, there are some errors.");
+        this.toastr.info("Please check form fields again, there are some errors.","", {positionClass: 'toast-bottom-left'});
     }
 
   }

@@ -24,10 +24,10 @@
     <hr class="mt-1 mb-1">
     <div class="card-body pt-2 pb-2 d-flex flex-row justify-content-between" *ngIf="user.userStatus === 'PENDING'">
       <div class="mr-auto" *ngIf="user.userStatus === 'PENDING'">
-        <button (click)="approveUser(user.id)" class="card-link button-add">Approve</button>
+        <button [hidden]="_authGuard.isUserAdmin() == false" (click)="approveUser(user.id)" class="card-link button-add">Approve</button>
       </div>
       <div *ngIf="user.userStatus === 'PENDING'">
-        <button (click)="denyUser(user.id)" class="card-link button-add">Deny</button>
+        <button [hidden]="_authGuard.isUserAdmin() == false" (click)="denyUser(user.id)" class="card-link button-add">Deny</button>
       </div>
     </div>
   </div>

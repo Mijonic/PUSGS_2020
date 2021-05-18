@@ -15,5 +15,6 @@ namespace SmartEnergy.Contract.Interfaces
                                   string searchParam, ClaimsPrincipal user);
 
         public WorkRequestStatisticsDto GetStatisticsForUser(int userId);
+        public bool IsCrewMemberHandlingWorkRequest(int crewMemberId, int workRequestId);
     }
 }

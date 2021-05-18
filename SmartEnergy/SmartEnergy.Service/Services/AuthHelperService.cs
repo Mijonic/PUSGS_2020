@@ -10,17 +10,22 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using FacebookCore;
+using FacebookCore.APIs;
+using Newtonsoft.Json.Linq;
 
 namespace SmartEnergy.Service.Services
 {
     public class AuthHelperService : IAuthHelperService
     {
         private readonly IConfigurationSection _googleSettings;
+        private readonly IConfigurationSection _facebookSettings;
         private readonly IConfigurationSection _secretKey;
 
         public AuthHelperService(IConfiguration config)
         {
             _googleSettings = config.GetSection("GoogleAuthSettings");
+            _facebookSettings = config.GetSection("FacebookAuthSettings");
             _secretKey = config.GetSection("SecretKey");
         }
 
@@ -51,7 +56,7 @@ namespace SmartEnergy.Service.Services
             return int.Parse(user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
         }
 
-        public async Task<GoogleJsonWebSignature.Payload> VerifyGoogleToken(ExternalLoginDto externalLogin)
+        public async Task<SocialInfoDto> VerifyGoogleToken(ExternalLoginDto externalLogin)
         {
             try
             {
@@ -59,14 +64,52 @@ namespace SmartEnergy.Service.Services
                 {
                     Audience = new List<string>() { _googleSettings.GetSection("clientId").Value }
                 };
-                var payload = await GoogleJsonWebSignature.ValidateAsync(externalLogin.IdToken, settings);
-                return payload;
+                var socialInfo = await GoogleJsonWebSignature.ValidateAsync(externalLogin.IdToken, settings);
+                return new SocialInfoDto()
+                {
+                    ID = socialInfo.JwtId,
+                    Name = socialInfo.GivenName,
+                    LastName = socialInfo.FamilyName,
+                    Email = socialInfo.Email,
+
+                }; 
             }
-            catch (Exception ex)
+            catch 
             {
-                //log an exception
                 return null;
             }
         }
+
+        public async Task<SocialInfoDto> VerifyFacebookTokenAsync(ExternalLoginDto externalLogin)
+        {
+            string[] userInfo = { "id", "name", "email", "first_name", "last_name" };
+            if (string.IsNullOrEmpty(externalLogin.IdToken))
+            {
+                return null;
+            }
+            FacebookClient client = new FacebookClient(_facebookSettings.GetSection("clientId").Value,
+                                                       _facebookSettings.GetSection("clientSecret").Value);
+            try
+            {
+                FacebookUserApi api = client.GetUserApi(externalLogin.IdToken);
+                JObject info = await api.RequestInformationAsync(userInfo);
+                if (info == null)
+                    return null;
+                SocialInfoDto fbInfo = new SocialInfoDto()
+                {
+                    ID = (string)info["id"],
+                    Name = (string)info["first_name"],
+                    LastName = (string)info["last_name"],
+                    Email = (string)info["email"],
+
+                };
+                return fbInfo; 
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
     }
 }

@@ -1,3 +1,4 @@
+import { AuthGuardService } from './../../auth/auth-guard.service';
 import { DisplayService } from './../../services/display.service';
 import { DeviceService } from './../../services/device.service';
 import { ToastrService } from 'ngx-toastr';
@@ -49,7 +50,7 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
   }
 
   constructor(private _router: Router, ngZone:NgZone, private incidentService:IncidentService, private deviceService:DeviceService,
-     private toastr:ToastrService, private displayService:DisplayService, private route:ActivatedRoute) {
+     private toastr:ToastrService, private displayService:DisplayService, private route:ActivatedRoute, private _authGuard:AuthGuardService) {
     this.ngZone = ngZone;
    } 
 
@@ -64,7 +65,7 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
         this.addDeviceMarkers(data);
       },
       error=>{
-        this.toastr.error("Cannot load devices"); 
+        this.toastr.error("Cannot load devices","", {positionClass: 'toast-bottom-left'}); 
      }
     )
   }
@@ -77,7 +78,7 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
           this.addIncidentCrewMarkers(data);
       },
       error=>{
-         this.toastr.error("Cannot load incidents"); 
+         this.toastr.error("Cannot load incidents","", {positionClass: 'toast-bottom-left'}); 
       }
     )
   }
@@ -90,7 +91,11 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
     }
     this.initMap();
     this.defineIcons();
-    this.loadDevices();
+    if(!this._authGuard.isUserConsumer())
+    {
+      this.loadDevices();
+    }
+      
     this.loadIncidents();
     window.dispatchEvent(new Event('resize'));
   }
@@ -197,6 +202,8 @@ export class WorkMapComponent implements OnInit, AfterViewInit {
         this._router.navigate(['/incident/basic-info', inc.id]);
       });
       marker.addTo(this.map);  
+      if(this._authGuard.isUserConsumer())
+        return;
       if(!inc.crew)
         return;
 

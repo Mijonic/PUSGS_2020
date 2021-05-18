@@ -57,19 +57,43 @@ const routes: Routes = [
   { path: 'register', component: RegistrationComponent,  outlet:"primary"  },
   { path: '', component: FrontPageComponent,  outlet:"front" },
   { path: 'work-plans', component: WorkPlansComponent,  outlet:"primary" },
-  { path: 'work-requests', component: WorkRequestsComponent,  outlet:"primary", canActivate: [AuthGuardService]  },
+  { path: 'work-requests', component: WorkRequestsComponent,
+    outlet:"primary",
+    canActivate: [AuthGuardService],
+    data:{
+      roles: ['CREW_MEMBER', 'DISPATCHER', 'WORKER']
+    }
+  },
   { path: 'dashboard', component: DashboardComponent,  outlet:"primary", canActivate: [AuthGuardService] },
   { path: 'map/:deviceid', component: WorkMapComponent,  outlet:"primary", canActivate: [AuthGuardService] },
   { path: 'map', component: WorkMapComponent,  outlet:"primary", canActivate: [AuthGuardService] },
-  { path: 'crews', component: CrewsComponent, outlet: "primary", canActivate: [AuthGuardService] },
-  { path: 'crew/:id', component: CrewComponent, outlet: "primary", canActivate: [AuthGuardService] } ,
-  { path: 'crew', component: CrewComponent, outlet: "primary", canActivate: [AuthGuardService] } ,
+  { path: 'crews', component: CrewsComponent,
+    outlet: "primary",
+    canActivate: [AuthGuardService],
+    data:{
+      roles:['ADMIN', 'CREW_MEMBER', 'WORKER', 'DISPATCHER']
+    }
+   },
+  { path: 'crew/:id', component: CrewComponent,
+   outlet: "primary", 
+   canActivate: [AuthGuardService],
+   data:{
+    roles: ['ADMIN']
+   }
+   } ,
+  { path: 'crew', component: CrewComponent,
+    outlet: "primary",
+    canActivate: [AuthGuardService],
+    data:{
+      roles: ['ADMIN']
+     }
+  } ,
   { path: 'edit-profile', component: EditProfileComponent, outlet: "primary"},
   { path: 'users', component: UsersComponent,
     outlet: "primary",
     canActivate: [AuthGuardService],
     data:{
-      roles: ['ADMIN']
+      roles: ['ADMIN', 'CREW_MEMBER', 'DISPATCHER', 'WORKER']
     }
   },
   { path: 'incidents', component: IncidentsComponent, outlet: "primary"},
@@ -172,28 +196,43 @@ const routes: Routes = [
       {
         path: 'basic-info',
         component: WorkRequestBasicInformationComponent, 
-        canActivate: [AuthGuardService]
+        canActivate: [AuthGuardService],
+        data:{
+          roles: ['DISPATCHER']
+        }
       },
       {
         path: 'basic-info/:id',
         component: WorkRequestBasicInformationComponent, 
-        canActivate: [AuthGuardService]
+        canActivate: [AuthGuardService],
+        data:{
+          roles: ['CREW_MEMBER', 'DISPATCHER']
+        }
       },
       {
         path: 'multimedia/:id',
         component: MultimediaAttachmentsComponent,
         canActivate: [AuthGuardService],
-        data:{requiredService: WORK_REQUEST_SERVICE_TOKEN}
+        data:{
+          requiredService: WORK_REQUEST_SERVICE_TOKEN,
+          roles: ['CREW_MEMBER', 'DISPATCHER']
+        }
       },
       {
         path: 'state-changes/:id',
         component: WorkRequestStateChangesComponent, 
-        canActivate: [AuthGuardService]
+        canActivate: [AuthGuardService],
+        data:{
+          roles: ['CREW_MEMBER', 'DISPATCHER']
+        }
       },
      {
         path: 'equipment/:id',
         component: WorkRequestEquipmentComponent,
-        canActivate: [AuthGuardService]
+        canActivate: [AuthGuardService],
+        data:{
+          roles: ['CREW_MEMBER', 'DISPATCHER']
+        }
       },
     ],
   },

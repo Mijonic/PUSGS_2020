@@ -38,6 +38,18 @@
           "lib/netcoreapp3.1/BCrypt.Net-Next.dll": {}
         }
       },
+      "FacebookCore/2.1.13": {
+        "type": "package",
+        "dependencies": {
+          "Rest.Net": "2.2.1"
+        },
+        "compile": {
+          "lib/netstandard2.0/FacebookCore.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/FacebookCore.dll": {}
+        }
+      },
       "Google.Apis/1.51.0": {
         "type": "package",
         "dependencies": {
@@ -97,6 +109,18 @@
         "runtime": {
           "lib/netstandard2.1/MailKit.dll": {}
         }
+      },
+      "Microsoft.AspNetCore.Authentication.Facebook/3.1.15": {
+        "type": "package",
+        "compile": {
+          "lib/netcoreapp3.1/Microsoft.AspNetCore.Authentication.Facebook.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/Microsoft.AspNetCore.Authentication.Facebook.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       },
       "Microsoft.AspNetCore.Authentication.JwtBearer/3.1.15": {
         "type": "package",
@@ -597,6 +621,18 @@
         },
         "runtime": {
           "lib/netstandard2.0/BouncyCastle.Crypto.dll": {}
+        }
+      },
+      "Rest.Net/2.2.1": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.2"
+        },
+        "compile": {
+          "lib/netstandard2.0/Rest.Net.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Rest.Net.dll": {}
         }
       },
       "runtime.native.System/4.3.0": {
@@ -1690,8 +1726,10 @@
         "framework": ".NETCoreApp,Version=v3.1",
         "dependencies": {
           "BCrypt.Net-Next": "4.0.2",
+          "FacebookCore": "2.1.13",
           "Google.Apis.Auth": "1.51.0",
           "MailKit": "2.12.0",
+          "Microsoft.AspNetCore.Authentication.Facebook": "3.1.15",
           "SmartEnergy.Contract": "1.0.0",
           "SmartEnergy.Infrastructure": "1.0.0",
           "System.Drawing.Common": "5.0.2",
@@ -1780,6 +1818,18 @@
         "lib/netstandard2.0/BCrypt.Net-Next.xml",
         "lib/netstandard2.1/BCrypt.Net-Next.dll",
         "lib/netstandard2.1/BCrypt.Net-Next.xml"
+      ]
+    },
+    "FacebookCore/2.1.13": {
+      "sha512": "s8V+RhuxgXafEgPmqCxR1+WW3CRLUmG417C5ZVaVWKw1SUwvNcBbFB+780h45XlKRsO2hDBI+dd2BXDW4SBICA==",
+      "type": "package",
+      "path": "facebookcore/2.1.13",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "facebookcore.2.1.13.nupkg.sha512",
+        "facebookcore.nuspec",
+        "lib/netstandard2.0/FacebookCore.dll"
       ]
     },
     "Google.Apis/1.51.0": {
@@ -1899,6 +1949,21 @@
         "lib/netstandard2.1/MailKit.xml",
         "mailkit.2.12.0.nupkg.sha512",
         "mailkit.nuspec"
+      ]
+    },
+    "Microsoft.AspNetCore.Authentication.Facebook/3.1.15": {
+      "sha512": "MLj08Q2m6NepA/ktHxJJGz6ro0/YMO7T6CzrAgzgCRY+Tq5BqENRvo+D3cM3A8gWaomJZqYj9rFOCYred08Niw==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.authentication.facebook/3.1.15",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/netcoreapp3.1/Microsoft.AspNetCore.Authentication.Facebook.dll",
+        "lib/netcoreapp3.1/Microsoft.AspNetCore.Authentication.Facebook.xml",
+        "microsoft.aspnetcore.authentication.facebook.3.1.15.nupkg.sha512",
+        "microsoft.aspnetcore.authentication.facebook.nuspec"
       ]
     },
     "Microsoft.AspNetCore.Authentication.JwtBearer/3.1.15": {
@@ -2746,6 +2811,19 @@
         "lib/netstandard2.0/BouncyCastle.Crypto.xml",
         "portable.bouncycastle.1.8.10.nupkg.sha512",
         "portable.bouncycastle.nuspec"
+      ]
+    },
+    "Rest.Net/2.2.1": {
+      "sha512": "srK/BQgTxDkAPucMymv99QBvbltNxsg60hkTfh4II0b+Lh15R4uJs1GMmMrU/aYObOAbhkDLSBkIEEm8yE4nxQ==",
+      "type": "package",
+      "path": "rest.net/2.2.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/Rest.Net.dll",
+        "lib/netstandard2.0/Rest.Net.xml",
+        "rest.net.2.2.1.nupkg.sha512",
+        "rest.net.nuspec"
       ]
     },
     "runtime.native.System/4.3.0": {

@@ -64,7 +64,7 @@ export class CrewsComponent implements OnInit, AfterViewInit{
   {
     this.crewService.deleteCrew(crewId).subscribe(
       data =>{
-        this.toastr.success("Crew deleted successfully.");
+        this.toastr.success("Crew deleted successfully.","", {positionClass: 'toast-bottom-left'});
         this.loadCrews();
     },
     error => {
