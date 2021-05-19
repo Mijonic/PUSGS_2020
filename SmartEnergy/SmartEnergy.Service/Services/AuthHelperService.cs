@@ -37,6 +37,8 @@ namespace SmartEnergy.Service.Services
             claims.Add(new Claim(ClaimTypes.Name, user.Name)); //Add name 
             claims.Add(new Claim(ClaimTypes.Surname, user.Lastname)); //Add lastname
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.ID.ToString())); //Add ID
+            if(user.UserStatus =="APPROVED")
+                claims.Add(new Claim("Approved", "Approved"));
 
             SymmetricSecurityKey secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey.Value));
             var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);

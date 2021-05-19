@@ -37,7 +37,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpGet("all")]
-        [Authorize(Roles ="CREW_MEMBER, DISPATCHER, WORKER")]
+        [Authorize(Roles ="CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<WorkRequestDto>))]
         public IActionResult GetAll()
@@ -47,7 +47,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<WorkRequestDto>))]
         public IActionResult GetPaged([FromQuery] string searchParam, [FromQuery] WorkRequestField sortBy, [FromQuery] SortingDirection direction,
@@ -59,7 +59,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -88,7 +88,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpGet("{id}/devices")]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -105,7 +105,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "DISPATCHER")]
+        [Authorize(Roles = "DISPATCHER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -133,7 +133,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -164,7 +164,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -186,7 +186,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpPost("{id}/attachments")]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -221,7 +221,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpGet("{id}/attachments/{filename}")]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type= typeof(FileStreamResult))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -246,7 +246,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet("{id}/attachments")]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<MultimediaAttachmentDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -267,7 +267,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet("{id}/state-changes")]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<StateChangeHistoryDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -288,7 +288,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpDelete("{id}/attachments/{filename}")]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -318,7 +318,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpPut("{id}/approve")]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type=typeof(WorkRequestDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -344,7 +344,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpPut("{id}/cancel")]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -371,7 +371,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPut("{id}/deny")]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

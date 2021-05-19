@@ -62,9 +62,6 @@ export class UsersComponent implements OnInit {
 
         this.totalResultCount = data.totalCount;
         this.isLoading = false;
-      },
-      error =>{
-        this.getUsers(currentPage, perPage);
       }
     )
   }

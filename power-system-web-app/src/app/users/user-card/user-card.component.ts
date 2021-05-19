@@ -71,7 +71,7 @@ export class UserCardComponent implements OnInit {
     if(type === 'CREW_MEMBER')
       return 'Crew member';
 
-    if(type === 'DISPTACHER')
+    if(type === 'DISPATCHER')
       return 'Disptacher';
 
     if(type === 'WORKER')

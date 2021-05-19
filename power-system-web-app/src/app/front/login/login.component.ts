@@ -48,7 +48,6 @@ export class LoginComponent implements OnInit {
   {
     this.authService.signInWithFacebook()
     .then(res => {
-      console.log(res);
       const user: SocialUser = { ...res };
       const externalAuth: ExternalAuth = {
         provider: user.provider,

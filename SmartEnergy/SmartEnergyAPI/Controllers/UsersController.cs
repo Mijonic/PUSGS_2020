@@ -32,7 +32,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpGet("all")]
-        [Authorize(Roles = "ADMIN, DISPATCHER, WORKER, CREW_MEMBER")]
+        [Authorize(Roles = "ADMIN, DISPATCHER, WORKER, CREW_MEMBER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<UserDto>))]     
         public IActionResult GetAll()
@@ -44,7 +44,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "ADMIN, DISPATCHER, WORKER, CREW_MEMBER")]
+        [Authorize(Roles = "ADMIN, DISPATCHER, WORKER, CREW_MEMBER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsersListDto))]
         public IActionResult GetAllPaged([FromQuery] string searchParam, [FromQuery] UserField sortBy, [FromQuery] SortingDirection direction,
@@ -81,7 +81,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet("unassigned-crew-members")]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER, ADMIN")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER, ADMIN", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<UserDto>))]
         public IActionResult GetUnassignedCrewMembers()
@@ -94,7 +94,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPut("{id}/approve")]
-        [Authorize(Roles ="ADMIN")]
+        [Authorize(Roles ="ADMIN", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -118,7 +118,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPut("{id}/deny")]
-        [Authorize(Roles ="ADMIN")]
+        [Authorize(Roles ="ADMIN", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -37,7 +37,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CrewsListDto))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult GetCrewsPaged([FromQuery] CrewField sortBy, [FromQuery] SortingDirection direction, [FromQuery][BindRequired] int page, [FromQuery][BindRequired] int perPage)
@@ -48,7 +48,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet("{id}")]
-        [Authorize]
+        [Authorize(Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CrewDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -62,7 +62,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPost]
-        [Authorize(Roles ="ADMIN")]
+        [Authorize(Roles ="ADMIN", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -94,7 +94,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "ADMIN", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CrewDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -126,7 +126,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "ADMIN", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

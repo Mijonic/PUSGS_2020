@@ -28,10 +28,11 @@ export class AuthGuardService implements CanActivate {
       return false;
     }
 
+
     if (route.data && route.data.roles) {
       let roles:string[] = route.data.roles;
       let user:User = JSON.parse(localStorage.getItem("user")!);
-      if(roles.indexOf(user.userType) == -1 || user.userStatus !== "APPROVED")
+      if(roles.indexOf(user.userType) == -1)
       {
         this.toastr.warning("Your are not authorized to view this.","", {positionClass: 'toast-bottom-left'});
         this.router.navigate(["/dashboard"]);
