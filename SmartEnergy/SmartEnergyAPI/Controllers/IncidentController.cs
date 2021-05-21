@@ -246,6 +246,10 @@ namespace SmartEnergyAPI.Controllers
             {
                 return NotFound(invalidDeviceUsage.Message);
             }
+            catch(InvalidDeviceException invalidDevice)
+            {
+                return BadRequest(invalidDevice.Message);
+            }
 
 
             

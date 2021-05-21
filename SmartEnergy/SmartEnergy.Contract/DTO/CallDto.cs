@@ -12,9 +12,9 @@ namespace SmartEnergy.Contract.DTO
         public string Hazard { get; set; }
         public int LocationID { get; set; }
         public int? ConsumerID { get; set; }
-        public int? IncidentID { get; set; }
-        //public LocationDto Location { get; set; }
-        //public ConsumerDto Consumer { get; set; }
+        public int? IncidentID { get; set; }     
+        public LocationDto Location { get; set; }
+        public ConsumerDto Consumer { get; set; }
        // public int Incident { get; set; }
 
     }

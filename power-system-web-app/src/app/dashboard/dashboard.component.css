@@ -1,7 +1,6 @@
-
-  :host {
-    width: 100%;
-  }
+:host {
+  width: 100%;
+}
 .text-edit {
   color: rgba(255, 255, 255, 0.5);
   font-size: 25px;

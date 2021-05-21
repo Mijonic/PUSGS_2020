@@ -17,5 +17,13 @@ namespace SmartEnergyDomainModels
         public Location Location { get; set; }
         public Consumer Consumer { get; set; }
         public Incident Incident { get; set; }
+
+
+        public void UpdateCall(Call modified)
+        {
+            IncidentID = modified.IncidentID;
+
+
+        }
     }
 }

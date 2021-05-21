@@ -134,9 +134,10 @@ export class SelectDeviceDialogComponent implements OnInit {
 
         }else
         {
-          this.toastr.error('Could not add device to incident.',"", {positionClass: 'toast-bottom-left'})
+          this.toastr.error(error.error,"", {positionClass: 'toast-bottom-left'})
      
-          this.router.navigate(['incidents']);
+          //this.router.navigate(['incidents']);
+          this.dialogRef.close();
           this.isLoading = false;
         }
       }

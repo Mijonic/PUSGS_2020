@@ -42,7 +42,9 @@
                 <div class="content dashboard-container">
                     
                     <a class="nav-item nav-link d-flex align-items-center justify-content-left text-edit">&nbsp;<mat-icon>work</mat-icon> &nbsp; My Work Requests</a>
-                   <mat-spinner [diameter]="'100'" *ngIf="isLoadingWorkReq"></mat-spinner> 
+                  
+                        <mat-spinner style="margin-left: 35%; margin-top: 8%;" [diameter]="'100'" *ngIf="isLoadingWorkReq"></mat-spinner> 
+                  
                    <div class="dashboard-div-p-l"  *ngIf="isLoadingWorkReq == false">
                         <p><b>{{workReqStats.draft}}</b> Drafts</p>
                         <p><b>{{workReqStats.cancelled}}</b> Canceled</p>

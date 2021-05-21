@@ -103,8 +103,8 @@ namespace SmartEnergy.Service.Services
             if (oldDevice == null)
                 throw new DeviceNotFoundException($"Device with Id = {updatedDevice.ID} does not exists!");
 
-            if (updatedDevice.Name.Trim().Equals("") || updatedDevice.Name == null)
-                throw new InvalidDeviceException("You have to enter device name!");
+            //if (updatedDevice.Name.Trim().Equals("") || updatedDevice.Name == null)
+            //    throw new InvalidDeviceException("You have to enter device name!");
 
             if (_dbContext.Location.Where(x => x.ID.Equals(updatedDevice.LocationID)) == null)
                 throw new LocationNotFoundException($"Location with id = {updatedDevice.LocationID} does not exists!");

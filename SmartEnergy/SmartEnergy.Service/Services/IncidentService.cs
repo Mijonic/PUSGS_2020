@@ -349,10 +349,34 @@ namespace SmartEnergy.Service.Services
             if (incident == null)
                 throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
 
-            Device device = _dbContext.Devices.Find(deviceId);
+            Device device = _dbContext.Devices.Include(x => x.Location).FirstOrDefault( x => x.ID == deviceId);
 
             if (device == null)
                 throw new DeviceNotFoundException($"Device with id = { deviceId} does not exists!");
+
+            // ako je vec dodat device u incident   
+            // proverim da li se adresa novog poklapa (city, street, zip)
+            if (incident.IncidentDevices.Count != 0)                                                    
+            {                                        
+                foreach(DeviceUsage du in incident.IncidentDevices)
+                {
+                    if (!CompareLocation(du.Device.Location, device.Location))
+                        throw new InvalidDeviceException($"Device has to be on {du.Device.Location.Street}, {du.Device.Location.City}, {du.Device.Location.Zip}!");
+                }
+            }
+
+            List<Call> callWithoutIncident = _dbContext.Calls.Include("Location").Where(x => x.IncidentID == null).ToList();
+            
+            foreach(Call c in callWithoutIncident)
+            {
+                if(CompareLocation(c.Location, device.Location))
+                {
+                    c.IncidentID = incidentId;
+                    _callService.Update(_mapper.Map<CallDto>(c));
+                }
+
+            }
+
 
 
             if (incident.IncidentDevices.Find(x => x.DeviceID == deviceId) != null)
@@ -447,9 +471,40 @@ namespace SmartEnergy.Service.Services
             return returnValue;
         }
 
+
+     /// <summary>
+     /// Get all calls for incident
+     /// Compare location of devices assigned to incident and calls location
+     /// </summary>
+     /// <param name="incidentId"></param>
+     /// <returns></returns>
         public List<CallDto> GetIncidentCalls(int incidentId)
         {
+
+            List<DeviceDto> incidentDevices = GetIncidentDevices(incidentId);
+            List<CallDto> allCalls = _callService.GetAll();
+
+           
+
+            if(incidentDevices.Count != 0)
+            {
+
+                foreach(CallDto c in allCalls)
+                {
+                    if(c.IncidentID == null && CompareLocation(_mapper.Map<Location>(c.Location), _mapper.Map<Location>( incidentDevices[0].Location)))
+                    {
+                        c.IncidentID = incidentId;
+                        _callService.Update(_mapper.Map<CallDto>(c));
+                    }
+
+
+                }
+
+              
+            }
+
             return _callService.GetAll().Where(x => x.IncidentID == incidentId).ToList();
+
 
         }
 
@@ -587,6 +642,20 @@ namespace SmartEnergy.Service.Services
                 throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
 
             return _mapper.Map<CrewDto>(incident.Crew);
+        }
+
+        private bool CompareLocation(Location location1, Location location2)
+        {
+            if( (location1.Zip == location2.Zip) &&
+                (location1.Street.Equals(location2.Street))
+                && (location1.City.Equals(location2.City)))
+            {
+                return true;
+            }else
+            {
+                return false;
+            }
+                    
         }
     }
 }
