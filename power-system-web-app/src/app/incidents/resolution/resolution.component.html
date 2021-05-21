@@ -30,10 +30,11 @@
                 <div class="col-md-12">
                     <div class="p-3 py-5">
                         <mat-form-field class="w-100 m-auto" appearance="fill">
-                            <mat-label>Subcause</mat-label>
-                            <mat-select required formControlName="subcauseControl">
+                            <mat-label >Subcause</mat-label>
+                        
+                             <mat-select required formControlName="subcauseControl">         
                                 <mat-option  *ngFor="let value of subcauses" value="{{value}}">{{value}}</mat-option>
-                            </mat-select>
+                             </mat-select>
                             <mat-error *ngIf="submitted && newResolutionForm.controls.subcauseControl.invalid">
                                 Subcause is required
                             </mat-error>

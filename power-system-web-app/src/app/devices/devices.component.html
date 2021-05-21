@@ -71,17 +71,17 @@
                             <!-- Coordinates Column -->
                             <ng-container matColumnDef="coordinates">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Coordinates </th>
-                            <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.location.latitude.toFixed(5)}}, {{row.location.longitude.toFixed(5)}}  </td>
+                            <td mat-cell *matCellDef="let row" > {{row.location.latitude.toFixed(5)}}, {{row.location.longitude.toFixed(5)}}  </td>
                             </ng-container>
 
                             <ng-container matColumnDef="address">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Address</th>
-                            <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{getAddressFromLocation(row.location)}} </td>
+                            <td mat-cell *matCellDef="let row"> {{getAddressFromLocation(row.location)}} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="map">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>
-                                <td mat-cell *matCellDef="let row" [style.color]="row.color"><a class="clickable" [routerLink]="['/map', row.id]"><mat-icon> location_on</mat-icon></a>  </td>
+                                <td mat-cell *matCellDef="let row"><a class="clickable" [routerLink]="['/map', row.id]"><mat-icon> location_on</mat-icon></a>  </td>
                             </ng-container>
 
 

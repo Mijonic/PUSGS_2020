@@ -146,7 +146,7 @@ namespace SmartEnergyAPI.Controllers
 
 
 
-        [HttpPut("incident/{incidentId}/crew/{crewId}")]
+        [HttpPut("{incidentId}/crew/{crewId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IncidentDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)] 
         public IActionResult AddCrewToIncident(int incidentId, int crewId)
@@ -171,7 +171,7 @@ namespace SmartEnergyAPI.Controllers
 
 
 
-        [HttpPut("remove-crew/incident/{incidentId}")]
+        [HttpPut("{incidentId}/remove-crew")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IncidentDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult RemoveCrewFromIncidet(int incidentId)
@@ -198,8 +198,8 @@ namespace SmartEnergyAPI.Controllers
             }
         }
 
-
-        [HttpPost("incident/{incidentId}/device/{deviceId}")]
+        
+        [HttpPost("{incidentId}/device/{deviceId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -233,7 +233,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
 
-        [HttpPut("remove-device/incident/{incidentId}/device/{deviceId}")]
+        [HttpPut("{incidentId}/remove-device/device/{deviceId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -264,7 +264,7 @@ namespace SmartEnergyAPI.Controllers
 
 
 
-        [HttpGet("calls/incident/{incidentId}")]
+        [HttpGet("{incidentId}/calls")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<IncidentDto>))]
         public IActionResult GetIncidentCalls(int incidentId)
         {
@@ -272,14 +272,14 @@ namespace SmartEnergyAPI.Controllers
         }
 
 
-        [HttpGet("calls-counter/incident/{incidentId}")]
+        [HttpGet("{incidentId}/calls-counter")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         public IActionResult GetNumberOfIncidentCalls(int incidentId)
         {
             return Ok(_incidentService.GetNumberOfCalls(incidentId));
         }
 
-        [HttpGet("affected-consumers/incident/{incidentId}")]
+        [HttpGet("{incidentId}/affected-consumers")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         public IActionResult GetNumberOfAffectedConsumers(int incidentId)
         {
@@ -294,7 +294,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
 
-        [HttpGet("devices/incident/{incidentId}")]
+        [HttpGet("{incidentId}/devices")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
         public IActionResult GetIncidentDevices(int incidentId)
         {
@@ -309,9 +309,25 @@ namespace SmartEnergyAPI.Controllers
         }
 
 
+        [HttpGet("{incidentId}/unrelated-devices")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
+        public IActionResult GetUnrelatedDevices(int incidentId)
+        {
+            try
+            {
+                return Ok(_incidentService.GetUnrelatedDevices(incidentId));
+            }
+            catch (IncidentNotFoundException incidentNotFound)
+            {
+                return NotFound(incidentNotFound.Message);
+            }
+        }
 
 
-        [HttpPut("set-priority/incident/{incidentId}")]
+
+
+
+        [HttpPut("{incidentId}/set-priority")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult SetIncidentPriority(int incidentId)

@@ -4,23 +4,13 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DeviceService } from 'app/services/device.service';
+import { IncidentService } from 'app/services/incident.service';
+import { Device } from 'app/shared/models/device.model';
+import { Location } from 'app/shared/models/location.model';
+import { ToastrService } from 'ngx-toastr';
 
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-  color: string;
-}
-
-/** Constants used to fill up our data base. */
-const COLORS: string[] = [
-  'maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple', 'fuchsia', 'lime', 'teal',
-  'aqua', 'blue', 'navy', 'black', 'gray'
-];
-const NAMES: string[] = [
-  'Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack', 'Charlotte', 'Theodore', 'Isla', 'Oliver',
-  'Isabella', 'Jasper', 'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'
-];
 
 
 
@@ -31,36 +21,54 @@ const NAMES: string[] = [
 })
 export class SelectDeviceDialogComponent implements OnInit {
 
- 
-  displayedColumns: string[] = ['id', 'name', 'type', 'coordinates', 'address', 'map'];
-  dataSource: MatTableDataSource<UserData>;
-  toppings = new FormControl();
-  toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato']; 
+  
+  displayedColumns: string[] = ['id', 'name', 'type', 'coordinates', 'address', 'add'];
+  dataSource: MatTableDataSource<Device>;
   isLoading:boolean = true;
+
+  incidentId: number;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(public dialogRef: MatDialogRef<SelectDeviceDialogComponent>) {
 
-     // Create 100 users
-     const users = Array.from({length: 30}, (_, k) => createNewUser(k + 1));
-
-     // Assign the data to the data source for the table to render
-     this.dataSource = new MatTableDataSource(users);
-
-   }
+  devices:Device[] = [];
+  allDevices:Device[] = [];
+ 
 
   
-   ngOnInit(): void {
-    window.dispatchEvent(new Event('resize'));
-    this.isLoading = false;
+ 
+  toppings = new FormControl();
+  toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato']; 
+
+
+
+  constructor(public dialogRef: MatDialogRef<SelectDeviceDialogComponent>, private deviceService:DeviceService,private incidentService: IncidentService,  private toastr: ToastrService,
+    private route:ActivatedRoute, private router:Router) {
+
+
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+
+  
+
+
+  
+
+  ngOnInit(): void {
+
+    
+
+    
+
+    window.dispatchEvent(new Event('resize'));
+
+    this.getUnrelatedDevices();
+    this.isLoading = false;
+    
+    
   }
+
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -71,9 +79,79 @@ export class SelectDeviceDialogComponent implements OnInit {
     }
   }
 
+ 
+  getUnrelatedDevices()
+  {
+    this.incidentService.getUnrelatedDevices(this.incidentId).subscribe(
+      data =>{
+        this.allDevices = data;
+        this.devices = data;
+        this.dataSource = new MatTableDataSource(data);
+        this.isLoading = false;
+       
+      },
+      error =>{
+        this.getUnrelatedDevices();
+        this.isLoading = true;
+     
+
+    
+
+      }
+    )
+  }
+
+  getAddressFromLocation(location: Location) {
+        
+    return  `${location.street} ${location.number}, ${location.city}, ${location.zip}`
+
+  }
+
+  
+ 
+
+ 
+
+
+  addDeviceToIncident(deviceId: number)
+  {
+
+   
+
+    this.incidentService.addDeviceToIncident(this.incidentId, deviceId).subscribe(
+      data =>{
+
+        this.getUnrelatedDevices();
+        this.isLoading = false;
+        this.toastr.success('Device added to incident successfully',"", {positionClass: 'toast-bottom-left'})
+        
+       
+      },
+      error =>{
+        if(error.error instanceof ProgressEvent)
+        {
+          this.addDeviceToIncident(deviceId);
+
+        }else
+        {
+          this.toastr.error('Could not add device to incident.',"", {positionClass: 'toast-bottom-left'})
+     
+          this.router.navigate(['incidents']);
+          this.isLoading = false;
+        }
+      }
+    )
+    
+
+  }
+
   onCancelClick(): void {
     this.dialogRef.close();
   }
+
+
+
+
 
 
   
@@ -81,16 +159,4 @@ export class SelectDeviceDialogComponent implements OnInit {
 }
 
 
-/** Builds and returns a new User. */
-function createNewUser(id: number): UserData {
-  const name = NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
-
-  return {
-    id: id.toString(),
-    name: name,
-    progress: Math.round(Math.random() * 100).toString(),
-    color: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
-  };
-}
 

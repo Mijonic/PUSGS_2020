@@ -26,6 +26,8 @@ export class ResolutionComponent implements OnInit {
   submitted = false;
   isNew:boolean = true;
 
+  defaultSubcause: string = "";
+
   resolution: Resolution = new Resolution();
   newResolution: Resolution = new Resolution();
 
@@ -78,10 +80,19 @@ export class ResolutionComponent implements OnInit {
     {
       this.subcauses = this.humanErrorSubcauses;
     }
+
+    this.defaultSubcause = this.subcauses[0];
+    this.newResolutionForm.get('subcauseControl')!.setValue(this.defaultSubcause);
+
+ 
+   
   }
 
   get shouldShowSubcauses():boolean{
+   
     return this.subcauses.length > 0;
+
+    
   }
 
   loadIncidentResolution(incidentId:number){
@@ -105,7 +116,13 @@ export class ResolutionComponent implements OnInit {
           }else if(this.resolution.cause === 'HUMAN_ERROR')
           {
             this.subcauses = this.humanErrorSubcauses;
+          }else
+          {
+            this.subcauses = [];
           }
+
+          this.defaultSubcause = this.subcauses[0];
+          
         
         console.log(this.resolution.subcause.toString())
         this.newResolutionForm.setValue({

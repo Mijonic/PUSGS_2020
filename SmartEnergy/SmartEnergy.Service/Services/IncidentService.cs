@@ -246,7 +246,13 @@ namespace SmartEnergy.Service.Services
 
             }
 
-            priority = allPriorities.Max();
+
+            if (allPriorities.Count != 0)
+                priority = allPriorities.Max();
+            else
+                priority = 0;
+
+
 
             if (priority != -1)
                 return priority;
@@ -518,6 +524,57 @@ namespace SmartEnergy.Service.Services
             incident.Priority = incidentPriority;
             _dbContext.SaveChanges();
 
+        }
+
+        public List<DeviceDto> GetUnrelatedDevices(int incidentId)
+        {
+
+            
+            Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
+                                                  .ThenInclude(p => p.Device)
+                                                  .ThenInclude(o => o.Location)
+                                                  .FirstOrDefault(x => x.ID == incidentId);
+            if (incident == null)
+                throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
+
+
+            List<int> incidentDeviceIds = new List<int>();
+
+            
+
+
+            foreach(DeviceUsage deviceUsage in _dbContext.DeviceUsages.ToList())
+            {
+                if (deviceUsage.IncidentID == incidentId)
+                    incidentDeviceIds.Add(deviceUsage.DeviceID);
+            }
+
+            bool condition = true;
+            List<Device> devicesToReturn = new List<Device>();
+
+            List<Device> allDevices = _dbContext.Devices.Include("Location").ToList();
+
+            foreach(Device d in allDevices)
+            {
+                condition = true;
+                foreach(int deviceId in incidentDeviceIds)
+                {
+                    if(d.ID == deviceId)
+                    {
+                        condition = false;
+                        break;
+ 
+                    }
+
+                }
+
+                if(condition)
+                    devicesToReturn.Add(d);
+            }
+
+           
+
+            return _mapper.Map<List<DeviceDto>>(devicesToReturn);
         }
     }
 }

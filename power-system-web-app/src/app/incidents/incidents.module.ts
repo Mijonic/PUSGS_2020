@@ -30,6 +30,7 @@ import { NewCallComponent } from './calls/new-call/new-call.component';
 import { SelectDeviceDialogComponent } from './incident-dialogs/select-device-dialog/select-device-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -72,6 +73,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatSlideToggleModule,
     MatDialogModule,
     MatProgressSpinnerModule,
+    MatTooltipModule
    
    
   

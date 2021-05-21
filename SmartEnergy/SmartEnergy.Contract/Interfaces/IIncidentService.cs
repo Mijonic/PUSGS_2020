@@ -30,6 +30,8 @@ namespace SmartEnergy.Contract.Interfaces
 
         void SetIncidentPriority(int incidentId);
 
+        List<DeviceDto> GetUnrelatedDevices(int incidentId);
+
 
     }
 }

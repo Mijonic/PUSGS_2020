@@ -87,9 +87,7 @@ export class NewDeviceComponent implements OnInit {
           deviceTypeControl: this.device.deviceType.toString(),
           deviceLocationControl: this.device.location.id.toString()
        });
-        
-        // this.newDeviceForm.value.deviceTypeControl = +this.device.deviceType;
-        // this.newDeviceForm.value.deviceLocationControl =  +this.device.locationId;
+      
 
        
       },
@@ -113,12 +111,12 @@ export class NewDeviceComponent implements OnInit {
      
       if(this.isNew)
       {
-          this.device.name ="TEST"
+         
           this.device.deviceType = this.newDeviceForm.value.deviceTypeControl;
           this.device.locationId = +this.newDeviceForm.value.deviceLocationControl;
 
 
-          console.log(this.newDeviceForm.value)
+          
           this.deviceService.createNewDevice(this.device).subscribe(
             data => {
             
@@ -159,7 +157,7 @@ export class NewDeviceComponent implements OnInit {
 
   getAddressFromLocation(location: Location) {
         
-    return  `${location.street}, ${location.city}, ${location.zip}`
+    return  `${location.street} ${location.number}, ${location.city}, ${location.zip}`
 
   }
 

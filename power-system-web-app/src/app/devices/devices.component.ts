@@ -11,23 +11,6 @@ import { LocationService } from 'app/services/location.service';
 
 
 
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-  color: string;
-}
-
-/** Constants used to fill up our data base. */
-const COLORS: string[] = [
-  'maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple', 'fuchsia', 'lime', 'teal',
-  'aqua', 'blue', 'navy', 'black', 'gray'
-];
-const NAMES: string[] = [
-  'Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack', 'Charlotte', 'Theodore', 'Isla', 'Oliver',
-  'Isabella', 'Jasper', 'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'
-];
-
 @Component({
   selector: 'app-devices',
   templateUrl: './devices.component.html',
@@ -97,23 +80,11 @@ export class DevicesComponent implements OnInit {
 
   getAddressFromLocation(location: Location) {
         
-    return  `${location.street}, ${location.city}, ${location.zip}`
+    return  `${location.street} ${location.number}, ${location.city}, ${location.zip}`
 
   }
 
-  // getDeviceTypeString(deviceType:number)
-  // {
-  //     switch(deviceType)
-  //     {
-  //         case 0: return "POWER_SWITCH";
-  //         case 1: return "FUSE"
-  //         case 2: return "TRANSFORMER"
-  //         case 3: return "DISCONNECTOR"   
-  //     }
-
-  //     return "UNKNOWN";
-  // }
-
+  
   delete(deviceId: number)
   {
    
