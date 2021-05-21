@@ -576,5 +576,17 @@ namespace SmartEnergy.Service.Services
 
             return _mapper.Map<List<DeviceDto>>(devicesToReturn);
         }
+
+        public CrewDto GetIncidentCrew(int incidentId)
+        {
+            Incident incident = _dbContext.Incidents.Include(x => x.Crew)
+                                                    .ThenInclude(x => x.CrewMembers)
+                                                    .FirstOrDefault(x => x.ID == incidentId);
+
+            if (incident == null)
+                throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
+
+            return _mapper.Map<CrewDto>(incident.Crew);
+        }
     }
 }

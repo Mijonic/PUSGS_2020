@@ -32,6 +32,8 @@ namespace SmartEnergy.Contract.Interfaces
 
         List<DeviceDto> GetUnrelatedDevices(int incidentId);
 
+        CrewDto GetIncidentCrew(int incidentId);
+
 
     }
 }

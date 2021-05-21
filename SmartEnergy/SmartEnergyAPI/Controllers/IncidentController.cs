@@ -171,6 +171,25 @@ namespace SmartEnergyAPI.Controllers
 
 
 
+        [HttpGet("{incidentId}/crew")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
+        public IActionResult GetIncidentCrew(int incidentId)
+        {
+            try
+            {
+                return Ok(_incidentService.GetIncidentCrew(incidentId));
+            }
+            catch (IncidentNotFoundException incidentNotFound)
+            {
+                return NotFound(incidentNotFound.Message);
+            }
+        }
+
+
+
+
+
+
         [HttpPut("{incidentId}/remove-crew")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IncidentDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -307,6 +326,10 @@ namespace SmartEnergyAPI.Controllers
                 return NotFound(incidentNotFound.Message);
             }
         }
+
+
+
+        
 
 
         [HttpGet("{incidentId}/unrelated-devices")]

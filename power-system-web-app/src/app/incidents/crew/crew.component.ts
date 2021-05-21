@@ -1,26 +1,18 @@
+import { ContentObserver } from '@angular/cdk/observers';
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CrewService } from 'app/services/crew.service';
+import { IncidentService } from 'app/services/incident.service';
 import { TabMessagingService } from 'app/services/tab-messaging.service';
+import { Crew } from 'app/shared/models/crew.model';
+import { ToastrService } from 'ngx-toastr';
+import { merge, Observable, of } from 'rxjs';
+import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-  color: string;
-}
-
-/** Constants used to fill up our data base. */
-const COLORS: string[] = [
-  'maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple', 'fuchsia', 'lime', 'teal',
-  'aqua', 'blue', 'navy', 'black', 'gray'
-];
-const NAMES: string[] = [
-  'Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack', 'Charlotte', 'Theodore', 'Isla', 'Oliver',
-  'Isabella', 'Jasper', 'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'
-];
 
 
 @Component({
@@ -30,77 +22,157 @@ const NAMES: string[] = [
 })
 export class IncidentCrewComponent implements OnInit, AfterViewInit {
 
-  displayedColumns: string[] = ['id', 'name', 'members'];
-  dataSource: MatTableDataSource<UserData>;
-
-  selectedRowIndex = -1;
-
-
-
+  displayedColumns: string[] = ['id', 'crewName', 'members', 'select'];
+  dataSource: MatTableDataSource<Crew>;
+  filteredAndPagedCrews: Observable<Crew[]>;
   isLoading:boolean = true;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  incidentCrew: Crew = new Crew();
+  incidentId: number;
 
-  constructor(private tabMessaging:TabMessagingService, private route:ActivatedRoute) {
-    // Create 100 users
-    const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(users);
-    //window.dispatchEvent(new Event('resize'));
+  constructor(private crewService:CrewService, private tabMessaging:TabMessagingService, private route:ActivatedRoute, private router:Router, private toastr:ToastrService, private incidentService: IncidentService) {
+  }
+  ngAfterViewInit(): void {
+    if(this.isLoading)
+      this.loadCrews();
   }
 
   ngOnInit(): void {
-
     const incidentId = this.route.snapshot.paramMap.get('id');
     if(incidentId && incidentId != "")
     {
       this.tabMessaging.showEdit(+incidentId);
-     // this.isNew = false;
-      //this.workReqId = +wrId;
-     /// this.loadWorkRequest(this.workReqId);
+      this.incidentId = +incidentId;
+      this.loadCrew(this.incidentId);
     }
 
     window.dispatchEvent(new Event('resize'));
+  }
+
+
+  addCrewToIncident(crewId: number)
+  {
     
+    this.incidentService.addCrewToIncident(this.incidentId, crewId).subscribe(
+      data =>{
+
+        this.loadCrew(this.incidentId);
+        this.isLoading = false;
+        this.toastr.success('Crew assigned to incident successfully',"", {positionClass: 'toast-bottom-left'})
+        
+       
+      },
+      error =>{
+        if(error.error instanceof ProgressEvent)
+        {
+          this.addCrewToIncident(crewId);
+
+        }else
+        {
+          this.toastr.error('Could not assign crew to incident.',"", {positionClass: 'toast-bottom-left'})
+     
+          this.router.navigate(['incidents']);
+          this.isLoading = false;
+        }
+      }
+    )
   }
-  
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;    //this.isLoading = false;
+
+  removeCrewFromIncidet()
+  {
+    
+
+    this.incidentService.removeCrewFromIncidet(this.incidentId).subscribe(
+      data =>{
+
+        this.loadCrew(this.incidentId);
+        this.isLoading = false;
+        this.toastr.success('Crew unassigned from incident successfully',"", {positionClass: 'toast-bottom-left'})
+        
+       
+      },
+      error =>{
+        if(error.error instanceof ProgressEvent)
+        {
+          this.removeCrewFromIncidet();
+
+        }else
+        {
+          this.toastr.error('Could not unassign crew from incident.',"", {positionClass: 'toast-bottom-left'})
+     
+          this.router.navigate(['incidents']);
+          this.isLoading = false;
+        }
+      }
+    )
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+
+  loadCrew(incidentId: number)
+  {
+    this.isLoading = true;
+    this.incidentService.getIncidentCrew(incidentId).subscribe(
+      data =>{
+        this.isLoading = false;
+        this.incidentCrew = data;
+        
+      } ,
+      error =>{
+        if(error.error instanceof ProgressEvent)
+        {
+          this.loadCrew(incidentId);
+        }else
+        {
+          this.toastr.error('Could not load incident crew.',"", {positionClass: 'toast-bottom-left'})
+     
+          this.router.navigate(['incidents']);
+          this.isLoading = false;
+        }
+      }
+    );
   }
 
-  
 
-  highlight(row: any){
-    this.selectedRowIndex = row.id;
+
+  loadCrews() {
+
+    this.filteredAndPagedCrews = merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          this.isLoading = true;
+          return this.crewService.getCrewsPaged(
+            this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+        }),
+        map(data => {
+          // Flip flag to show that loading has finished.
+          this.isLoading = false;
+          this.paginator.length = data.totalCount;
+
+          return data.crews;
+        }),
+        catchError(() => {
+          this.isLoading = false;
+          return of([]);
+        })
+      );
+  }
+
+ 
+ 
+
+  resetPaging(): void {
+    this.paginator.pageIndex = 0;
+  }
 }
-  
-
-}
 
 
 
-/** Builds and returns a new User. */
-function createNewUser(id: number): UserData {
-  const name = NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
 
-  return {
-    id: id.toString(),
-    name: name,
-    progress: Math.round(Math.random() * 100).toString(),
-    color: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
-  };
-}
 
 

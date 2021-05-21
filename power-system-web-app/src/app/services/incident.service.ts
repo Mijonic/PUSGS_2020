@@ -5,6 +5,7 @@ import { Incident } from 'app/shared/models/incident.model';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { Device } from 'app/shared/models/device.model';
+import { Crew } from 'app/shared/models/crew.model';
 
 @Injectable({
   providedIn: 'root'
@@ -50,8 +51,6 @@ export class IncidentService {
     return this.http.get<Device[]>(requestUrl);
   }
 
- 
-
 
   addDeviceToIncident(incidentId: number, deviceId: number):Observable<Incident>{
    
@@ -61,7 +60,28 @@ export class IncidentService {
   }
 
 
+  addCrewToIncident(incidentId: number, crewId: number):Observable<Incident>{
+   
+    let incident: Incident = new Incident();
+    let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/crew/${crewId}`);
+    return this.http.put<Incident>(requestUrl, incident);                  /// proveriti
+  }
 
+
+  getIncidentCrew(incidentId:number):Observable<Crew>{
+    let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/crew`);
+    return this.http.get<Crew>(requestUrl);
+  }
+
+
+  
+
+  removeCrewFromIncidet(incidentId: number):Observable<Incident>{
+
+    let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/remove-crew`);
+    return this.http.put<Incident>(requestUrl, "");  
+
+  }
 
 
 
