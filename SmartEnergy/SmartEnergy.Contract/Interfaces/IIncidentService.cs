@@ -34,6 +34,8 @@ namespace SmartEnergy.Contract.Interfaces
 
         CrewDto GetIncidentCrew(int incidentId);
 
+        CallDto AddIncidentCall(int incidentId, CallDto newCall);
+
 
     }
 }

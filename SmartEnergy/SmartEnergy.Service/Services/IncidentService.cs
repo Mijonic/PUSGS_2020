@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SmartEnergy.Contract.CustomExceptions;
+using SmartEnergy.Contract.CustomExceptions.Call;
+using SmartEnergy.Contract.CustomExceptions.Consumer;
 using SmartEnergy.Contract.CustomExceptions.Device;
 using SmartEnergy.Contract.CustomExceptions.DeviceUsage;
 using SmartEnergy.Contract.CustomExceptions.Incident;
@@ -503,7 +505,7 @@ namespace SmartEnergy.Service.Services
               
             }
 
-            return _callService.GetAll().Where(x => x.IncidentID == incidentId).ToList();
+            return _callService.GetAll().FindAll(x => x.IncidentID == incidentId).ToList();
 
 
         }
@@ -656,6 +658,46 @@ namespace SmartEnergy.Service.Services
                 return false;
             }
                     
+        }
+
+        public CallDto AddIncidentCall(int incidentId, CallDto newCall)
+        {
+
+            Incident incident = _dbContext.Incidents.Include(x => x.Crew)
+                                                  .ThenInclude(x => x.CrewMembers)
+                                                  .FirstOrDefault(x => x.ID == incidentId);
+
+            if (incident == null)
+                throw new IncidentNotFoundException($"Incident with id {incidentId} does not exists.");
+
+
+            ValidateCall(newCall);
+
+            newCall.IncidentID = incidentId;
+            return _callService.Insert(newCall);
+        }
+
+
+        private void ValidateCall(CallDto entity)
+        {
+            if (entity.Hazard.Trim().Equals("") || entity.Hazard == null)
+                throw new InvalidCallException("You have to enter call hazard!");
+
+            if (!Enum.IsDefined(typeof(CallReason), entity.CallReason))
+                throw new InvalidCallException("Undefined call reason!");
+
+
+            if (_dbContext.Location.Any(x => x.ID == entity.LocationID) == false)
+                throw new LocationNotFoundException($"Location with id = {entity.LocationID} does not exists!");
+
+
+            if (entity.ConsumerID != 0 && entity.ConsumerID != null)  // ako nije anoniman
+            {
+
+                if (_dbContext.Consumers.Any(x => x.ID == entity.ConsumerID) == false)
+                    throw new ConsumerNotFoundException($"Consumer with id = {entity.ConsumerID} does not exists!");
+
+            }
         }
     }
 }

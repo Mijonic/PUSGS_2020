@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using SmartEnergy.Contract.Enums;
 using SmartEnergy.Contract.CustomExceptions.Location;
 using SmartEnergy.Contract.CustomExceptions.Incident;
+using SmartEnergy.Contract.CustomExceptions.Consumer;
 
 namespace SmartEnergy.Service.Services
 {
@@ -52,7 +53,44 @@ namespace SmartEnergy.Service.Services
 
         public CallDto Insert(CallDto entity)
         {
-            throw new NotImplementedException();
+            if (entity.Hazard.Trim().Equals("") || entity.Hazard == null)
+               throw new InvalidCallException("You have to enter call hazard!");
+
+            if (!Enum.IsDefined(typeof(CallReason), entity.CallReason))
+                throw new InvalidCallException("Undefined call reason!");
+
+
+            if (_dbContext.Location.Any(x => x.ID == entity.LocationID) == false)
+                throw new LocationNotFoundException($"Location with id = {entity.LocationID} does not exists!");
+
+
+            if (entity.ConsumerID != 0 && entity.ConsumerID != null)
+            {
+                if (_dbContext.Consumers.Any(x => x.ID == entity.ConsumerID) == false)
+                    throw new ConsumerNotFoundException($"Consumer with id = {entity.ConsumerID} does not exists!");
+            }else
+            {
+                entity.ConsumerID = null;
+            }
+
+
+            Call newCall = _mapper.Map<Call>(entity);
+
+            newCall.ID = 0;
+            newCall.Location = null;
+            newCall.Consumer = null;
+            newCall.Incident = null;
+            //newCall.IncidentID = null;
+
+
+
+            _dbContext.Calls.Add(newCall);
+            _dbContext.SaveChanges();
+
+            return _mapper.Map<CallDto>(newCall);
+
+
+
         }
 
         public CallDto Update(CallDto entity)

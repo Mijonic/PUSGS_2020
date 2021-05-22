@@ -6,6 +6,7 @@ import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { Device } from 'app/shared/models/device.model';
 import { Crew } from 'app/shared/models/crew.model';
+import { Call } from 'app/shared/models/call.model';
 
 @Injectable({
   providedIn: 'root'
@@ -92,9 +93,19 @@ export class IncidentService {
   }
 
 
-  
+  getIncidentCalls(incidentId: number):Observable<Call[]>{
+    let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/calls`);
+    return this.http.get<Call[]>(requestUrl);
+  }
 
 
+  addIncidentCall(incidentId: number, newCall: Call):Observable<Call>{
+    
+    let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/calls`);
+    return this.http.post<Call>(requestUrl, newCall);
+  }
+
+ 
   //done
   getIncidentLocation(incidentId:number):Observable<Location>{
     let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/location`);
