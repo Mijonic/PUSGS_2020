@@ -31,6 +31,7 @@ import { SelectDeviceDialogComponent } from './incident-dialogs/select-device-di
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { SelectConsumerDialogComponent } from './incident-dialogs/select-consumer-dialog/select-consumer-dialog.component';
 
 
 @NgModule({
@@ -45,6 +46,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     IncidentCrewComponent,
     NewCallComponent,
     SelectDeviceDialogComponent,
+    SelectConsumerDialogComponent,
     
   ],
   exports:[

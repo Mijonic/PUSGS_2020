@@ -54,7 +54,7 @@
           </div>
 
 
-          <div class="col-md-6">
+          <div class="col-md-6" *ngIf="isCustomerSelected == false">
             <div class="p-3 py-5">
               <mat-form-field class="w-100 m-auto"  appearance="legacy">
                   <mat-label>Address</mat-label>
@@ -82,7 +82,7 @@
                 <div class="p-3 py-5">
                   <mat-form-field class="w-100">
                     <mat-label>Name</mat-label>
-                    <input matInput placeholder="Specify  name" value="">
+                    <input matInput placeholder="Specify  name" value="{{consumer.name}}" disabled>
                   </mat-form-field>
                 </div>
             </div>
@@ -91,7 +91,7 @@
                 <div class="p-3 py-5">
                   <mat-form-field class="w-100">
                     <mat-label>Last name</mat-label>
-                    <input matInput placeholder="Specify last name" value="">
+                    <input matInput placeholder="Specify last name" value="{{consumer.lastname}}" disabled>
                   </mat-form-field>
                 </div>
             </div>
@@ -102,38 +102,49 @@
                 <div class="p-3 py-5">
                   <mat-form-field class="w-100">
                     <mat-label>Account</mat-label>
-                    <input matInput placeholder="Specify consumer account number" value="">
+                    <input matInput placeholder="Specify consumer account number" value="{{consumer.accountID}}" disabled>
                   </mat-form-field>
                 </div>
             </div>
-  
-            <div class="col-md-6">
-                <div class="p-3 py-5">
-                  <mat-form-field class="w-100">
-                    <mat-label>Priority</mat-label>
-                    <input matInput placeholder="Specify consumer priority" value="">
-                  </mat-form-field>
-                </div>
-            </div>
-          </div>
 
+            <div class="col-md-6">
+              <div class="p-3 py-5">
+                <mat-form-field class="w-100">
+                  <mat-label>Address</mat-label>
+                  
+
+                  <div *ngIf="isCustomerSelected; else notShow">
+                    <input matInput placeholder="Specify consumer address" value="{{getAddressFromLocation(consumer.location!)}}" disabled>
+                  </div>
+                  
+                  <ng-template #notShow>
+                    <input matInput placeholder="Specify consumer address" value="" disabled>
+                  </ng-template>
+                </mat-form-field>
+              </div>
+          </div>
+  
+         
+          </div>
+         <!--
           <div class="row" >
             <div class="col-md-6">
-                <div class="p-3 py-5">
-                  <mat-form-field class="w-100">
-                    <mat-label>Address</mat-label>
-                    <input matInput placeholder="Specify consumer address" value="">
-                  </mat-form-field>
-                </div>
-            </div>
+              <div class="p-3 py-5">
+                <mat-form-field class="w-100">
+                  <mat-label>Priority</mat-label>
+                  <input matInput placeholder="Specify consumer priority" value="" disabled>
+                </mat-form-field>
+              </div>
           </div>
+          </div>
+          -->
 
      
 
           <div class="row" >
             <div class="col-md-6 ">
                 <div class="p-3 d-flex justify-content-start">
-                    <button class="button-add w-75" >Choose customer</button>                       
+                    <button type="button" (click)="onChooseCustomer()" class="button-add w-75" >Choose customer</button>                       
                 </div>
             </div>
 

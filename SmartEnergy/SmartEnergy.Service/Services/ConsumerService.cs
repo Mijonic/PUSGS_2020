@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace SmartEnergy.Service.Services
 {
@@ -33,7 +34,7 @@ namespace SmartEnergy.Service.Services
 
         public List<ConsumerDto> GetAll()
         {
-            return _mapper.Map<List<ConsumerDto>>(_dbContext.Consumers.ToList());
+            return _mapper.Map<List<ConsumerDto>>(_dbContext.Consumers.Include("Location").ToList());
 
         }
 
