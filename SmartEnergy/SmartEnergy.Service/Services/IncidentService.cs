@@ -142,8 +142,19 @@ namespace SmartEnergy.Service.Services
             incident.NotificationAnchor = nAnchor;
 
 
+
+            if(incident.ETR != null)
+                incident.ETR = incident.ETR.Value.AddHours(2);
+
+
+
+
+
+
             incident.Priority = 0;
             incident.IncidentStatus = IncidentStatus.INITIAL; // with basic info only init
+
+            
 
          
 
@@ -164,7 +175,13 @@ namespace SmartEnergy.Service.Services
             if (oldIncident == null)
                 throw new IncidentNotFoundException($"Incident with id {entity.ID} does not exist");
 
-            oldIncident.Update(_mapper.Map<Incident>(entity));
+
+            Incident entityIncident = _mapper.Map<Incident>(entity);
+            
+            if(entityIncident.ETR != null)
+                entityIncident.ETR = entityIncident.ETR.Value.AddHours(2);
+
+            oldIncident.Update(_mapper.Map<Incident>(entityIncident));
 
             _dbContext.SaveChanges();
             
@@ -389,6 +406,9 @@ namespace SmartEnergy.Service.Services
             _deviceUsageService.Insert(new DeviceUsageDto { IncidentID = incidentId, DeviceID = deviceId });
 
             incident.Priority = GetIncidentPriority(incident.ID);
+            
+            if(incident.IncidentStatus == IncidentStatus.INITIAL)
+                incident.IncidentStatus = IncidentStatus.UNRESOLVED;
 
 
             _dbContext.SaveChanges();

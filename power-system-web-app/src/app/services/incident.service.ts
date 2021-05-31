@@ -105,6 +105,23 @@ export class IncidentService {
     return this.http.post<Call>(requestUrl, newCall);
   }
 
+
+  getNumberOfAffectedConsumers(incidentId: number):Observable<number[]>{
+    let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/affected-consumers`);
+    return this.http.get<number[]>(requestUrl);
+  }
+
+
+  getNumberOfIncidentCalls(incidentId: number):Observable<number[]>{
+    let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/calls-counter`);
+    return this.http.get<number[]>(requestUrl);
+  }
+
+
+
+
+
+ 
  
   //done
   getIncidentLocation(incidentId:number):Observable<Location>{

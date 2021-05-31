@@ -32,6 +32,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SelectConsumerDialogComponent } from './incident-dialogs/select-consumer-dialog/select-consumer-dialog.component';
+import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 
 
 @NgModule({
@@ -75,7 +76,9 @@ import { SelectConsumerDialogComponent } from './incident-dialogs/select-consume
     MatSlideToggleModule,
     MatDialogModule,
     MatProgressSpinnerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    NgxMatDatetimePickerModule,
+    NgxMatNativeDateModule
    
    
   
