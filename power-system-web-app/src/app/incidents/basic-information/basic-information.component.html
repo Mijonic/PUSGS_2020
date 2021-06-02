@@ -42,7 +42,7 @@
                 <div class="d-flex justify-content-center">
                     <mat-form-field class="w-100">
                         <mat-label>Affected Consumers</mat-label>
-                        <input matInput placeholder="Affected Consumers" value="0" readonly>
+                        <input matInput placeholder="Affected Consumers" value="{{affectedConsumers}}" readonly>
                     </mat-form-field>
                 </div>
             </div>
@@ -56,7 +56,7 @@
                     <mat-form-field class="m-auto w-100" appearance="legacy" class="w-100"> 
                         
                             <mat-label>Priority</mat-label>
-                            <input matInput placeholder="Priority" value="0" readonly>
+                            <input matInput placeholder="Priority" value="{{priority}}" readonly>
                      
                     </mat-form-field>
                 </div>
@@ -66,13 +66,16 @@
 
             <div class="col-md-6">
                 <div class="d-flex justify-content-center">
+                   
+
                     <mat-form-field appearance="legacy" class="w-100">
                         <mat-label>Outage Date</mat-label>
-                        <input matInput [matDatepicker]="outageTime" formControlName="incidentDateTime">
-                        <mat-datepicker-toggle matSuffix [for]="outageTime" class="date-picker-image"></mat-datepicker-toggle>
-                        <mat-datepicker #outageTime></mat-datepicker>
-                        
-                      </mat-form-field>
+                        <input matInput type="datetime-local" formControlName="incidentDateTime">
+                        <mat-error *ngIf="incidentForm.hasError('invalidDates', 'incidentDateTime')">
+                            Outage Date is required.
+                          </mat-error>
+                     </mat-form-field>
+                   
                 </div>
             </div>
         </div>
@@ -85,10 +88,13 @@
             <div class="col-md-6">
                 <div class="d-flex justify-content-center">
                     <mat-form-field appearance="legacy" class="w-100">
-                        <mat-label>Scheduled Time</mat-label>
-                        <input matInput [matDatepicker]="sheduledTime" formControlName="workBeginDate">
-                        <mat-datepicker-toggle matSuffix [for]="sheduledTime" class="date-picker-image"></mat-datepicker-toggle>
-                        <mat-datepicker #sheduledTime></mat-datepicker>
+                        <mat-label>Scheduled Date</mat-label>
+                        <input matInput  type="datetime-local" formControlName="workBeginDate">
+                          <mat-error *ngIf="incidentForm.hasError('invalidDates', 'ata')">
+                            Scheduled Date is required and can not be before Outage Date.
+                          </mat-error>
+                      
+                         
                        
                       </mat-form-field>
                 </div>
@@ -100,9 +106,14 @@
                 <div class="d-flex justify-content-center">
                     <mat-form-field appearance="legacy" class="w-100">
                         <mat-label>ETR</mat-label>
-                        <input matInput  [matDatepicker]="ETR" formControlName="etr">
-                        <mat-datepicker-toggle matSuffix [for]="ETR" class="date-picker-image"></mat-datepicker-toggle>
-                        <mat-datepicker #ETR></mat-datepicker>
+                        <input *ngIf="incidentId != 0"  matInput type="time"  min='00:00' max= '12:00' formControlName="etr" class="without_ampm" value='{{incident.etr | date: "HH:mm"}}'>
+                        
+                        <input *ngIf="incidentId == 0"  matInput type="time"  min='00:00' max= '12:00' formControlName="etr" class="without_ampm">
+                        <mat-error>
+                            ETR is required.
+                          </mat-error>
+                        
+                         
 
                       
                       </mat-form-field>
@@ -138,7 +149,7 @@
                 <div class="d-flex justify-content-center">
                     <mat-form-field class="w-100">
                         <mat-label>Calls</mat-label>
-                        <input matInput placeholder="Calls" value="0" readonly>
+                        <input matInput placeholder="Calls" value="{{numberOfCalls}}" readonly>
                     </mat-form-field>
                 </div>
             </div>
@@ -187,9 +198,11 @@
                 <div class="d-flex justify-content-center">
                     <mat-form-field appearance="legacy" class="w-100">
                         <mat-label>ETA</mat-label>
-                        <input matInput [matDatepicker]="ETA" formControlName="eta">
-                        <mat-datepicker-toggle matSuffix [for]="ETA" class="date-picker-image"></mat-datepicker-toggle>
-                        <mat-datepicker #ETA></mat-datepicker>
+                        <input matInput type="datetime-local" formControlName="eta">
+                        <mat-error *ngIf="incidentForm.hasError('invalidDates', 'eta')">
+                            ETA is required and can not be before Outage Date.
+                          </mat-error>
+                       
                       </mat-form-field>
                 </div>
             </div>
@@ -200,9 +213,11 @@
                 <div class="d-flex justify-content-center">
                     <mat-form-field appearance="legacy" class="w-100">
                         <mat-label>ATA</mat-label>
-                        <input matInput [matDatepicker]="ATA" formControlName="ata">
-                        <mat-datepicker-toggle matSuffix [for]="ATA" class="date-picker-image"></mat-datepicker-toggle>
-                        <mat-datepicker #ATA></mat-datepicker>
+                        <input matInput type="datetime-local" formControlName="ata">
+                        <mat-error *ngIf="incidentForm.hasError('invalidDates', 'ata')">
+                            ATA is required and can not be before Outage Date.
+                          </mat-error>
+                      
                       </mat-form-field>
                 </div>
             </div>

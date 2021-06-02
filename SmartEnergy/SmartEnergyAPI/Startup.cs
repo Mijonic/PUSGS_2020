@@ -107,6 +107,7 @@ namespace SmartEnergyAPI
             services.AddScoped<ICallService, CallService>();
             services.AddScoped<IMailService, MailingService>();
             services.AddScoped<IAuthHelperService, AuthHelperService>();
+            services.AddScoped<IConsumerService, ConsumerService>();
 
 
         }

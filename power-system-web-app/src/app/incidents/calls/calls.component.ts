@@ -3,25 +3,12 @@ import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { IncidentService } from 'app/services/incident.service';
 import { TabMessagingService } from 'app/services/tab-messaging.service';
+import { Call } from 'app/shared/models/call.model';
+import { ToastrService } from 'ngx-toastr';
 
-export interface UserData {
-  id: string;
-  hazard: string;
-  reason: string;
-  comment: string;
-}
-
-/** Constants used to fill up our data base. */
-const COLORS: string[] = [
-  'maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple', 'fuchsia', 'lime', 'teal',
-  'aqua', 'blue', 'navy', 'black', 'gray'
-];
-const NAMES: string[] = [
-  'Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack', 'Charlotte', 'Theodore', 'Isla', 'Oliver',
-  'Isabella', 'Jasper', 'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'
-];
 
 
 @Component({
@@ -29,21 +16,32 @@ const NAMES: string[] = [
   templateUrl: './calls.component.html',
   styleUrls: ['./calls.component.css']
 })
-export class CallsComponent implements  AfterViewInit, OnInit {
-  displayedColumns: string[] = ['id', 'reason', 'hazard', 'comment'];
-  reasons:string[]=['No electricity', 'Non breaking hazard', 'Light flickering', 'Power restored', 'Partial power outage', 'Voltage issue'];
-  dataSource: MatTableDataSource<UserData>;
+export class CallsComponent implements  OnInit {
+  displayedColumns: string[] = ['id', 'reason', 'hazard', 'comment', 'name', 'lastname'];
+  reasons:string[]=['NO_POWER', 'FLICKERING_LIGHT', 'PARTIAL_POWER', 'VOLTAGE_PROBLEM', 'POWER_RESTORED', 'MALFUNCTION'];
+  
+
+ 
+  dataSource: MatTableDataSource<Call>;
   showAllCalls:boolean = true;
+
+  isLoading:boolean = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private tabMessaging:TabMessagingService, private route:ActivatedRoute) {
-    // Create 100 users
-    const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
 
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(users);
+  calls:Call[] = [];
+  allCalls:Call[] = [];
+
+  incidentId: number = 0;
+
+
+
+
+
+  constructor(private router:Router, private tabMessaging:TabMessagingService, private route:ActivatedRoute,private incidentService:IncidentService,  private toastr: ToastrService) {
+   
   }
 
  
@@ -54,17 +52,51 @@ export class CallsComponent implements  AfterViewInit, OnInit {
     if(incidentId && incidentId != "")
     {
       this.tabMessaging.showEdit(+incidentId);
-     // this.isNew = false;
-      //this.workReqId = +wrId;
-     /// this.loadWorkRequest(this.workReqId);
+    
+      this.incidentId = +incidentId;
+      this.loadIncidentCalls();
     }
     
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+
+  
+  loadIncidentCalls()
+  {
+    this.incidentService.getIncidentCalls(this.incidentId).subscribe(
+      data =>{
+        this.allCalls = data;
+        this.calls = data;
+        
+        this.dataSource = new MatTableDataSource(data);
+        this.isLoading = false;
+
+      
+
+       
+       
+      },
+      error =>{
+
+
+        if(error.error instanceof ProgressEvent)
+        {
+          this.loadIncidentCalls();
+
+        }else
+        {
+          this.toastr.error('Could not load incident calls.',"", {positionClass: 'toast-bottom-left'})
+     
+          this.router.navigate(['incidents']);
+          this.isLoading = false;
+        }
+
+        
+      }
+    )
   }
+
+
 
   onAddClick()
   {
@@ -72,19 +104,9 @@ export class CallsComponent implements  AfterViewInit, OnInit {
   }
 
   showCalls(){
+
+    this.loadIncidentCalls();
     this.showAllCalls = true;
   }
 
-}
-/** Builds and returns a new User. */
-function createNewUser(id: number): UserData {
-  const name = NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
-
-  return {
-    id: id.toString(),
-    hazard: name,
-    reason: name,
-    comment: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
-  };
 }

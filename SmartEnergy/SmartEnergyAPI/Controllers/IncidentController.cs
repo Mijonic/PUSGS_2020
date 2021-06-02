@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartEnergy.Contract.CustomExceptions;
+using SmartEnergy.Contract.CustomExceptions.Call;
+using SmartEnergy.Contract.CustomExceptions.Consumer;
 using SmartEnergy.Contract.CustomExceptions.Device;
 using SmartEnergy.Contract.CustomExceptions.DeviceUsage;
 using SmartEnergy.Contract.CustomExceptions.Incident;
@@ -293,6 +295,49 @@ namespace SmartEnergyAPI.Controllers
         {
             return Ok(_incidentService.GetIncidentCalls(incidentId));
         }
+
+
+        [HttpPost("{incidentId}/calls")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CallDto))]
+       // [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult AddIncidentCall(int incidentId, CallDto newCall)
+        {
+            try
+            {
+                _incidentService.AddIncidentCall(incidentId, newCall);
+
+                return Ok();
+            }
+            catch (IncidentNotFoundException incidentNotFound)
+            {
+                return NotFound(incidentNotFound.Message);
+            }
+            catch (InvalidIncidentException invalidIncident)
+            {
+                return BadRequest(invalidIncident.Message);
+            }
+            catch (InvalidCallException invalidCall)
+            {
+                return BadRequest(invalidCall.Message);
+            }
+            catch (LocationNotFoundException notFound)
+            {
+                return NotFound(notFound.Message);
+            }
+            catch (ConsumerNotFoundException notFound)
+            {
+                return NotFound(notFound.Message);
+            }
+
+
+
+
+
+        }
+
+
 
 
         [HttpGet("{incidentId}/calls-counter")]

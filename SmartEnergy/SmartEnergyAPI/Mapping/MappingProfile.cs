@@ -87,8 +87,11 @@ namespace SmartEnergyAPI.Mapping
                  .ForMember(mem => mem.CallReason, op => op.MapFrom(o => o.CallReason));
 
 
-            CreateMap<Consumer, ConsumerDto>();
-            CreateMap<ConsumerDto, Consumer>();
+            CreateMap<Consumer, ConsumerDto>()
+                .ForMember(mem => mem.AccountType, op => op.MapFrom(o => o.AccountType));
+
+            CreateMap<ConsumerDto, Consumer>()
+                 .ForMember(mem => mem.AccountType, op => op.MapFrom(o => o.AccountType));
 
 
 
