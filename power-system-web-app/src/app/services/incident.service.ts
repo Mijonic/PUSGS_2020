@@ -1,5 +1,6 @@
+import { IMultimediaService } from './../shared/interfaces/multimedia-service';
 import { IncidentMapDisplay } from './../shared/models/incident-map-display.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Incident } from 'app/shared/models/incident.model';
 import { environment } from 'environments/environment';
@@ -7,13 +8,44 @@ import { Observable } from 'rxjs';
 import { Device } from 'app/shared/models/device.model';
 import { Crew } from 'app/shared/models/crew.model';
 import { Call } from 'app/shared/models/call.model';
+import { MultimediaAttachment } from 'app/shared/models/multimedia-attachment.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class IncidentService {
+export class IncidentService implements IMultimediaService {
 
   constructor(private http: HttpClient) { }
+  downloadAttachment(documentId: number, filename: string): Observable<any> {
+    let requestUrl = environment.serverURL.concat(`incidents/${documentId}/attachments/${filename}`);
+		return this.http.get(requestUrl, {responseType: 'blob'});
+  }
+
+  getAttachments(documentId: number): Observable<MultimediaAttachment[]> {
+    let requestUrl = environment.serverURL.concat(`incidents/${documentId}/attachments`);
+		return this.http.get<MultimediaAttachment[]>(requestUrl);
+  }
+
+  uploadAttachment(file: File, documentId: number): Observable<HttpEvent<any>> {
+    let requestUrl = environment.serverURL.concat(`incidents/${documentId}/attachments`);
+    const formData: FormData = new FormData();
+
+    formData.append('file', file);
+
+    const request = new HttpRequest('POST', requestUrl, formData, {
+      reportProgress: true,
+      responseType: 'json'
+    });
+
+    return this.http.request(request);
+  }
+
+  deleteAttachment(filename: string, documentId: number): Observable<any> {
+    let requestUrl = environment.serverURL.concat(`incidents/${documentId}/attachments/${filename}`);
+    return this.http.delete(requestUrl);
+  }
+
+
 
   getAllIncidents():Observable<Incident[]>{
     let requestUrl = environment.serverURL.concat("incidents");

@@ -1,3 +1,4 @@
+import { IncidentService } from 'app/services/incident.service';
 import { ErrorInterceptorService } from './services/error-interceptor.service';
 import { AuthGuardService } from './auth/auth-guard.service';
 
@@ -10,7 +11,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { NavigationModule } from './navigation/navigation.module';
 import {  NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule, WORK_REQUEST_SERVICE_TOKEN } from './app-routing.module';
+import { AppRoutingModule, WORK_REQUEST_SERVICE_TOKEN, INCIDENT_SERVICE_TOKEN } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DatePipe } from '@angular/common';
 import { FrontModule } from './front/front.module';
@@ -73,7 +74,11 @@ export function tokenGetter() {
    {
       provide: WORK_REQUEST_SERVICE_TOKEN,
       useClass: WorkRequestService
-   }
+   },
+   {
+    provide: INCIDENT_SERVICE_TOKEN,
+    useClass: IncidentService
+    }
    /*Define other services here*/
    ,
    AuthGuardService,
