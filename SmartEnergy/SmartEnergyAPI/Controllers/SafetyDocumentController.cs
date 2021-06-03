@@ -19,10 +19,12 @@ namespace SmartEnergyAPI.Controllers
     {
 
         private readonly ISafetyDocumentService _safetyDocumentService;
+        private readonly IStateChangeService _stateChangeService;
 
-        public SafetyDocumentController(ISafetyDocumentService safetyDocumentService)
+        public SafetyDocumentController(ISafetyDocumentService safetyDocumentService, IStateChangeService stateChangeService)
         {
             _safetyDocumentService = safetyDocumentService;
+            _stateChangeService = stateChangeService;
         }
 
         [HttpGet]
@@ -143,6 +145,94 @@ namespace SmartEnergyAPI.Controllers
             
 
 
+        }
+
+
+        [HttpGet("{id}/state-changes")]
+        //[Authorize(Roles = "CREW_MEMBER, DISPATCHER", Policy = "ApprovedOnly")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<StateChangeHistoryDto>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetSafetyDocumentStateChanges(int id)
+        {
+            try
+            {
+                return Ok(_stateChangeService.GetSafetyDocumentStateHistory(id));
+            }
+            catch (SafetyDocumentNotFoundException wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+        }
+
+        [HttpPut("{id}/approve")]
+        //[Authorize(Roles = "CREW_MEMBER, DISPATCHER", Policy = "ApprovedOnly")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SafetyDocumentDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult ApproveSafetyDocument(int id)
+        {
+            try
+            {
+                SafetyDocumentDto sd = _stateChangeService.ApproveSafetyDocument(id, User);
+                return Ok(sd);
+            }
+            catch (SafetyDocumentNotFoundException wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+            catch (SafetyDocumentInvalidStateException wnf)
+            {
+                return BadRequest(wnf.Message);
+            }
+        }
+
+        [HttpPut("{id}/cancel")]
+        //[Authorize(Roles = "CREW_MEMBER, DISPATCHER", Policy = "ApprovedOnly")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SafetyDocumentDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult CancelSafetyDocument(int id)
+        {
+            try
+            {
+                SafetyDocumentDto sd = _stateChangeService.CancelSafetyDocument(id, User);
+                return Ok(sd);
+            }
+            catch (SafetyDocumentNotFoundException wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+            catch (SafetyDocumentInvalidStateException wnf)
+            {
+                return BadRequest(wnf.Message);
+            }
+        }
+
+
+        [HttpPut("{id}/deny")]
+        //[Authorize(Roles = "CREW_MEMBER, DISPATCHER", Policy = "ApprovedOnly")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SafetyDocumentDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult DenySafetyDocument(int id)
+        {
+            try
+            {
+                SafetyDocumentDto sd = _stateChangeService.DenySafetyDocument(id, User);
+                return Ok(sd);
+            }
+            catch (SafetyDocumentNotFoundException wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+            catch (SafetyDocumentInvalidStateException wnf)
+            {
+                return BadRequest(wnf.Message);
+            }
         }
 
 

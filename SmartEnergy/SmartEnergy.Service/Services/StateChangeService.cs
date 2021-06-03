@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using SmartEnergy.Contract.CustomExceptions.SafetyDocument;
 using SmartEnergy.Contract.CustomExceptions.WorkRequest;
 using SmartEnergy.Contract.DTO;
 using SmartEnergy.Contract.Enums;
@@ -25,6 +26,37 @@ namespace SmartEnergy.Service.Services
             _dbContext = dbContext;
             _mapper = mapper;
             _authHelperService = authHelperService;
+        }
+
+        public SafetyDocumentDto ApproveSafetyDocument(int safetyDocId, ClaimsPrincipal user)
+        {
+            int userID = _authHelperService.GetUserIDFromPrincipal(user);
+            SafetyDocument sd = _dbContext.SafetyDocuments.Include(x => x.StateChangeAnchor)
+                                                    .ThenInclude(x => x.StateChangeHistories)
+                                                    .FirstOrDefault(x => x.ID == safetyDocId);
+
+            if (sd == null)
+                throw new SafetyDocumentNotFoundException($"Safety document  with ID {safetyDocId} does not exist");
+
+            if (sd.DocumentStatus == DocumentStatus.APPROVED)
+                throw new SafetyDocumentInvalidStateException($"Safety document is already approved.");
+
+            if (sd.DocumentStatus == DocumentStatus.CANCELLED)
+                throw new SafetyDocumentInvalidStateException($"Safety document is canceled and cannot be approved.");
+
+            StateChangeHistory state = new StateChangeHistory()
+            {
+                UserID = userID,
+                DocumentStatus = DocumentStatus.APPROVED
+            };
+
+
+            sd.StateChangeAnchor.StateChangeHistories.Add(state);
+            sd.DocumentStatus = DocumentStatus.APPROVED;
+
+            _dbContext.SaveChanges();
+
+            return _mapper.Map<SafetyDocumentDto>(sd);
         }
 
         public WorkRequestDto ApproveWorkRequest(int workRequestId, ClaimsPrincipal user)
@@ -59,6 +91,37 @@ namespace SmartEnergy.Service.Services
             return _mapper.Map<WorkRequestDto>(wr);
         }
 
+        public SafetyDocumentDto CancelSafetyDocument(int safetyDocId, ClaimsPrincipal user)
+        {
+            int userID = _authHelperService.GetUserIDFromPrincipal(user);
+            // TODO: Add user after authentication! 
+            SafetyDocument sd = _dbContext.SafetyDocuments.Include(x => x.StateChangeAnchor)
+                                                    .ThenInclude(x => x.StateChangeHistories)
+                                                    .FirstOrDefault(x => x.ID == safetyDocId);
+
+            if (sd == null)
+                throw new SafetyDocumentNotFoundException($"Safety document  with ID {safetyDocId} does not exist");
+
+            if (sd.DocumentStatus == DocumentStatus.APPROVED)
+                throw new SafetyDocumentInvalidStateException($"Safety document is approved and cannot be cancelled.");
+
+            if (sd.DocumentStatus == DocumentStatus.CANCELLED)
+                throw new SafetyDocumentInvalidStateException($"Safety document is already canceled.");
+
+            StateChangeHistory state = new StateChangeHistory()
+            {
+                UserID = userID,
+                DocumentStatus = DocumentStatus.CANCELLED
+            };
+
+
+            sd.StateChangeAnchor.StateChangeHistories.Add(state);
+            sd.DocumentStatus = DocumentStatus.CANCELLED;
+
+            _dbContext.SaveChanges();
+            return _mapper.Map<SafetyDocumentDto>(sd);
+        }
+
         public WorkRequestDto CancelWorkRequest(int workRequestId, ClaimsPrincipal user)
         {
             int userID = _authHelperService.GetUserIDFromPrincipal(user);
@@ -88,6 +151,40 @@ namespace SmartEnergy.Service.Services
 
             _dbContext.SaveChanges();
             return _mapper.Map<WorkRequestDto>(wr);
+        }
+
+        public SafetyDocumentDto DenySafetyDocument(int safetyDocId, ClaimsPrincipal user)
+        {
+            int userID = _authHelperService.GetUserIDFromPrincipal(user);
+            // TODO: Add user after authentication! 
+            SafetyDocument sd = _dbContext.SafetyDocuments.Include(x => x.StateChangeAnchor)
+                                                    .ThenInclude(x => x.StateChangeHistories)
+                                                    .FirstOrDefault(x => x.ID == safetyDocId);
+
+            if (sd == null)
+                throw new SafetyDocumentNotFoundException($"Safety document  with ID {safetyDocId} does not exist");
+
+            if (sd.DocumentStatus == DocumentStatus.APPROVED)
+                throw new SafetyDocumentInvalidStateException($"Safety document is approved and cannot be denied.");
+
+            if (sd.DocumentStatus == DocumentStatus.CANCELLED)
+                throw new SafetyDocumentInvalidStateException($"Safety document is canceled and cannot be denied.");
+
+            if (sd.DocumentStatus == DocumentStatus.DENIED)
+                throw new SafetyDocumentInvalidStateException($"Safety document is already denied.");
+
+            StateChangeHistory state = new StateChangeHistory()
+            {
+                UserID = userID,
+                DocumentStatus = DocumentStatus.DENIED
+            };
+
+
+            sd.StateChangeAnchor.StateChangeHistories.Add(state);
+            sd.DocumentStatus = DocumentStatus.DENIED;
+
+            _dbContext.SaveChanges();
+            return _mapper.Map<SafetyDocumentDto>(sd);
         }
 
         public WorkRequestDto DenyWorkRequest(int workRequestId, ClaimsPrincipal user)
@@ -123,6 +220,19 @@ namespace SmartEnergy.Service.Services
             _dbContext.SaveChanges();
 
             return _mapper.Map<WorkRequestDto>(wr);
+        }
+
+        public List<StateChangeHistoryDto> GetSafetyDocumentStateHistory(int safetyDocId)
+        {
+            SafetyDocument sd = _dbContext.SafetyDocuments.Include(x => x.StateChangeAnchor)
+                                                             .ThenInclude(x => x.StateChangeHistories)
+                                                             .ThenInclude(x => x.User)
+                                                             .FirstOrDefault(x => x.ID == safetyDocId);
+
+            if (sd == null)
+                throw new SafetyDocumentNotFoundException($"Safety document  with ID {safetyDocId} does not exist");
+
+            return _mapper.Map<List<StateChangeHistoryDto>>(sd.StateChangeAnchor.StateChangeHistories);
         }
 
         public List<StateChangeHistoryDto> GetWorkRequestStateHistory(int workRequestId)
