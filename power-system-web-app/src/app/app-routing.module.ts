@@ -113,6 +113,9 @@ const routes: Routes = [
     {
       path: 'multimedia/:id',
       component: MultimediaAttachmentsComponent, 
+      data:{
+        requiredService: INCIDENT_SERVICE_TOKEN,
+      }
     },
     {
       path: 'calls/:id',

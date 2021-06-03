@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using nClam;
 using SmartEnergy.Contract.CustomExceptions;
+using SmartEnergy.Contract.CustomExceptions.Incident;
 using SmartEnergy.Contract.CustomExceptions.Multimedia;
 using SmartEnergy.Contract.CustomExceptions.User;
 using SmartEnergy.Contract.CustomExceptions.WorkRequest;
@@ -34,6 +35,36 @@ namespace SmartEnergy.Service.Services
             _dbContext = dbContext;
             _mapper = mapper;
             _configuration = configuration;
+        }
+
+        public async Task AttachFileToIncidentAsync(IFormFile formFile, int incidentId)
+        {
+            await ScanAttachmentAsync(formFile);
+            Incident inc = _dbContext.Incidents.Find(incidentId);
+
+            if (inc == null)
+                throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
+
+            string filePath = Path.Combine(@$"Attachments/INC{incidentId}/", formFile.FileName);
+            if (_dbContext.MultimediaAttachments.FirstOrDefault(x => x.MultimediaAnchorID == inc.MultimediaAnchorID
+                                                                && x.Url == formFile.FileName) != null)
+            {
+                throw new MultimediaAlreadyExists($"Attachment with name {formFile.FileName} is already attached to this incident.");
+            }
+            new FileInfo(filePath).Directory?.Create();
+            using (FileStream stream = new FileStream(filePath, FileMode.Create))
+            {
+                formFile.CopyTo(stream);
+
+            }
+
+            MultimediaAttachment attachment = new MultimediaAttachment();
+            attachment.Url = formFile.FileName;
+            attachment.MultimediaAnchorID = (int)inc.MultimediaAnchorID;
+            _dbContext.MultimediaAttachments.Add(attachment);
+
+            _dbContext.SaveChanges();
+
         }
 
         public async Task AttachFileToWorkRequestAsync(IFormFile formFile, int workRequestId)
@@ -100,6 +131,38 @@ namespace SmartEnergy.Service.Services
             _dbContext.SaveChanges();
         }
 
+        public void DeleteIncidentAttachment(int incidentId, string filename)
+        {
+            Incident inc = _dbContext.Incidents.Find(incidentId);
+
+            if (inc == null)
+                throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
+
+          
+            MultimediaAttachment attachment = _dbContext.MultimediaAttachments.FirstOrDefault(x => x.MultimediaAnchorID == inc.MultimediaAnchorID
+                                                                                                && x.Url == filename);
+
+            if (attachment == null)
+                throw new MultimediaNotFoundException($"Incident with ID {incidentId} does not contain file with name {filename}");
+
+            _dbContext.MultimediaAttachments.Remove(attachment);
+
+            if (File.Exists(@$"Attachments/INC{incidentId}/{filename}"))
+            {
+                File.Delete(@$"Attachments/INC{incidentId}/{filename}");
+            }
+
+            _dbContext.SaveChanges();
+        }
+
+        public void DeleteIncidentFileOnDisk(int incidentID, string filePath)
+        {
+            if (File.Exists(@$"Attachments/INC{incidentID}/{filePath}"))
+            {
+                File.Delete(@$"Attachments/INC{incidentID}/{filePath}");
+            }
+        }
+
         public void DeleteWorkRequestAttachment(int workRequestId, string filename)
         {
             WorkRequest wr = _dbContext.WorkRequests.Find(workRequestId);
@@ -107,9 +170,7 @@ namespace SmartEnergy.Service.Services
             if (wr == null)
                 throw new WorkRequestNotFound($"Work request with id {workRequestId} does not exist.");
 
-            if (wr.DocumentStatus == DocumentStatus.APPROVED || wr.DocumentStatus == DocumentStatus.CANCELLED)
-                throw new WorkRequestInvalidStateException($"Cannot delete attachment from this work request as it is already {wr.DocumentStatus}");
-
+         
             MultimediaAttachment attachment = _dbContext.MultimediaAttachments.FirstOrDefault(x => x.MultimediaAnchorID == wr.MultimediaAnchorID
                                                                                                 && x.Url == filename);
 
@@ -134,6 +195,31 @@ namespace SmartEnergy.Service.Services
                 File.Delete(@$"Attachments/WR{workRequestID}/{filePath}");
             }
 
+        }
+
+        public List<MultimediaAttachmentDto> GetIncidentAttachments(int incidentId)
+        {
+            Incident inc = _dbContext.Incidents.Include(x => x.MultimediaAnchor)
+                                                        .ThenInclude(x => x.MultimediaAttachments)
+                                                        .FirstOrDefault(x => x.ID == incidentId);
+            if (inc == null)
+                throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist");
+
+            return _mapper.Map<List<MultimediaAttachmentDto>>(inc.MultimediaAnchor.MultimediaAttachments);
+        }
+
+        public FileStream GetIncidentAttachmentStream(int incidentId, string fileName)
+        {
+            Incident inc = _dbContext.Incidents.Find(incidentId);
+            if (inc == null)
+                throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist");
+
+            MultimediaAttachment attachment = _dbContext.MultimediaAttachments.Where(x => x.MultimediaAnchorID == inc.MultimediaAnchorID &&
+                                                                                     x.Url == fileName).FirstOrDefault();
+            if (attachment == null)
+                throw new MultimediaNotFoundException($"Multimedia attachment with name {fileName} does not exist.");
+            FileStream stream = new FileStream(@$"Attachments/INC{incidentId}/{fileName}", FileMode.Open);
+            return stream;
         }
 
         public FileStream GetUserAvatarStream(int userId, string imageURL)

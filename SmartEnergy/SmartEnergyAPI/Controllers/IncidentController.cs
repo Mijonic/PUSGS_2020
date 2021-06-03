@@ -7,6 +7,7 @@ using SmartEnergy.Contract.CustomExceptions.Device;
 using SmartEnergy.Contract.CustomExceptions.DeviceUsage;
 using SmartEnergy.Contract.CustomExceptions.Incident;
 using SmartEnergy.Contract.CustomExceptions.Location;
+using SmartEnergy.Contract.CustomExceptions.Multimedia;
 using SmartEnergy.Contract.DTO;
 using SmartEnergy.Contract.Interfaces;
 using System;
@@ -21,10 +22,12 @@ namespace SmartEnergyAPI.Controllers
     public class IncidentController : ControllerBase
     {
         private readonly IIncidentService _incidentService;
+        private readonly IMultimediaService _multimediaService;
 
-        public IncidentController(IIncidentService incidentService)
+        public IncidentController(IIncidentService incidentService, IMultimediaService multimediaService)
         {
             _incidentService = incidentService;
+            _multimediaService = multimediaService;
         }
 
         [HttpGet("{id}/location")]
@@ -418,6 +421,94 @@ namespace SmartEnergyAPI.Controllers
             }
 
            
+        }
+
+
+        [HttpPost("{id}/attachments")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [RequestSizeLimit(long.MaxValue)]
+        public async Task<IActionResult> AttachFileAsync(int id, IFormFile file)
+        {
+            try
+            {
+                await _multimediaService.AttachFileToIncidentAsync(file, id);
+                return Ok();
+            }
+            catch (IncidentNotFoundException wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+            catch (MultimediaAlreadyExists mae)
+            {
+                return BadRequest(mae.Message);
+            }
+            catch (MultimediaInfectedException mie)
+            {
+                return BadRequest(mie.Message);
+            }
+        }
+
+        [HttpGet("{id}/attachments/{filename}")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetFile(int id, string filename)
+        {
+            try
+            {
+                return File(_multimediaService.GetIncidentAttachmentStream(id, filename), "application/octet-stream", filename);
+            }
+            catch (IncidentNotFoundException wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+            catch (MultimediaNotFoundException mne)
+            {
+                return NotFound(mne.Message);
+            }
+        }
+
+
+        [HttpGet("{id}/attachments")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<MultimediaAttachmentDto>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetIncidentAttachments(int id)
+        {
+            try
+            {
+                return Ok(_multimediaService.GetIncidentAttachments(id));
+            }
+            catch (IncidentNotFoundException wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+        }
+
+
+        [HttpDelete("{id}/attachments/{filename}")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult DeleteAttachment(int id, string filename)
+        {
+            try
+            {
+                _multimediaService.DeleteIncidentAttachment(id, filename);
+                return Ok();
+            }
+            catch (IncidentNotFoundException wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+            catch (MultimediaNotFoundException mnf)
+            {
+                return NotFound(mnf.Message);
+            }
+
         }
 
 
