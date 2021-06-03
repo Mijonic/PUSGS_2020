@@ -134,9 +134,14 @@ const routes: Routes = [
   { path: 'work-plan',  redirectTo: '/work-plan/basic-info', pathMatch: 'full', outlet: "primary"},
   { path: 'work-plan', component: WorkPlanComponent, outlet: "primary",
   children:
-  [
+  [ 
     {
       path: 'basic-info',
+      component: WorkPlanBasicInformationComponent, 
+      canActivate: [AuthGuardService, AuthGuardApprovedService]
+    },
+    {
+      path: 'basic-info/:id',
       component: WorkPlanBasicInformationComponent, 
       canActivate: [AuthGuardService, AuthGuardApprovedService]
     },
@@ -171,20 +176,25 @@ const routes: Routes = [
       path: 'basic-info',
       component: SafetyDocumentBasicInformationComponent, 
     },
+
     {
-      path: 'multimedia',
+      path: 'basic-info/:id',
+      component: SafetyDocumentBasicInformationComponent, 
+    },
+    {
+      path: 'multimedia/:id',
       component: MultimediaAttachmentsComponent, 
     },
     {
-      path: 'state-changes',
+      path: 'state-changes/:id',
       component: SafetyDocumentStateChangesComponent, 
     },
     {
-      path: 'equipment',
+      path: 'equipment/:id',
       component: SafetyDocumentEquipmentComponent,
     },
     {
-      path: 'checklist',
+      path: 'checklist/:id',
       component: SafetyDocumentChecklistComponent,
     },
   ],

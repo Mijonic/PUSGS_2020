@@ -94,6 +94,18 @@ namespace SmartEnergyAPI.Mapping
                  .ForMember(mem => mem.AccountType, op => op.MapFrom(o => o.AccountType));
 
 
+            CreateMap<SafetyDocument, SafetyDocumentDto>()
+              .ForMember(mem => mem.DocumentStatus, op => op.MapFrom(o => o.DocumentStatus))
+              .ForMember(mem => mem.DocumentType, op => op.MapFrom(o => o.DocumentType));
+
+            CreateMap<SafetyDocumentDto, SafetyDocument>()
+              .ForMember(mem => mem.DocumentStatus, op => op.MapFrom(o => o.DocumentStatus))
+              .ForMember(mem => mem.DocumentType, op => op.MapFrom(o => o.DocumentType));
+
+
+
+
+
 
 
 

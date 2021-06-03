@@ -5,6 +5,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { ValidationService } from 'app/services/validation.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UserService } from 'app/services/user.service';
+import { ToastrService } from 'ngx-toastr';
+import { TabMessagingService } from 'app/services/tab-messaging.service';
 
 export interface UserData {
   id: string;
@@ -37,7 +42,9 @@ export class SafetyDocumentEquipmentComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(public dialog:MatDialog) {
+  constructor(public dialog:MatDialog, private validation:ValidationService, private route:ActivatedRoute, private userService:UserService,
+    private toastr:ToastrService, private router:Router,
+   private tabMessaging:TabMessagingService) {
     // Create 100 users
     const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
 
@@ -46,6 +53,9 @@ export class SafetyDocumentEquipmentComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const safetyDocumentId = this.route.snapshot.paramMap.get('id');
+    //this.loadDevices(+wrId!);
+    this.tabMessaging.showEdit(+safetyDocumentId!);
   }
 
   ngAfterViewInit() {

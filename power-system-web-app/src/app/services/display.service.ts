@@ -31,12 +31,9 @@ export class DisplayService {
   {
 
     let date: Date = new Date(dateETR);
-     
-    
-    if(date.getDay() == 1)
-      return date.getDay() + " d, " + date.getHours() + " h, " + date.getMinutes() + " min";
-    else
-    return date.getDay() + " d, " + date.getHours() + " h, " + date.getMinutes() + " min";
+
+    return date.getHours() + " h, " + date.getMinutes() + " min";
+  
   }
 
   getStateChangeDateDisplay(date:Date)

@@ -29,5 +29,22 @@ namespace SmartEnergyDomainModels
         public NotificationAnchor NotificationAnchor { get; set; }
         public WorkPlan WorkPlan { get; set; }
         public List<DeviceUsage> DeviceUsages { get; set; }
+
+
+        public void Update(SafetyDocument newData)
+        {         
+         
+            Details = newData.Details;
+            Notes = newData.Notes;
+            Phone = newData.Phone;
+            DocumentStatus = newData.DocumentStatus;
+            DocumentType = newData.DocumentType;
+            WorkPlanID = newData.WorkPlanID;
+
+
+          
+        }
+
+        //public void UpdateCheckList()
     }
 }

@@ -28,6 +28,22 @@ namespace SmartEnergy.Service.Services
             _mapper = mapper;
         }
 
+        public void CopyIncidentDevicesToSafetyDocument(int workPlanId, int safetyDocumentId)
+        {
+            SafetyDocument sf = _dbContext.SafetyDocuments.Find(safetyDocumentId);
+            if (sf == null)
+                throw new SafetyDocumentNotFoundException($"Safety document with ID {safetyDocumentId} does not exist");
+
+            List<DeviceUsage> usages = _dbContext.DeviceUsages.Where(x => x.WorkPlanID == workPlanId).ToList();
+
+            foreach (DeviceUsage deviceUsage in usages)
+            {
+                deviceUsage.SafetyDocumentID = safetyDocumentId;
+            }
+
+            _dbContext.SaveChanges();
+        }
+
         public void CopyIncidentDevicesToWorkRequest(int incidentID, int workRequestID)
         {
             WorkRequest wr = _dbContext.WorkRequests.Find(workRequestID);

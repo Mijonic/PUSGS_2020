@@ -8,5 +8,7 @@ namespace SmartEnergy.Contract.Interfaces
     public interface IDeviceUsageService : IGenericService<DeviceUsageDto>
     {
         void CopyIncidentDevicesToWorkRequest(int incidentID, int workRequestID);
+
+        public void CopyIncidentDevicesToSafetyDocument(int workPlanId, int safetyDocumentId);
     }
 }
