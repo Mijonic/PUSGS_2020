@@ -9,23 +9,21 @@
          </div>
 
 
-          <div class="row">
+         <div class="row">
+            <div class="col-md-12 d-flex justify-content-start">
+                <h1 class="p-3 pb-5">State change history</h1>
+            </div>
+         </div>
+         
+         <div class='w-100 d-flex justify-content-center'*ngIf="isLoading">
+            <mat-spinner color='primary' [diameter]= "'100'" ></mat-spinner>
+        </div>
+
+          <div class="row" *ngFor="let stateChange of stateChanges">
               <div class="col-md-12">
-                  <app-state-change></app-state-change>
+                  <app-state-change [stateChange]="stateChange"></app-state-change>
               </div>
           </div>
-
-          <div class="row">
-            <div class="col-md-12">
-                <app-state-change></app-state-change>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <app-state-change></app-state-change>
-            </div>
-        </div>
 
         <div class="row">
             <div class="col-md-4">
