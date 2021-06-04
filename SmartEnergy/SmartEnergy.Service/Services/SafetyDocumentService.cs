@@ -163,6 +163,21 @@ namespace SmartEnergy.Service.Services
             return _mapper.Map<SafetyDocumentDto>(existing);
         }
 
+        public ChecklistDto UpdateSafetyDocumentChecklist(ChecklistDto checklistDto)
+        {
+            SafetyDocument sf = _dbContext.SafetyDocuments.Find(checklistDto.SafetyDocumentId);
+
+            if (sf == null)
+                throw new SafetyDocumentNotFoundException($"Safety document with id {checklistDto.SafetyDocumentId} does not exist.");
+
+            sf.UpdateChecklist(checklistDto);
+
+            _dbContext.SaveChanges();
+
+            return new ChecklistDto() { SafetyDocumentId = sf.ID, TagsRemoved = sf.TagsRemoved, Ready = sf.Ready, GroundingRemoved = sf.GroundingRemoved, OperationCompleted = sf.OperationCompleted };
+
+        }
+
         private void ValidateSafetyDocument(SafetyDocumentDto entity)
         {
             if (_dbContext.WorkPlans.Find(entity.WorkPlanID) == null)

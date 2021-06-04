@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Checklist } from 'app/shared/models/checklist.model';
 import { SafetyDocument } from 'app/shared/models/safety-document.model';
 import { StateChange } from 'app/shared/models/state-change.model';
 import { environment } from 'environments/environment';
@@ -35,6 +36,15 @@ export class SafetyDocumentService {
     let requestUrl = environment.serverURL.concat(`safety-documents/${safetyDocument.id}`);
     return this.http.put<SafetyDocument>(requestUrl, safetyDocument);
   }
+
+  updateSafetyDocumentChecklist(checklist: Checklist):Observable<Checklist>{
+    console.log("U metodi serivsa");
+    console.log(checklist)
+    let requestUrl = environment.serverURL.concat(`safety-documents/${checklist.safetyDocumentId}/checklist`);
+    return this.http.put<Checklist>(requestUrl, checklist);
+  }
+
+  
 
   getCrewForSafetyDocument(id:number):Observable<SafetyDocument>{
     let requestUrl = environment.serverURL.concat(`safety-documents/${id}/crew`);

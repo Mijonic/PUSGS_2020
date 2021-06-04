@@ -1,4 +1,5 @@
-﻿using SmartEnergy.Contract.Enums;
+﻿using SmartEnergy.Contract.DTO;
+using SmartEnergy.Contract.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -44,6 +45,15 @@ namespace SmartEnergyDomainModels
 
           
         }
+
+        public void UpdateChecklist(ChecklistDto updated)
+        {
+            OperationCompleted = updated.OperationCompleted;
+            TagsRemoved = updated.TagsRemoved;
+            GroundingRemoved = updated.GroundingRemoved;
+            Ready = updated.Ready;
+      
+    }
 
         //public void UpdateCheckList()
     }

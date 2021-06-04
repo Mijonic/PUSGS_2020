@@ -9,5 +9,9 @@ namespace SmartEnergy.Contract.Interfaces
     {
 
         CrewDto GetCrewForSafetyDocument(int safetyDocumentId);
+
+        ChecklistDto UpdateSafetyDocumentChecklist(ChecklistDto checklistDto);
+
+       
     }
 }

@@ -114,7 +114,7 @@ namespace SmartEnergyAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SafetyDocumentDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult UpdateDevice(int id, [FromBody] SafetyDocumentDto modifiedSafetyDocument)
+        public IActionResult UpdateSafetyDocument(int id, [FromBody] SafetyDocumentDto modifiedSafetyDocument)
         {
             try
             {
@@ -146,6 +146,32 @@ namespace SmartEnergyAPI.Controllers
 
 
         }
+
+
+
+        [HttpPut("{id}/checklist")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ChecklistDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult UpdateSafetyDocumentChecklist([FromBody] ChecklistDto checklist)
+        {
+            try
+            {
+                ChecklistDto updated = _safetyDocumentService.UpdateSafetyDocumentChecklist(checklist);
+
+                return Ok(updated);
+            }
+            catch (SafetyDocumentNotFoundException sfnf)
+            {
+                return NotFound(sfnf.Message);
+            }
+           
+
+
+
+        }
+
+        
 
 
         [HttpGet("{id}/state-changes")]
