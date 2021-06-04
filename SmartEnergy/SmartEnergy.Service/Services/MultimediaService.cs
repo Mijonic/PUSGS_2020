@@ -6,7 +6,7 @@ using nClam;
 using SmartEnergy.Contract.CustomExceptions;
 using SmartEnergy.Contract.CustomExceptions.Incident;
 using SmartEnergy.Contract.CustomExceptions.Multimedia;
-using SmartEnergy.Contract.CustomExceptions.User;
+using SmartEnergy.Contract.CustomExceptions.SafetyDocument;
 using SmartEnergy.Contract.CustomExceptions.WorkRequest;
 using SmartEnergy.Contract.DTO;
 using SmartEnergy.Contract.Enums;
@@ -61,6 +61,39 @@ namespace SmartEnergy.Service.Services
             MultimediaAttachment attachment = new MultimediaAttachment();
             attachment.Url = formFile.FileName;
             attachment.MultimediaAnchorID = (int)inc.MultimediaAnchorID;
+            _dbContext.MultimediaAttachments.Add(attachment);
+
+            _dbContext.SaveChanges();
+
+        }
+
+        public async Task AttachFileToSafetyDocumentAsync(IFormFile formFile, int safetyDocId)
+        {
+            await ScanAttachmentAsync(formFile);
+            SafetyDocument sd = _dbContext.SafetyDocuments.Find(safetyDocId);
+
+            if (sd == null)
+                throw new SafetyDocumentNotFoundException($"Safety Document with id {safetyDocId} does not exist.");
+
+            if (sd.DocumentStatus == DocumentStatus.APPROVED || sd.DocumentStatus == DocumentStatus.CANCELLED)
+                throw new SafetyDocumentInvalidStateException($"Cannot attach to this safety document as it is already {sd.DocumentStatus}");
+
+            string filePath = Path.Combine(@$"Attachments/SD{safetyDocId}/", formFile.FileName);
+            if (_dbContext.MultimediaAttachments.FirstOrDefault(x => x.MultimediaAnchorID == sd.MultimediaAnchorID
+                                                                && x.Url == formFile.FileName) != null)
+            {
+                throw new MultimediaAlreadyExists($"Attachment with name {formFile.FileName} is already attached to this safety document.");
+            }
+            new FileInfo(filePath).Directory?.Create();
+            using (FileStream stream = new FileStream(filePath, FileMode.Create))
+            {
+                formFile.CopyTo(stream);
+
+            }
+
+            MultimediaAttachment attachment = new MultimediaAttachment();
+            attachment.Url = formFile.FileName;
+            attachment.MultimediaAnchorID = (int)sd.MultimediaAnchorID;
             _dbContext.MultimediaAttachments.Add(attachment);
 
             _dbContext.SaveChanges();
@@ -163,6 +196,41 @@ namespace SmartEnergy.Service.Services
             }
         }
 
+        public void DeleteSafetyDocumentAttachment(int safetyDocId, string filename)
+        {
+            SafetyDocument sd = _dbContext.SafetyDocuments.Find(safetyDocId);
+
+            if (sd == null)
+                throw new SafetyDocumentNotFoundException($"Safety Document with id {safetyDocId} does not exist.");
+
+            if (sd.DocumentStatus == DocumentStatus.APPROVED || sd.DocumentStatus == DocumentStatus.CANCELLED)
+                throw new SafetyDocumentInvalidStateException($"Cannot delete from this safety document as it is already {sd.DocumentStatus}");
+
+
+            MultimediaAttachment attachment = _dbContext.MultimediaAttachments.FirstOrDefault(x => x.MultimediaAnchorID == sd.MultimediaAnchorID
+                                                                                                && x.Url == filename);
+
+            if (attachment == null)
+                throw new MultimediaNotFoundException($"Safety document with ID {safetyDocId} does not contain file with name {filename}");
+
+            _dbContext.MultimediaAttachments.Remove(attachment);
+
+            if (File.Exists(@$"Attachments/SD{safetyDocId}/{filename}"))
+            {
+                File.Delete(@$"Attachments/SD{safetyDocId}/{filename}");
+            }
+
+            _dbContext.SaveChanges();
+        }
+
+        public void DeleteSafetyDocumentFileOnDisk(int safetyDocID, string filePath)
+        {
+            if (File.Exists(@$"Attachments/SD{safetyDocID}/{filePath}"))
+            {
+                File.Delete(@$"Attachments/SD{safetyDocID}/{filePath}");
+            }
+        }
+
         public void DeleteWorkRequestAttachment(int workRequestId, string filename)
         {
             WorkRequest wr = _dbContext.WorkRequests.Find(workRequestId);
@@ -219,6 +287,32 @@ namespace SmartEnergy.Service.Services
             if (attachment == null)
                 throw new MultimediaNotFoundException($"Multimedia attachment with name {fileName} does not exist.");
             FileStream stream = new FileStream(@$"Attachments/INC{incidentId}/{fileName}", FileMode.Open);
+            return stream;
+        }
+
+        public List<MultimediaAttachmentDto> GetSafetyDocumentAttachments(int safetyDocId)
+        {
+            SafetyDocument sd = _dbContext.SafetyDocuments.Include(x => x.MultimediaAnchor)
+                                                        .ThenInclude(x => x.MultimediaAttachments)
+                                                        .FirstOrDefault(x => x.ID == safetyDocId);
+            if (sd == null)
+                throw new SafetyDocumentNotFoundException($"Safety Document with id {safetyDocId} does not exist.");
+
+
+            return _mapper.Map<List<MultimediaAttachmentDto>>(sd.MultimediaAnchor.MultimediaAttachments);
+        }
+
+        public FileStream GetSafetyDocumentAttachmentStream(int safetyDocId, string fileName)
+        {
+            SafetyDocument sd = _dbContext.SafetyDocuments.Find(safetyDocId);
+            if (sd == null)
+                throw new SafetyDocumentNotFoundException($"Safety Document with id {safetyDocId} does not exist.");
+
+            MultimediaAttachment attachment = _dbContext.MultimediaAttachments.Where(x => x.MultimediaAnchorID == sd.MultimediaAnchorID &&
+                                                                                     x.Url == fileName).FirstOrDefault();
+            if (attachment == null)
+                throw new MultimediaNotFoundException($"Multimedia attachment with name {fileName} does not exist.");
+            FileStream stream = new FileStream(@$"Attachments/SD{safetyDocId}/{fileName}", FileMode.Open);
             return stream;
         }
 

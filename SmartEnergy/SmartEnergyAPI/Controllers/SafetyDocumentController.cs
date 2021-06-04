@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartEnergy.Contract.CustomExceptions;
+using SmartEnergy.Contract.CustomExceptions.Multimedia;
 using SmartEnergy.Contract.CustomExceptions.SafetyDocument;
 using SmartEnergy.Contract.CustomExceptions.WorkPlan;
 using SmartEnergy.Contract.CustomExceptions.WorkRequest;
@@ -20,11 +21,13 @@ namespace SmartEnergyAPI.Controllers
 
         private readonly ISafetyDocumentService _safetyDocumentService;
         private readonly IStateChangeService _stateChangeService;
+        private readonly IMultimediaService _multimediaService;
 
-        public SafetyDocumentController(ISafetyDocumentService safetyDocumentService, IStateChangeService stateChangeService)
+        public SafetyDocumentController(ISafetyDocumentService safetyDocumentService, IStateChangeService stateChangeService, IMultimediaService multimediaService)
         {
             _safetyDocumentService = safetyDocumentService;
             _stateChangeService = stateChangeService;
+            _multimediaService = multimediaService;
         }
 
         [HttpGet]
@@ -261,7 +264,103 @@ namespace SmartEnergyAPI.Controllers
             }
         }
 
+        #region Multimedia
+        [HttpPost("{id}/attachments")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [RequestSizeLimit(long.MaxValue)]
+        public async Task<IActionResult> AttachFileAsync(int id, IFormFile file)
+        {
+            try
+            {
+                await _multimediaService.AttachFileToSafetyDocumentAsync(file, id);
+                return Ok();
+            }
+            catch (SafetyDocumentNotFoundException wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+            catch (MultimediaAlreadyExists mae)
+            {
+                return BadRequest(mae.Message);
+            }
+            catch (MultimediaInfectedException mie)
+            {
+                return BadRequest(mie.Message);
+            }
+            catch (SafetyDocumentInvalidStateException mnf)
+            {
+                return BadRequest(mnf.Message);
+            }
+        }
 
+        [HttpGet("{id}/attachments/{filename}")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetFile(int id, string filename)
+        {
+            try
+            {
+                return File(_multimediaService.GetSafetyDocumentAttachmentStream(id, filename), "application/octet-stream", filename);
+            }
+            catch (SafetyDocumentNotFoundException wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+            catch (MultimediaNotFoundException mne)
+            {
+                return NotFound(mne.Message);
+            }
+        }
+
+
+        [HttpGet("{id}/attachments")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<MultimediaAttachmentDto>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetSafetyDocumentAttachments(int id)
+        {
+            try
+            {
+                return Ok(_multimediaService.GetSafetyDocumentAttachments(id));
+            }
+            catch (SafetyDocumentNotFoundException wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+        }
+
+
+        [HttpDelete("{id}/attachments/{filename}")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult DeleteAttachment(int id, string filename)
+        {
+            try
+            {
+                _multimediaService.DeleteSafetyDocumentAttachment(id, filename);
+                return Ok();
+            }
+            catch (SafetyDocumentNotFoundException wnf)
+            {
+                return NotFound(wnf.Message);
+            }
+            catch (MultimediaNotFoundException mnf)
+            {
+                return NotFound(mnf.Message);
+            }
+            catch (SafetyDocumentInvalidStateException mnf)
+            {
+                return BadRequest(mnf.Message);
+            }
+
+        }
+        #endregion
 
 
         //[HttpDelete("{id}")]

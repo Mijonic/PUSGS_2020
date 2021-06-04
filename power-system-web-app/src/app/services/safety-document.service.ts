@@ -1,17 +1,49 @@
-import { HttpClient } from '@angular/common/http';
+import { IMultimediaService } from './../shared/interfaces/multimedia-service';
+import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Checklist } from 'app/shared/models/checklist.model';
 import { SafetyDocument } from 'app/shared/models/safety-document.model';
 import { StateChange } from 'app/shared/models/state-change.model';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
+import { MultimediaAttachment } from 'app/shared/models/multimedia-attachment.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SafetyDocumentService {
+export class SafetyDocumentService implements IMultimediaService{
 
   constructor(private http: HttpClient) { }
+
+  downloadAttachment(documentId: number, filename: string): Observable<any> {
+    let requestUrl = environment.serverURL.concat(`safety-documents/${documentId}/attachments/${filename}`);
+		return this.http.get(requestUrl, {responseType: 'blob'});
+  }
+
+  getAttachments(documentId: number): Observable<MultimediaAttachment[]> {
+    let requestUrl = environment.serverURL.concat(`safety-documents/${documentId}/attachments`);
+		return this.http.get<MultimediaAttachment[]>(requestUrl);
+  }
+
+  uploadAttachment(file: File, documentId: number): Observable<HttpEvent<any>> {
+    let requestUrl = environment.serverURL.concat(`safety-documents/${documentId}/attachments`);
+    const formData: FormData = new FormData();
+
+    formData.append('file', file);
+
+    const request = new HttpRequest('POST', requestUrl, formData, {
+      reportProgress: true,
+      responseType: 'json'
+    });
+
+    return this.http.request(request);
+  }
+
+  deleteAttachment(filename: string, documentId: number): Observable<any> {
+    let requestUrl = environment.serverURL.concat(`safety-documents/${documentId}/attachments/${filename}`);
+    return this.http.delete(requestUrl);
+  }
+
   
   getAllSafetyDocuments():Observable<SafetyDocument[]>{
     let requestUrl = environment.serverURL.concat("safety-documents");
