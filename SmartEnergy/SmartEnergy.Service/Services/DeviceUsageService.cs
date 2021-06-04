@@ -36,6 +36,8 @@ namespace SmartEnergy.Service.Services
 
             List<DeviceUsage> usages = _dbContext.DeviceUsages.Where(x => x.WorkPlanID == workPlanId).ToList();
 
+         
+
             foreach (DeviceUsage deviceUsage in usages)
             {
                 deviceUsage.SafetyDocumentID = safetyDocumentId;

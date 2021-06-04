@@ -1,3 +1,8 @@
+<div class='w-100 d-flex justify-content-center '*ngIf="isLoading">
+  <div class="loading-shade">
+    <mat-spinner color='primary' [diameter]= "'200'" ></mat-spinner>
+  </div>
+</div>
 <div class="container-fluid p-3 m-1 pr-4" *ngIf="isLoading == false">
     <div class="mat-elevation-z8 mt-4">
       <mat-expansion-panel hideToggle>

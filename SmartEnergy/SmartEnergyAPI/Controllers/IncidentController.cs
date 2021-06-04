@@ -176,6 +176,31 @@ namespace SmartEnergyAPI.Controllers
 
 
 
+        [HttpPut("{incidentId}/assign/{userId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult AssignIncidetToUser(int incidentId, int userId)
+        {
+
+            try
+            {
+
+                _incidentService.AssignIncidetToUser(incidentId, userId);
+
+                return Ok();
+            }
+            catch (IncidentNotFoundException incidentNotFound)
+            {
+                return NotFound(incidentNotFound.Message);
+            }
+            catch (UserNotFoundException usernf)
+            {
+                return NotFound(usernf.Message);
+            }
+        }
+
+        
+
         [HttpGet("{incidentId}/crew")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
         public IActionResult GetIncidentCrew(int incidentId)

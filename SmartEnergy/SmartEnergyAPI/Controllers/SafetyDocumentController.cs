@@ -39,6 +39,27 @@ namespace SmartEnergyAPI.Controllers
         }
 
 
+        [HttpGet("{id}/devices")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetSafetyDocumentDevices(int id)
+        {
+            try
+            {
+                return Ok( _safetyDocumentService.GetSafetyDocumentDevices(id));
+
+            }
+            catch (SafetyDocumentNotFoundException sfnf)
+            {
+                return NotFound(sfnf.Message);
+            }
+
+
+
+        }
+
+
+
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SafetyDocumentDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -174,6 +195,7 @@ namespace SmartEnergyAPI.Controllers
 
         }
 
+        
         
 
 

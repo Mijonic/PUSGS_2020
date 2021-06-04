@@ -89,7 +89,7 @@ export class IncidentService implements IMultimediaService {
    
     let incident: Incident = new Incident();
     let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/device/${deviceId}`);
-    return this.http.post<Incident>(requestUrl, incident);                  /// proveriti
+    return this.http.post<Incident>(requestUrl, incident);                  
   }
 
 
@@ -97,8 +97,19 @@ export class IncidentService implements IMultimediaService {
    
     let incident: Incident = new Incident();
     let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/crew/${crewId}`);
-    return this.http.put<Incident>(requestUrl, incident);                  /// proveriti
+    return this.http.put<Incident>(requestUrl, incident);                
   }
+
+
+  assignIncidetToUser(incidentId: number, userId: number):Observable<Incident>{
+   
+    let incident: Incident = new Incident();
+    let requestUrl = environment.serverURL.concat(`incidents/${incidentId}/assign/${userId}`);
+    return this.http.put<Incident>(requestUrl, incident);                  
+  }
+
+
+ 
 
 
   getIncidentCrew(incidentId:number):Observable<Crew>{

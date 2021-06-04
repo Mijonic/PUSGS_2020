@@ -7,6 +7,7 @@ import { StateChange } from 'app/shared/models/state-change.model';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { MultimediaAttachment } from 'app/shared/models/multimedia-attachment.model';
+import { Device } from 'app/shared/models/device.model';
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +39,12 @@ export class SafetyDocumentService implements IMultimediaService{
 
     return this.http.request(request);
   }
+
+  getSafetyDocumentDevices(id:number):Observable<Device[]>{
+    let requestUrl = environment.serverURL.concat(`safety-documents/${id}/devices`);
+    return this.http.get<Device[]>(requestUrl);
+  }
+
 
   deleteAttachment(filename: string, documentId: number): Observable<any> {
     let requestUrl = environment.serverURL.concat(`safety-documents/${documentId}/attachments/${filename}`);

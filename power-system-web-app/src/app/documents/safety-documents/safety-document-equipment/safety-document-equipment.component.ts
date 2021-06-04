@@ -10,23 +10,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'app/services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { TabMessagingService } from 'app/services/tab-messaging.service';
+import { Device } from 'app/shared/models/device.model';
+import { SafetyDocumentService } from 'app/services/safety-document.service';
+import { DisplayService } from 'app/services/display.service';
 
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-  color: string;
-}
-
-/** Constants used to fill up our data base. */
-const COLORS: string[] = [
-  'maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple', 'fuchsia', 'lime', 'teal',
-  'aqua', 'blue', 'navy', 'black', 'gray'
-];
-const NAMES: string[] = [
-  'Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack', 'Charlotte', 'Theodore', 'Isla', 'Oliver',
-  'Isabella', 'Jasper', 'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'
-];
 
 
 @Component({
@@ -36,66 +23,46 @@ const NAMES: string[] = [
 })
 export class SafetyDocumentEquipmentComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'type', 'coordinates', 'address', 'map', 'remove'];
-  dataSource: MatTableDataSource<UserData>;
+  displayedColumns: string[] = ['id', 'name', 'deviceType', 'coordinates', 'address', 'actions'];
+  dataSource: MatTableDataSource<Device>;
+  isLoading:boolean = true;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
-  constructor(public dialog:MatDialog, private validation:ValidationService, private route:ActivatedRoute, private userService:UserService,
-    private toastr:ToastrService, private router:Router,
-   private tabMessaging:TabMessagingService) {
-    // Create 100 users
-    const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
-
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(users);
+  constructor(public dialog:MatDialog, private safetyDocumentService:SafetyDocumentService, private route:ActivatedRoute, private toastr:ToastrService,
+    private tabMessaging:TabMessagingService, public display:DisplayService) {
   }
 
   ngOnInit(): void {
-    const safetyDocumentId = this.route.snapshot.paramMap.get('id');
-    //this.loadDevices(+wrId!);
-    this.tabMessaging.showEdit(+safetyDocumentId!);
+    const sf = this.route.snapshot.paramMap.get('id');
+    console.log(sf);
+    this.loadDevices(+sf!);
+    this.tabMessaging.showEdit(+sf!);
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
-
-
-
-  onAddDevice()
+  loadDevices(id:number)
   {
-    const dialogRef = this.dialog.open(ChooseEquipmentDialogComponent, {width: "70%"});
-
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log(`The dialog was closed and choosen id is ${result}`);
-    });
+    this.isLoading = true;
+    this.safetyDocumentService.getSafetyDocumentDevices(id).subscribe(
+      data =>{
+        this.dataSource = new MatTableDataSource(data);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.isLoading = false;
+      },
+      error =>{
+        if(error.error instanceof ProgressEvent)
+          {
+            this.loadDevices(id);
+          }else
+          {
+            this.toastr.error(error.error);
+          }
+      }
+    )
   }
 
-}
-
-/** Builds and returns a new User. */
-function createNewUser(id: number): UserData {
-  const name = NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
-
-  return {
-    id: id.toString(),
-    name: name,
-    progress: Math.round(Math.random() * 100).toString(),
-    color: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
-  };
 }
 
 

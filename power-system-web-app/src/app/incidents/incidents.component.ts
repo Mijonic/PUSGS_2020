@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { DisplayService } from 'app/services/display.service';
 import { IncidentService } from 'app/services/incident.service';
 import { Incident } from 'app/shared/models/incident.model';
+import { User } from 'app/shared/models/user.model';
 import { ToastrService } from 'ngx-toastr';
 
 
@@ -31,6 +32,7 @@ export class IncidentsComponent implements OnInit  {
 
   incidents:Incident[] = [];
   allIncidents:Incident[] = [];
+  user: User = new User();
   
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -43,6 +45,8 @@ export class IncidentsComponent implements OnInit  {
   ngOnInit(): void {
     window.dispatchEvent(new Event('resize'));
     this.getIncidents();
+
+    this.user = JSON.parse(localStorage.getItem("user")!);
     
     
   }
@@ -88,6 +92,33 @@ export class IncidentsComponent implements OnInit  {
         this.getIncidents();
         this.toastr.success("Incident successfully deleted","", {positionClass: 'toast-bottom-left'});
     });
+  }
+
+  assignIncidentToUser(incidentId: number)
+  {
+    this.incidentService.assignIncidetToUser(incidentId, +this.user.id).subscribe(
+      data =>{
+        
+        this.toastr.success('Incicent succesfully assigned to you',"", {positionClass: 'toast-bottom-left'})
+       
+       
+        
+      },
+      error =>{
+      this.isLoading = false;
+        if(error.error instanceof ProgressEvent)
+          {
+            
+            this.toastr.success('Server is unreachable',"", {positionClass: 'toast-bottom-left'})
+          }else
+          {
+            
+            this.toastr.error(error.error,"", {positionClass: 'toast-bottom-left'})
+          }
+          
+        
+      }
+    )
   }
 
   

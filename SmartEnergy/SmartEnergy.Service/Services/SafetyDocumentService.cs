@@ -91,6 +91,22 @@ namespace SmartEnergy.Service.Services
             return _mapper.Map<CrewDto>(sf.WorkPlan.WorkRequest.Incident.Crew);
         }
 
+        public List<DeviceDto> GetSafetyDocumentDevices(int safetyDocumentId)
+        {
+            SafetyDocument sf = _dbContext.SafetyDocuments.Include(x => x.DeviceUsages)
+                                                             .ThenInclude(x => x.Device)
+                                                             .ThenInclude(x => x.Location)
+                                                             .FirstOrDefault(x => x.ID == safetyDocumentId);
+            if (sf == null)
+                throw new SafetyDocumentNotFoundException($"Safety document with id {safetyDocumentId} does not exist.");
+
+            List<Device> devices = new List<Device>();
+            foreach (DeviceUsage d in sf.DeviceUsages)
+                devices.Add(d.Device);
+
+            return _mapper.Map<List<DeviceDto>>(devices);
+        }
+
         public SafetyDocumentDto Insert(SafetyDocumentDto entity)
         {
 

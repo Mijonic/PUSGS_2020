@@ -719,5 +719,27 @@ namespace SmartEnergy.Service.Services
 
             }
         }
+
+        public void AssignIncidetToUser(int incidentId, int userId)
+        {
+            Incident incident = _dbContext.Incidents.Find(incidentId);
+
+            if (incident == null)
+                throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
+
+            User user = _dbContext.Users.Find(userId);
+
+
+            if (user == null)
+                throw new UserNotFoundException($"User with id {userId} does not exist.");
+
+            incident.UserID = userId;
+
+            _dbContext.SaveChanges();
+
+
+
+
+        }
     }
 }

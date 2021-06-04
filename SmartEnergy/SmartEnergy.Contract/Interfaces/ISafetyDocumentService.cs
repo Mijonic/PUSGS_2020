@@ -12,6 +12,10 @@ namespace SmartEnergy.Contract.Interfaces
 
         ChecklistDto UpdateSafetyDocumentChecklist(ChecklistDto checklistDto);
 
-       
+        List<DeviceDto> GetSafetyDocumentDevices(int safetyDocumentId);
+     
+
+
+
     }
 }

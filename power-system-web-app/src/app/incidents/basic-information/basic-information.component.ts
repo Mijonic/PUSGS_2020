@@ -8,6 +8,7 @@ import { IncidentService } from 'app/services/incident.service';
 import { TabMessagingService } from 'app/services/tab-messaging.service';
 import { ValidationService } from 'app/services/validation.service';
 import { Incident } from 'app/shared/models/incident.model';
+import { User } from 'app/shared/models/user.model';
 import { ToastrService } from 'ngx-toastr';
 import { isObservable } from 'rxjs';
 
@@ -69,7 +70,7 @@ export class BasicInformationComponent implements OnInit {
   numberOfCalls: number = 0;
   priority: number = 0;
     
-  
+  user:User = new User();
 
 
 
@@ -86,6 +87,10 @@ export class BasicInformationComponent implements OnInit {
       this.loadIncident(this.incidentId);
       this.getNumberOfAffectedConsumers(this.incidentId);
       this.getNumberOfIncidentCalls(this.incidentId);
+    }else
+    {
+      this.user = JSON.parse(localStorage.getItem("user")!);
+     
     }
   }
 
@@ -211,7 +216,12 @@ export class BasicInformationComponent implements OnInit {
 
      // console.log(this.incident.etr);
     
-      this.incident.userId = 4;
+      //this.incident.userId = 4;
+      if(this.isNew)
+      {
+        this.incident.userId = this.user.id;
+       
+      }
   }
 
 

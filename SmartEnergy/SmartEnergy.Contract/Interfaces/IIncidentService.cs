@@ -36,6 +36,8 @@ namespace SmartEnergy.Contract.Interfaces
 
         CallDto AddIncidentCall(int incidentId, CallDto newCall);
 
+        void AssignIncidetToUser(int incidentId, int userId);
+
 
     }
 }
