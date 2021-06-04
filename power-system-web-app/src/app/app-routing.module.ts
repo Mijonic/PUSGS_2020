@@ -187,6 +187,9 @@ const routes: Routes = [
     {
       path: 'multimedia/:id',
       component: MultimediaAttachmentsComponent, 
+      data:{
+        requiredService: SAFETY_DOCUMENTS_SERVICE_TOKEN,
+      }
     },
     {
       path: 'state-changes/:id',
