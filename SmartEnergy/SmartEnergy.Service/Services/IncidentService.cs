@@ -15,6 +15,7 @@ using SmartEnergyDomainModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 
 namespace SmartEnergy.Service.Services
@@ -27,15 +28,18 @@ namespace SmartEnergy.Service.Services
         private readonly IDeviceUsageService _deviceUsageService;
         private readonly ICallService _callService;
         private readonly IMapper _mapper;
-        
+        private readonly IAuthHelperService _authHelperService;
 
-        public IncidentService(SmartEnergyDbContext dbContext, ITimeService timeService, IDeviceUsageService deviceUsageService,  IMapper mapper, ICallService callService)
+
+
+        public IncidentService(SmartEnergyDbContext dbContext, ITimeService timeService, IDeviceUsageService deviceUsageService,  IMapper mapper, ICallService callService, IAuthHelperService authHelperService)
         {
             _dbContext = dbContext;
             _timeService = timeService;
             _deviceUsageService = deviceUsageService;
             _callService = callService;
             _mapper = mapper;
+            _authHelperService = authHelperService;
 
 
         }
@@ -741,5 +745,151 @@ namespace SmartEnergy.Service.Services
 
 
         }
+
+        public IncidentListDto GetIncidentsPaged(IncidentFields sortBy, SortingDirection direction, int page, int perPage, IncidentFilter filter, OwnerFilter owner, string searchParam, ClaimsPrincipal user)
+        {
+            IQueryable<Incident> incidents = _dbContext.Incidents.Include(x => x.User).AsQueryable();
+
+            incidents = FilterIncidents(incidents, filter);
+            incidents = FilterIncidentsByOwner(incidents, owner, user);
+            incidents = SearchIncidents(incidents, searchParam);
+            incidents = SortIncidents(incidents, sortBy, direction);
+
+            int resourceCount = incidents.Count();
+            incidents = incidents.Skip(page * perPage)
+                                    .Take(perPage);
+
+            IncidentListDto returnValue = new IncidentListDto()
+            {
+                Incidents = _mapper.Map<List<IncidentDto>>(incidents.ToList()),
+                TotalCount = resourceCount
+            };
+
+            return returnValue;
+        }
+
+
+        private IQueryable<Incident> FilterIncidents(IQueryable<Incident> incidents, IncidentFilter filter)
+        {
+            //Filter by status, ignore if ALL
+            switch (filter)
+            {
+                case IncidentFilter.CONFIRMED:
+                    return incidents.Where(x => x.Confirmed == true);
+                case IncidentFilter.RESOLVED:
+                    return incidents.Where(x => x.IncidentStatus == IncidentStatus.RESOLVED);
+                case IncidentFilter.UNRESOLVED:
+                    return incidents.Where(x => x.IncidentStatus == IncidentStatus.UNRESOLVED);
+                case IncidentFilter.INITIAL:
+                    return incidents.Where(x => x.IncidentStatus == IncidentStatus.INITIAL);
+                case IncidentFilter.PLANNED:
+                    return incidents.Where(x => x.WorkType == WorkType.PLANNED);
+                case IncidentFilter.UNPLANNED:
+                    return incidents.Where(x => x.WorkType == WorkType.UNPLANNED);
+
+              
+            }
+
+            return incidents;
+        }
+
+        private IQueryable<Incident> FilterIncidentsByOwner(IQueryable<Incident> incidents, OwnerFilter owner, ClaimsPrincipal user)
+        {
+            int userId = _authHelperService.GetUserIDFromPrincipal(user);
+            if (owner == OwnerFilter.mine)
+                incidents = incidents.Where(x => x.User.ID == userId);
+
+            return incidents;
+        }
+
+        private IQueryable<Incident> SearchIncidents(IQueryable<Incident> incidents, string searchParam)
+        {
+            if (string.IsNullOrWhiteSpace(searchParam)) //Ignore empty search
+                return incidents;
+           
+            return incidents.Where(x => x.ID.ToString().Trim().ToLower().Contains(searchParam.Trim().ToLower()) ||
+                                        x.VoltageLevel.ToString().Trim().ToLower().Contains(searchParam.Trim().ToLower()) ||
+                                        x.CrewID.ToString().Trim().ToLower().Contains(searchParam.Trim().ToLower()) ||
+                                        x.Priority.ToString().Trim().ToLower().Contains(searchParam.Trim().ToLower()));
+
+
+        }
+
+        private IQueryable<Incident> SortIncidents(IQueryable<Incident> incidents, IncidentFields sortBy, SortingDirection direction)
+        {
+            //Sort
+            if (direction == SortingDirection.asc)
+            {
+                switch (sortBy)
+                {
+                    case IncidentFields.ID:
+                        return incidents.OrderBy(x => x.ID);
+                    case IncidentFields.ATA:
+                        return incidents.OrderBy(x => x.ATA);
+                    case IncidentFields.CONFIRMED:
+                        return incidents.OrderBy(x => x.Confirmed);
+                    case IncidentFields.ETA:
+                        return incidents.OrderBy(x => x.ETA);
+                    case IncidentFields.ETR:
+                        return incidents.OrderBy(x => x.ETR.Value.Hour)
+                                         .ThenBy(x => x.ETR.Value.Minute);
+
+                    case IncidentFields.INCIDENTDATETIME:
+                        return incidents.OrderBy(x => x.IncidentDateTime);
+                    case IncidentFields.PLANNEDWORK:
+                        return incidents.OrderBy(x => x.WorkBeginDate);
+                    case IncidentFields.PRIORITY:
+                        return incidents.OrderBy(x => x.Priority);
+                    case IncidentFields.STATUS:
+                        return incidents.OrderBy(x => x.IncidentStatus);
+                    case IncidentFields.TYPE:
+                        return incidents.OrderBy(x => x.WorkType);
+                    case IncidentFields.VOLTAGELEVEL:
+                        return incidents.OrderBy(x => x.VoltageLevel);
+
+                }
+
+            }
+            else
+            {
+                switch (sortBy)
+                {
+                    case IncidentFields.ID:
+                        return incidents.OrderByDescending(x => x.ID);
+                    case IncidentFields.ATA:
+                        return incidents.OrderByDescending(x => x.ATA);
+                    case IncidentFields.CONFIRMED:
+                        return incidents.OrderByDescending(x => x.Confirmed);
+                    case IncidentFields.ETA:
+                        return incidents.OrderByDescending(x => x.ETA);
+                    case IncidentFields.ETR:
+                        return incidents.OrderByDescending(x => x.ETR.Value.Hour)
+                                         .ThenBy(x => x.ETR.Value.Minute);
+                    case IncidentFields.INCIDENTDATETIME:
+                        return incidents.OrderByDescending(x => x.IncidentDateTime);
+                    case IncidentFields.PLANNEDWORK:
+                        return incidents.OrderByDescending(x => x.WorkBeginDate);
+                    case IncidentFields.PRIORITY:
+                        return incidents.OrderByDescending(x => x.Priority);
+                    case IncidentFields.STATUS:
+                        return incidents.OrderByDescending(x => x.IncidentStatus);
+                    case IncidentFields.TYPE:
+                        return incidents.OrderByDescending(x => x.WorkType);
+                    case IncidentFields.VOLTAGELEVEL:
+                        return incidents.OrderByDescending(x => x.VoltageLevel);
+            }
+
+            }
+
+            return incidents;
+        }
+
+
+        
+
+
+
+
+
     }
 }

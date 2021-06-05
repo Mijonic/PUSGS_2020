@@ -7,7 +7,7 @@
 
 
 
-<div class="container-fluid p-3 m-1 pr-4" *ngIf="isLoading == false">
+<div class="container-fluid p-3 m-1 pr-4" [hidden]="isLoading">
     <div class="mat-elevation-z8 mt-4">
       <mat-expansion-panel hideToggle>
       <mat-expansion-panel-header>
@@ -15,44 +15,50 @@
           <mat-icon>more_vert</mat-icon>
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <div class="row">
-        <div class="col-md-12">
-          <mat-form-field>
-            <mat-label>Search</mat-label>
-            <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input> 
-          </mat-form-field>
-        </div>
-      </div> 
-      <div class="row">
-        <div class="col-md-4">
-          <mat-form-field appearance="fill">
-            <mat-label>Filter</mat-label>
-            <mat-select [formControl]="toppings" multiple>
-              <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col-md-4 pt-3 d-flex justify-content-center">
-          <mat-radio-group aria-label="Select an option">
-            <mat-radio-button value="1">All</mat-radio-button>&nbsp;&nbsp;&nbsp;
-            <mat-radio-button value="2">Only mine</mat-radio-button>
-          </mat-radio-group>
-        </div>
+      
+      <form [formGroup]="incidentForm">
+          <div class="row">
+            <div class="col-md-12">
+              <mat-form-field>
+                <mat-label>Search</mat-label>
+                <input matInput formControlName="searchControl" (keyup.enter)="reload()"  on-focusout="reload()" placeholder="Search for anything.." #input> 
+              </mat-form-field>
+            </div>
+          </div> 
+          <div class="row">
+            <div class="col-md-4">
+              <mat-form-field appearance="fill">
+                <mat-label>Filter</mat-label>
+                <mat-select formControlName="filterControl" (selectionChange)="reload()" >
+                  <mat-option *ngFor="let filter of filterIncident" [value]="filter.value">{{filter.filter}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 pt-3 d-flex justify-content-center">
+              <mat-radio-group  formControlName="documentOwnerControl" (change)="reload()" aria-label="Select an option">
+                <mat-radio-button value="all">All</mat-radio-button>&nbsp;&nbsp;&nbsp;
+                <mat-radio-button value="mine">Only mine</mat-radio-button>
+              </mat-radio-group>
+            </div>
 
-        <div class="col-md-4 pb-3 d-flex justify-content-end"> 
-          <button [routerLink]="['/incident']" class="button-add pt-2 d-flex justify-content-center"><mat-icon>add</mat-icon></button> 
-        </div>
-      </div>
+
+            <div class="col-md-4 pb-3 d-flex justify-content-end"> 
+              <button [routerLink]="['/incident']" class="button-add pt-2 d-flex justify-content-center"><mat-icon>add</mat-icon></button> 
+            </div>
+          </div>
+      </form>
     </mat-expansion-panel>
   </div>  
     <div class="row"> 
     <div class="col-md-12">
       <div class="mat-elevation-z8 mt-n1 table-responsive">
-        <table mat-table [dataSource]="dataSource" matSort> 
+        <table mat-table [dataSource]="dataSource" matSort
+        matSortActive="id" matSortDisableClear matSortDirection="asc"
+        (matSortChange)="resetPaging()"> 
       
           <!-- ID Column -->
-          <ng-container matColumnDef="action" >
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+          <ng-container matColumnDef="action" sticky >
+            <th mat-header-cell *matHeaderCellDef >  </th>
             <!--Change this-->
             <td mat-cell *matCellDef="let row"><a [routerLink]="['/incident/basic-info', row.id]"><mat-icon>edit</mat-icon></a><a [routerLink]="['/dashboard']"><mat-icon>delete</mat-icon></a></td>
           </ng-container>
@@ -99,7 +105,7 @@
           </ng-container>
 
            <!-- End Date collumn -->
-           <ng-container matColumnDef="incidentOccurred">
+           <ng-container matColumnDef="incidentDateTime">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Incident Occurred</th>
             <td mat-cell *matCellDef="let row" > {{display.getDateDisplayIncident(row.incidentDateTime)}} </td>
           </ng-container>
@@ -110,19 +116,7 @@
             <td mat-cell *matCellDef="let row" > {{display.getTimeDisplayIncidentETR(row.etr)}} </td>
           </ng-container>
 
-          <!--  
-          <ng-container matColumnDef="affectedConsumers">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Affected Consumers </th>
-            <td mat-cell *matCellDef="let row" > aaaa </td>
-          </ng-container>
-
-         
-          <ng-container matColumnDef="calls">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Calls</th>
-            <td mat-cell *matCellDef="let row"> aaaaa </td>
-          </ng-container>
-
-           -->
+       
 
           <!-- Phone no collumn -->
           <ng-container matColumnDef="voltageLevel">
@@ -137,7 +131,7 @@
           </ng-container>
 
           <ng-container matColumnDef="solveIncident">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Solve Incident</th>
+            <th mat-header-cell *matHeaderCellDef > Solve Incident</th>
             <td mat-cell *matCellDef="let row" > <a class="btn" (click)="assignIncidentToUser(row.id)"><mat-icon>handyman</mat-icon></a> </td>
           </ng-container>
       
@@ -146,7 +140,7 @@
       
          
           <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell" colspan="4">There are no incidents "{{input.value}}"</td>
+            <td class="mat-cell" colspan="4">There are no incidents</td>
           </tr>
 
         </table>
@@ -154,7 +148,7 @@
         <div class="row">
           <div class="col-md-12 mt-0 ">
             <div class="mat-elevation-z8">
-              <mat-paginator [pageSizeOptions]="[10, 15, 20]"></mat-paginator> 
+              <mat-paginator [pageSizeOptions]="[3, 5, 10, 15, 20]"></mat-paginator> 
             </div>
           </div>
         </div>

@@ -1,6 +1,8 @@
 ﻿using SmartEnergy.Contract.DTO;
+using SmartEnergy.Contract.Enums;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Text;
 
 namespace SmartEnergy.Contract.Interfaces
@@ -37,6 +39,13 @@ namespace SmartEnergy.Contract.Interfaces
         CallDto AddIncidentCall(int incidentId, CallDto newCall);
 
         void AssignIncidetToUser(int incidentId, int userId);
+
+
+        IncidentListDto GetIncidentsPaged(IncidentFields sortBy, SortingDirection direction, int page,
+                               int perPage, IncidentFilter filter, OwnerFilter owner,
+                               string searchParam, ClaimsPrincipal user);
+      
+
 
 
     }

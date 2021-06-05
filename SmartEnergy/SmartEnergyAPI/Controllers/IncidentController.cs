@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SmartEnergy.Contract.CustomExceptions;
 using SmartEnergy.Contract.CustomExceptions.Call;
 using SmartEnergy.Contract.CustomExceptions.Consumer;
@@ -9,6 +10,7 @@ using SmartEnergy.Contract.CustomExceptions.Incident;
 using SmartEnergy.Contract.CustomExceptions.Location;
 using SmartEnergy.Contract.CustomExceptions.Multimedia;
 using SmartEnergy.Contract.DTO;
+using SmartEnergy.Contract.Enums;
 using SmartEnergy.Contract.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -46,11 +48,23 @@ namespace SmartEnergyAPI.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<IncidentDto>))]
         public IActionResult Get()
         {
             return Ok(_incidentService.GetAll());
+        }
+
+
+        [HttpGet]
+        //[Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<IncidentDto>))]
+        public IActionResult GetIncidentsPaged([FromQuery] string searchParam, [FromQuery] IncidentFields sortBy, [FromQuery] SortingDirection direction,
+                                    [FromQuery][BindRequired] int page, [FromQuery][BindRequired] int perPage, [FromQuery] IncidentFilter filter,
+                                    [FromQuery] OwnerFilter owner)
+        {
+            return Ok(_incidentService.GetIncidentsPaged(sortBy, direction, page, perPage, filter, owner, searchParam, User));
         }
 
 

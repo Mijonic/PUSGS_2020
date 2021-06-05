@@ -1,6 +1,6 @@
 import { IMultimediaService } from './../shared/interfaces/multimedia-service';
 import { IncidentMapDisplay } from './../shared/models/incident-map-display.model';
-import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpParams, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Incident } from 'app/shared/models/incident.model';
 import { environment } from 'environments/environment';
@@ -9,6 +9,7 @@ import { Device } from 'app/shared/models/device.model';
 import { Crew } from 'app/shared/models/crew.model';
 import { Call } from 'app/shared/models/call.model';
 import { MultimediaAttachment } from 'app/shared/models/multimedia-attachment.model';
+import { IncidentList } from 'app/shared/models/incident-list.model';
 
 @Injectable({
   providedIn: 'root'
@@ -48,9 +49,36 @@ export class IncidentService implements IMultimediaService {
 
 
   getAllIncidents():Observable<Incident[]>{
-    let requestUrl = environment.serverURL.concat("incidents");
+    let requestUrl = environment.serverURL.concat("incidents/all");
     return this.http.get<Incident[]>(requestUrl);
   }
+
+  getIncidentsPaged( page: number, perPage:number,sort?: string, order?: string, filter?:string, searchParam?:string, documentOwner?:string):Observable<IncidentList>{
+   
+    let requestUrl = environment.serverURL.concat("incidents");
+    let params = new HttpParams();
+
+    if(sort)
+      params = params.append('sortBy', sort);
+    if(order)
+      params = params.append('direction', order);
+
+    params = params.append('page', page.toString());
+    params = params.append('perPage', perPage.toString());
+
+    if(searchParam)
+      params = params.append('searchParam', searchParam);
+
+    if(documentOwner)
+      params = params.append('owner', documentOwner);
+
+    if(filter)
+      params = params.append('filter', filter);
+
+    return this.http.get<IncidentList>(requestUrl, {params:params});
+  }
+
+
 
   getIncidentById(id:number):Observable<Incident>{
     let requestUrl = environment.serverURL.concat(`incidents/${id}`);
