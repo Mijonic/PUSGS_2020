@@ -13,6 +13,7 @@ import { RouterModule } from '@angular/router';
 import { NewDeviceComponent } from './new-device/new-device.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSortModule } from '@angular/material/sort';
 
 
 
@@ -31,7 +32,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     ReactiveFormsModule,
     RouterModule,
     MatAutocompleteModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatSortModule,
+  
     
     
 

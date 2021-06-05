@@ -50,6 +50,47 @@ namespace SmartEnergy.Service.Services
 
         }
 
+        public DeviceListDto GetDevicesPaged(DeviceField sortBy, SortingDirection direction, int page, int perPage)
+        {
+            IQueryable<Device> devicesPaged = _dbContext.Devices.Include(x => x.Location).AsQueryable();
+
+
+            devicesPaged = SortDevices(devicesPaged, sortBy, direction);
+
+            int resourceCount = devicesPaged.Count();
+            devicesPaged = devicesPaged.Skip(page * perPage)
+                                    .Take(perPage);
+
+            DeviceListDto returnValue = new DeviceListDto()
+            {
+                Devices = _mapper.Map<List<DeviceDto>>(devicesPaged.ToList()),
+                TotalCount = resourceCount
+            };
+
+            return returnValue;
+        }
+
+        public DeviceListDto GetSearchDevicesPaged(DeviceField sortBy, SortingDirection direction, int page, int perPage, DeviceFilter type, DeviceField field, string searchParam)
+        {
+            IQueryable<Device> devices = _dbContext.Devices.Include(x => x.Location).AsQueryable();
+
+            devices = FilterDevicesByDeviceFilter(devices, type);
+            devices = SearchDevices(devices,field, searchParam);
+            devices = SortDevices(devices, sortBy, direction);
+
+            int resourceCount = devices.Count();
+            devices = devices.Skip(page * perPage)
+                                    .Take(perPage);
+
+            DeviceListDto returnValue = new DeviceListDto()
+            {
+                Devices = _mapper.Map<List<DeviceDto>>(devices.ToList()),
+                TotalCount = resourceCount
+            };
+
+            return returnValue;
+        }
+
         public DeviceDto Insert(DeviceDto entity)
         {
             Device newDevice = _mapper.Map<Device>(entity);
@@ -118,5 +159,120 @@ namespace SmartEnergy.Service.Services
 
             return _mapper.Map<DeviceDto>(oldDevice);
         }
+
+
+
+        private IQueryable<Device> FilterDevicesByDeviceFilter(IQueryable<Device> devices, DeviceFilter type)
+        {
+
+
+
+            //Filter by status, ignore if ALL
+            switch (type)
+            {
+                case DeviceFilter.POWER_SWITCH:
+                    return devices.Where(x => x.DeviceType == DeviceType.POWER_SWITCH);
+                case DeviceFilter.FUSE:
+                    return devices.Where(x => x.DeviceType == DeviceType.FUSE);
+                case DeviceFilter.TRANSFORMER:
+                    return devices.Where(x => x.DeviceType == DeviceType.TRANSFORMER);
+                case DeviceFilter.DISCONNECTOR:
+                    return devices.Where(x => x.DeviceType == DeviceType.DISCONNECTOR);
+            }
+
+            return devices;
+        }
+
+        private IQueryable<Device> SortDevices(IQueryable<Device> devices, DeviceField sortBy, SortingDirection direction)
+        {
+            //Sort
+            if (direction == SortingDirection.asc)
+            {
+                switch (sortBy)
+                {
+                    case DeviceField.ID:
+                        return devices.OrderBy(x => x.ID);
+                    case DeviceField.NAME:
+                        return devices.OrderBy(x => x.Name);
+                    case DeviceField.TYPE:
+                        return devices.OrderBy(x => x.DeviceType);
+                    case DeviceField.ADDRESS:
+                        return devices.OrderBy(x => x.Location.City)
+                                       .ThenBy(x => x.Location.Street)
+                                       .ThenBy(x => x.Location.Number);
+                    case DeviceField.COORDINATES:
+                        return devices.OrderBy(x => x.Location.Latitude)
+                                              .ThenBy(x => x.Location.Longitude);
+                   
+                }
+
+            }
+            else
+            {
+                switch (sortBy)
+                {
+
+                    case DeviceField.ID:
+                        return devices.OrderByDescending(x => x.ID);
+                    case DeviceField.NAME:
+                        return devices.OrderByDescending(x => x.Name);
+                    case DeviceField.TYPE:
+                        return devices.OrderByDescending(x => x.DeviceType);
+                    case DeviceField.ADDRESS:
+                        return devices.OrderByDescending(x => x.Location.City)
+                                       .ThenBy(x => x.Location.Street)
+                                       .ThenBy(x => x.Location.Number);
+                    case DeviceField.COORDINATES:
+                        return devices.OrderByDescending(x => x.Location.Latitude)
+                                              .ThenBy(x => x.Location.Longitude);
+
+                   
+                }
+
+            }
+
+            return devices;
+        }
+
+
+        private IQueryable<Device> SearchDevices(IQueryable<Device> devices, DeviceField field, string searchParam)
+        {
+            if (string.IsNullOrWhiteSpace(searchParam)) //Ignore empty search
+                return devices;
+
+
+            switch(field)
+            {
+                case DeviceField.ID:
+                    return devices.Where(x => x.ID.ToString().Trim().ToLower().Equals(searchParam.Trim().ToLower()));
+                case DeviceField.NAME:
+                    return devices.Where(x => x.Name.Trim().ToLower().Contains(searchParam.Trim().ToLower()));
+                case DeviceField.TYPE:
+                    return devices.Where(x => x.DeviceType.ToString().Contains(searchParam.Trim().ToLower()));
+                case DeviceField.ADDRESS:
+                    return devices.Where(x => x.Location.City.Trim().ToLower().Contains(searchParam.Trim().ToLower()) ||
+                                              x.Location.Street.Trim().ToLower().Contains(searchParam.Trim().ToLower()) ||
+                                              x.Location.Number.ToString().Trim().ToLower().Contains(searchParam.Trim().ToLower()));
+                case DeviceField.COORDINATES:
+                    return devices.Where(x => x.Location.Longitude.ToString().Trim().ToLower().Contains(searchParam.Trim().ToLower()) ||
+                                         x.Location.Latitude.ToString().Trim().ToLower().Contains(searchParam.Trim().ToLower()));
+
+
+
+
+            }
+
+            return devices;
+
+
+          
+        }
+
+
+
+
+
+
+
     }
 }

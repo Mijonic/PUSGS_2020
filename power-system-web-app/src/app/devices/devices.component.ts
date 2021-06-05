@@ -1,13 +1,16 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+//import { MatTableDataSource } from '@angular/material/table';
 import { DeviceService } from 'app/services/device.service';
 import { Device } from 'app/shared/models/device.model';
 import { ToastrService } from 'ngx-toastr';
 import { Location } from 'app/shared/models/location.model'; 
 import { LocationService } from 'app/services/location.service';
+import { merge, Observable, of } from 'rxjs';
+import { catchError, map, startWith, switchMap } from 'rxjs/operators';
+
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 
 
@@ -18,24 +21,30 @@ import { LocationService } from 'app/services/location.service';
 })
 
 
-export class DevicesComponent implements OnInit {
+export class DevicesComponent implements OnInit, AfterViewInit {
 
   displayedColumns: string[] = ['action', 'id', 'name', 'type', 'coordinates', 'address', 'map'];
-  dataSource: MatTableDataSource<Device>;
+  dataSource:Observable<Device[]>;    
+
   isLoading:boolean = true;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-
+  
 
   devices:Device[] = [];
   allDevices:Device[] = [];
   //allLocations:Location[] = [];
 
+  searchForm = new FormGroup(
+    {
+      searchControl:new FormControl(''),
+      typeControl:new FormControl('all'),
+      fieldControl:new FormControl('')
+    }
+  );
+
   
- 
-  toppings = new FormControl();
-  toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato']; 
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
 
 
@@ -45,38 +54,111 @@ export class DevicesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    window.dispatchEvent(new Event('resize'));
-    this.getDevices();
+   
+    //this.getDevices();
     
     
   }
 
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+  ngAfterViewInit(): void {
+    if(this.isLoading)
+      this.getDevicesPaged();
   }
+
+  getDevicesPaged() {
+
+   
+    this.dataSource = merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          this.isLoading = true;
+          return this.deviceService.getDevicesPaged(
+             this.paginator.pageIndex, this.paginator.pageSize, this.sort.active, this.sort.direction);
+        }),
+        map(data => {
+          // Flip flag to show that loading has finished.
+          this.isLoading = false;
+          this.paginator.length = data.totalCount;
+
+          return data.devices;
+        }),
+        catchError(() => {
+          this.isLoading = false;
+          return of([]);
+        })
+      );
+  }
+ 
+
+  search() {
+
+    let type = this.searchForm.controls['typeControl'].value;
+    let field = this.searchForm.controls['fieldControl'].value;
+    let search = this.searchForm.controls['searchControl'].value;
+
+    this.dataSource = merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          this.isLoading = true;
+          return this.deviceService.getSearchDevicesPaged(
+             this.paginator.pageIndex, this.paginator.pageSize, this.sort.active, this.sort.direction, type, field, search );
+        }),
+        map(data => {
+          // Flip flag to show that loading has finished.
+          this.isLoading = false;
+          this.paginator.length = data.totalCount;
+
+          return data.devices;
+        }),
+        catchError(() => {
+          this.isLoading = false;
+          return of([]);
+        })
+      );
+
+      this.resetPaging();
+  }
+ 
 
  
-  getDevices()
-  {
-    this.deviceService.getAllDevices().subscribe(
-      data =>{
-        this.allDevices = data;
-        this.devices = data;
-        this.dataSource = new MatTableDataSource(data);
-        this.isLoading = false;
+  // getDevices()
+  // {
+  //   this.deviceService.getAllDevices().subscribe(
+  //     data =>{
+  //       this.allDevices = data;
+  //       this.devices = data;
+  //       this.dataSource = new MatTableDataSource(data);
+  //       this.isLoading = false;
        
-      },
-      error =>{
-        this.getDevices();
-      }
-    )
+  //     },
+  //     error =>{
+  //       this.getDevices();
+  //     }
+  //   )
+  // }
+
+
+  resetPaging(): void {
+    this.paginator.pageIndex = 0;
+   
   }
+
+  resetSearch()
+  {
+    this.searchForm.setValue({
+      searchControl: "",
+      typeControl: "",
+      fieldControl: ""
+   });
+
+ 
+  }
+
+
+  
 
   getAddressFromLocation(location: Location) {
         
@@ -89,7 +171,7 @@ export class DevicesComponent implements OnInit {
   {
    
     this.deviceService.deleteDevice(deviceId).subscribe(x =>{
-        this.getDevices();
+        this.getDevicesPaged();
         this.toastr.success("Device successfully deleted","", {positionClass: 'toast-bottom-left'});
     });
   }

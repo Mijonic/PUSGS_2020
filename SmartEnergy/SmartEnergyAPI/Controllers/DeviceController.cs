@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SmartEnergy.Contract.CustomExceptions.Device;
 using SmartEnergy.Contract.CustomExceptions.Location;
 using SmartEnergy.Contract.DTO;
+using SmartEnergy.Contract.Enums;
 using SmartEnergy.Contract.Interfaces;
 
 namespace SmartEnergyAPI.Controllers
@@ -23,13 +25,35 @@ namespace SmartEnergyAPI.Controllers
         }
 
        
-        [HttpGet]
+        [HttpGet("all")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
         public IActionResult GetAllDevices()
         {
             return Ok(_deviceService.GetAll());
 
         }
+
+
+        [HttpGet]      
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
+        public IActionResult GetDevicesPaged([FromQuery] DeviceField sortBy, [FromQuery] SortingDirection direction,
+                                  [FromQuery][BindRequired] int page, [FromQuery][BindRequired] int perPage)
+        {
+            return Ok(_deviceService.GetDevicesPaged(sortBy, direction, page, perPage));
+        }
+
+        [HttpGet("search")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
+        public IActionResult GetSearchDevicesPaged([FromQuery] DeviceField sortBy, [FromQuery] SortingDirection direction,
+                                 [FromQuery][BindRequired] int page, [FromQuery][BindRequired] int perPage, [FromQuery] DeviceFilter type,
+                                 [FromQuery] DeviceField field, [FromQuery] string searchParam)
+        {
+            return Ok(_deviceService.GetSearchDevicesPaged(sortBy, direction, page, perPage, type, field, searchParam));
+        }
+       
+
 
 
         [HttpGet("{id}")]
