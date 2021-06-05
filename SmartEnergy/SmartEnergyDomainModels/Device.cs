@@ -17,11 +17,14 @@ namespace SmartEnergyDomainModels
 
         public int DeviceCounter { get; set; }
 
+        public DateTime Timestamp { get; set; }
+
         public void UpdateDevice(Device modified)
         {
             DeviceType = modified.DeviceType;
             Name = modified.Name;
             LocationID = modified.LocationID;
+            Timestamp = DateTime.Now;
 
         }
 

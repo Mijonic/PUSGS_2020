@@ -27,6 +27,7 @@ export class NewDeviceComponent implements OnInit {
   isNew:boolean = true;
 
   device: Device = new Device();
+  timestamp: Date;
 
   newDevice:Device = new Device();
   newDeviceForm = new FormGroup({
@@ -81,6 +82,8 @@ export class NewDeviceComponent implements OnInit {
         this.device = data;
         this.loadedDevice = false;
 
+        this.timestamp = this.device.timestamp;
+
         console.log(this.device)
 
         this.newDeviceForm.setValue({
@@ -114,6 +117,7 @@ export class NewDeviceComponent implements OnInit {
          
           this.device.deviceType = this.newDeviceForm.value.deviceTypeControl;
           this.device.locationId = +this.newDeviceForm.value.deviceLocationControl;
+          this.device.timestamp = this.timestamp;
 
 
           
@@ -141,7 +145,7 @@ export class NewDeviceComponent implements OnInit {
               },
               error=>{
                 this.router.navigate(['devices']);
-                this.toastr.error(error.error);
+                this.toastr.error(error.error,"", {positionClass: 'toast-bottom-left'});
               }
            );
         

@@ -15,6 +15,8 @@ namespace SmartEnergy.Contract.DTO
 
         public int DeviceCounter { get; set; }
 
+        public DateTime Timestamp { get; set; }
+
         //public List<DeviceUsage> DeviceUsage { get; set; }
         // public List<Instruction> Instructions { get; set; }
     }

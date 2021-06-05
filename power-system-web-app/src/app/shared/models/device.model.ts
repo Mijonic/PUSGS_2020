@@ -7,5 +7,6 @@ export class Device{
     deviceType:string="";
     locationId:number=0;
     location:Location;
+    timestamp: Date;
     
 }

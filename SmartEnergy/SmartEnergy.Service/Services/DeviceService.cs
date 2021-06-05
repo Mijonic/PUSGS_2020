@@ -97,6 +97,7 @@ namespace SmartEnergy.Service.Services
             
             newDevice.ID = 0;
             newDevice.Location = null;
+            newDevice.Timestamp = DateTime.Now;
 
             //if (entity.Name.Trim().Equals("") || entity.Name == null)
             //    throw new InvalidDeviceException("You have to enter device name!");
@@ -138,7 +139,12 @@ namespace SmartEnergy.Service.Services
             Device oldDevice = _dbContext.Devices.FirstOrDefault(x => x.ID.Equals(updatedDevice.ID));
 
 
+            if (updatedDevice.Timestamp < oldDevice.Timestamp)
+                throw new InvalidDeviceException("You have tried to modify outdated device. Please, try again.");
+
+
             updatedDevice.Location = null;
+
 
 
             if (oldDevice == null)
@@ -152,7 +158,7 @@ namespace SmartEnergy.Service.Services
 
 
             updatedDevice.Name = $"{updatedDevice.DeviceType.ToString().Substring(0, 3)}{updatedDevice.DeviceCounter}";
-
+            
 
             oldDevice.UpdateDevice(updatedDevice);
             _dbContext.SaveChanges();
