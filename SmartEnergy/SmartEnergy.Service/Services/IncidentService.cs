@@ -809,7 +809,6 @@ namespace SmartEnergy.Service.Services
            
             return incidents.Where(x => x.ID.ToString().Trim().ToLower().Contains(searchParam.Trim().ToLower()) ||
                                         x.VoltageLevel.ToString().Trim().ToLower().Contains(searchParam.Trim().ToLower()) ||
-                                        x.CrewID.ToString().Trim().ToLower().Contains(searchParam.Trim().ToLower()) ||
                                         x.Priority.ToString().Trim().ToLower().Contains(searchParam.Trim().ToLower()));
 
 

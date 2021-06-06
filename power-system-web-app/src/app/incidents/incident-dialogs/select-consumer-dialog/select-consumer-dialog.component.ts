@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -18,11 +18,18 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class SelectConsumerDialogComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'lastname', 'accountId', 'accountType', 'add'];
+  displayedColumns: string[] = ['id', 'name', 'lastname', 'accountID', 'accountType', 'add'];
   dataSource: MatTableDataSource<Consumer>;
   isLoading:boolean = true;
 
+  accountTypes:string[]=['ALL', 'RESIDENTAL', 'NONRESIDENTAL'];
+                                 
+  searchFilterConsumers = new FormGroup({
+     
+    accountTypeControl: new FormControl(''),
+    searchControl: new FormControl('')
 
+  });
 
   incidentId: number;
 
@@ -34,11 +41,6 @@ export class SelectConsumerDialogComponent implements OnInit {
   allConsumers:Consumer[] = [];
  
 
-  
- 
-  toppings = new FormControl();
-  toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato']; 
-
 
 
   constructor(public dialogRef: MatDialogRef<SelectConsumerDialogComponent>, private consumerService:ConsumerService, private incidentService: IncidentService,  private toastr: ToastrService,
@@ -49,7 +51,35 @@ export class SelectConsumerDialogComponent implements OnInit {
 
 
   
+  filter()
+  {
 
+    this.dataSource.filter
+
+    
+    if(this.searchFilterConsumers.controls['accountTypeControl'].value == "ALL")
+    { 
+        if(this.searchFilterConsumers.controls['searchControl'].value != null && this.searchFilterConsumers.controls['searchControl'].value != "")
+        {
+          this.dataSource.filter = this.searchFilterConsumers.controls['searchControl'].value.trim().toLowerCase();
+        }
+        // this.dataSource.filter = "";
+    }else
+    {
+
+      if(this.searchFilterConsumers.controls['searchControl'].value != null && this.searchFilterConsumers.controls['searchControl'].value != "")
+      {
+        this.dataSource.filter = this.searchFilterConsumers.controls['accountTypeControl'].value.trim().toLowerCase() + this.searchFilterConsumers.controls['searchControl'].value.trim().toLowerCase();
+       
+      }else
+      {
+        this.dataSource.filter = this.searchFilterConsumers.controls['accountTypeControl'].value.trim().toLowerCase();
+      }
+
+     
+    }
+    
+  }
 
   
 
@@ -85,6 +115,8 @@ export class SelectConsumerDialogComponent implements OnInit {
         console.log(this.allConsumers)
 
         this.dataSource = new MatTableDataSource(data);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
         this.isLoading = false;
        
       },

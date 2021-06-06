@@ -13,25 +13,27 @@
                                 <mat-icon>more_vert</mat-icon>
                             </mat-panel-title>
                         </mat-expansion-panel-header>
+                        <form [formGroup]="searchFilterConsumers">
                         <div class="row">
                             <div class="col-md-12">
                                 <mat-form-field>
                                 <mat-label>Search</mat-label>
-                                <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input> 
+                                <input matInput formControlName="searchControl"  (keyup.enter)="filter()" placeholder="Search consumers" #input> 
                                 </mat-form-field>
                             </div>
                         </div> 
                         <div class="row">
                             <div class="col-md-8">
                                 <mat-form-field appearance="fill">
-                                <mat-label>Filter</mat-label>
-                                <mat-select [formControl]="toppings" multiple>
-                                    <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                                <mat-label>Account type</mat-label>
+                                <mat-select formControlName ="accountTypeControl"  (selectionChange)="filter()">
+                                    <mat-option *ngFor="let type of accountTypes" [value]="type">{{type}}</mat-option>
                                 </mat-select>
                                 </mat-form-field>
                             </div>
                             
                         </div>
+                        </form>
                     </mat-expansion-panel>
                 </div>  
                 <div class="row"> 
@@ -59,7 +61,7 @@
 
 
                                  <!-- Type Column -->
-                                <ng-container matColumnDef="accountId">
+                                <ng-container matColumnDef="accountID">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Account Id </th>
                                 <td mat-cell *matCellDef="let row"> {{row.accountID}} </td>
                                 </ng-container>

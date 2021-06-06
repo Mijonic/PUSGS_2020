@@ -22,7 +22,7 @@ import { ToastrService } from 'ngx-toastr';
 export class SelectDeviceDialogComponent implements OnInit {
 
   
-  displayedColumns: string[] = ['id', 'name', 'type', 'coordinates', 'address', 'add'];
+  displayedColumns: string[] = ['id', 'name', 'deviceType', 'coordinates', 'address', 'add'];
   dataSource: MatTableDataSource<Device>;
   isLoading:boolean = true;
 
@@ -38,8 +38,7 @@ export class SelectDeviceDialogComponent implements OnInit {
 
   
  
-  toppings = new FormControl();
-  toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato']; 
+  
 
 
 
@@ -87,6 +86,8 @@ export class SelectDeviceDialogComponent implements OnInit {
         this.allDevices = data;
         this.devices = data;
         this.dataSource = new MatTableDataSource(data);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
         this.isLoading = false;
        
       },

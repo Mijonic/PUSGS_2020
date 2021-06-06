@@ -14,21 +14,16 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div class="row">
-                            <div class="col-md-12">
-                                <mat-form-field>
-                                <mat-label>Search</mat-label>
-                                <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input> 
+                            <div class="col-md-5">
+                                <mat-form-field class="w-100">
+                                    <mat-label>Search</mat-label>
+                                    <input matInput (keyup)="applyFilter($event)" placeholder="Search devices" #input>
                                 </mat-form-field>
                             </div>
                         </div> 
                         <div class="row">
                             <div class="col-md-8">
-                                <mat-form-field appearance="fill">
-                                <mat-label>Filter</mat-label>
-                                <mat-select [formControl]="toppings" multiple>
-                                    <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
-                                </mat-select>
-                                </mat-form-field>
+                              
                             </div>
                             
                         </div>
@@ -37,7 +32,8 @@
                 <div class="row"> 
                     <div class="col-md-12">
                         <div class="mat-elevation-z8 mt-n1 table-responsive">
-                            <table mat-table [dataSource]="dataSource" matSort> 
+                            <table mat-table [dataSource]="dataSource" matSort
+                            matSortActive="id" matSortDisableClear matSortDirection="asc"> 
                             
                                 <!-- ID Column -->
                                 <ng-container matColumnDef="id">
@@ -52,24 +48,24 @@
                                 </ng-container>
                             
                                 <!-- Type Column -->
-                                <ng-container matColumnDef="type">
+                                <ng-container matColumnDef="deviceType">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
                                 <td mat-cell *matCellDef="let row"> {{row.deviceType}} </td>
                                 </ng-container>
                             
                                 <!-- Coordinates Column -->
                                 <ng-container matColumnDef="coordinates">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Coordinates </th>
+                                <th mat-header-cell *matHeaderCellDef > Coordinates </th>
                                 <td mat-cell *matCellDef="let row" > {{row.location.latitude.toFixed(5)}}, {{row.location.longitude.toFixed(5)}} </td>
                                 </ng-container>
     
                                 <ng-container matColumnDef="address">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Address</th>
+                                <th mat-header-cell *matHeaderCellDef > Address</th>
                                 <td mat-cell *matCellDef="let row" > {{getAddressFromLocation(row.location)}} </td>
                                 </ng-container>
     
                                 <ng-container matColumnDef="add">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>
+                                    <th mat-header-cell *matHeaderCellDef > </th>
                                     <td mat-cell *matCellDef="let row"> <a role="button" (click)="addDeviceToIncident(row.id)"><mat-icon  color="primary" matTooltip="Add device to incident"> add</mat-icon></a> </td>
                                 </ng-container>
                                 

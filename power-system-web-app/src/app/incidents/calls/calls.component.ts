@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -17,9 +17,15 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./calls.component.css']
 })
 export class CallsComponent implements  OnInit {
-  displayedColumns: string[] = ['id', 'reason', 'hazard', 'comment', 'name', 'lastname'];
-  reasons:string[]=['NO_POWER', 'FLICKERING_LIGHT', 'PARTIAL_POWER', 'VOLTAGE_PROBLEM', 'POWER_RESTORED', 'MALFUNCTION'];
+  displayedColumns: string[] = ['id', 'callReason', 'hazard', 'comment', 'name', 'lastname'];
+  reasons:string[]=['ALL', 'NO_POWER', 'FLICKERING_LIGHT', 'PARTIAL_POWER', 'VOLTAGE_PROBLEM', 'POWER_RESTORED', 'MALFUNCTION'];
   
+
+  filterCalls = new FormGroup({
+     
+    reasonsControl: new FormControl('')  
+
+  });
 
  
   dataSource: MatTableDataSource<Call>;
@@ -44,6 +50,12 @@ export class CallsComponent implements  OnInit {
    
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    console.log(event)
+  }
+
  
 
   ngOnInit(): void {
@@ -59,6 +71,18 @@ export class CallsComponent implements  OnInit {
     
   }
 
+  filter()
+  {
+    if(this.filterCalls.controls['reasonsControl'].value == "ALL")
+    { 
+        this.dataSource.filter = "";
+    }else
+    {
+      this.dataSource.filter = this.filterCalls.controls['reasonsControl'].value 
+    }
+    
+  }
+
 
   
   loadIncidentCalls()
@@ -69,6 +93,8 @@ export class CallsComponent implements  OnInit {
         this.calls = data;
         
         this.dataSource = new MatTableDataSource(data);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
         this.isLoading = false;
 
       

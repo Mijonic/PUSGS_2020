@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -22,9 +22,9 @@ import { SelectDeviceDialogComponent } from '../incident-dialogs/select-device-d
   templateUrl: './devices.component.html',
   styleUrls: ['./devices.component.css']
 })
-export class IncidentDevicesComponent implements OnInit {
+export class IncidentDevicesComponent implements OnInit, AfterViewInit {
 
-  displayedColumns: string[] = ['id', 'name', 'type', 'coordinates', 'address', 'map', 'remove'];
+  displayedColumns: string[] = ['id', 'name', 'deviceType', 'coordinates', 'address', 'map', 'remove'];
   dataSource: MatTableDataSource<Device>;
   isLoading:boolean = true;
 
@@ -38,8 +38,12 @@ export class IncidentDevicesComponent implements OnInit {
   incidentId: number;
 
   
-  toppings = new FormControl();
-  toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato']; 
+  filterDevices = new FormGroup({
+     
+    reasonsControl: new FormControl('')  
+
+  });
+
 
 
 
@@ -54,6 +58,7 @@ export class IncidentDevicesComponent implements OnInit {
 
   ngOnInit(): void {
 
+    window.dispatchEvent(new Event('resize'));
     const incidentId = this.route.snapshot.paramMap.get('id');
     console.log( this.route.snapshot);
     
@@ -66,7 +71,7 @@ export class IncidentDevicesComponent implements OnInit {
        this.getIncidentDevices(this.incidentId);
     }
 
-    window.dispatchEvent(new Event('resize'));
+    
    
 
     
@@ -77,6 +82,8 @@ export class IncidentDevicesComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
+
+
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -95,6 +102,9 @@ export class IncidentDevicesComponent implements OnInit {
         this.allIncidentDevices = data;
         this.incidentDevices = data;
         this.dataSource = new MatTableDataSource(data);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+
         this.isLoading = false;
        
       },
