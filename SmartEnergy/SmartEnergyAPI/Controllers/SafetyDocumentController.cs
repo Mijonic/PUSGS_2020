@@ -11,6 +11,7 @@ using SmartEnergy.Contract.CustomExceptions.SafetyDocument;
 using SmartEnergy.Contract.CustomExceptions.WorkPlan;
 using SmartEnergy.Contract.CustomExceptions.WorkRequest;
 using SmartEnergy.Contract.DTO;
+using SmartEnergy.Contract.Enums;
 using SmartEnergy.Contract.Interfaces;
 
 namespace SmartEnergyAPI.Controllers
@@ -31,12 +32,21 @@ namespace SmartEnergyAPI.Controllers
             _multimediaService = multimediaService;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<SafetyDocumentDto>))]
         public IActionResult GetAllSafetyDocuments()
         {
             return Ok(_safetyDocumentService.GetAll());
+
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<SafetyDocumentDto>))]
+        public IActionResult GetAllMineSafetyDocuments([FromQuery] OwnerFilter owner)
+        {
+            return Ok(_safetyDocumentService.GetAllMineSafetyDocuments(owner, User));
 
         }
 

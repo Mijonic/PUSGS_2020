@@ -13,6 +13,7 @@ using SmartEnergy.Contract.CustomExceptions.WorkPlan;
 using SmartEnergy.Contract.CustomExceptions;
 using SmartEnergy.Contract.CustomExceptions.WorkRequest;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace SmartEnergy.Service.Services
 {
@@ -24,12 +25,15 @@ namespace SmartEnergy.Service.Services
         private readonly SmartEnergyDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IDeviceUsageService _deviceUsageService;
+        private readonly IAuthHelperService _authHelperService;
 
-        public SafetyDocumentService(SmartEnergyDbContext dbContext, IMapper mapper, IDeviceUsageService deviceUsageService)
+
+        public SafetyDocumentService(SmartEnergyDbContext dbContext, IMapper mapper, IDeviceUsageService deviceUsageService, IAuthHelperService authHelperService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _deviceUsageService = deviceUsageService;
+            _authHelperService = authHelperService;
         }
 
         public void Delete(int id)
@@ -73,6 +77,33 @@ namespace SmartEnergy.Service.Services
 
                 
             }
+
+            return allSafetDocuments;
+        }
+
+        public List<SafetyDocumentDto> GetAllMineSafetyDocuments(OwnerFilter owner, ClaimsPrincipal user)
+        {
+
+            List<SafetyDocumentDto> allSafetDocuments = _mapper.Map<List<SafetyDocumentDto>>(_dbContext.SafetyDocuments.Include(x => x.User).ToList());
+
+            foreach (SafetyDocumentDto sf in allSafetDocuments)
+            {
+                CrewDto crew = GetCrewForSafetyDocument(sf.ID);
+
+                if (crew != null)
+                    sf.CrewName = crew.CrewName;
+                else
+                    sf.CrewName = "/";
+
+
+
+            }
+
+          
+
+            int userId = _authHelperService.GetUserIDFromPrincipal(user);
+            if (owner == OwnerFilter.mine)
+                allSafetDocuments = allSafetDocuments.Where(x => x.User.ID == userId).ToList();
 
             return allSafetDocuments;
         }

@@ -103,7 +103,8 @@ import { WorkRequestEquipmentComponent } from './work-requests/work-request/work
     MatButtonToggleModule,
     MatCheckboxModule,
     MultimediaModule,
-    BrowserModule
+    BrowserModule,
+    
   ]
 
 })

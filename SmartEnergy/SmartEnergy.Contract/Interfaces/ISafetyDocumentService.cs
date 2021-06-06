@@ -1,6 +1,8 @@
 ﻿using SmartEnergy.Contract.DTO;
+using SmartEnergy.Contract.Enums;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Text;
 
 namespace SmartEnergy.Contract.Interfaces
@@ -13,6 +15,8 @@ namespace SmartEnergy.Contract.Interfaces
         ChecklistDto UpdateSafetyDocumentChecklist(ChecklistDto checklistDto);
 
         List<DeviceDto> GetSafetyDocumentDevices(int safetyDocumentId);
+
+        List<SafetyDocumentDto> GetAllMineSafetyDocuments(OwnerFilter owner, ClaimsPrincipal user);
      
 
 

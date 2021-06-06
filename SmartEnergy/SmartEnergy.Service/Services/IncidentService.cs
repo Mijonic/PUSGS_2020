@@ -29,10 +29,12 @@ namespace SmartEnergy.Service.Services
         private readonly ICallService _callService;
         private readonly IMapper _mapper;
         private readonly IAuthHelperService _authHelperService;
+        private readonly IMailService _mailService;
+        private readonly IConsumerService _consumerService;
 
 
 
-        public IncidentService(SmartEnergyDbContext dbContext, ITimeService timeService, IDeviceUsageService deviceUsageService,  IMapper mapper, ICallService callService, IAuthHelperService authHelperService)
+        public IncidentService(SmartEnergyDbContext dbContext, ITimeService timeService, IDeviceUsageService deviceUsageService,  IMapper mapper, ICallService callService, IAuthHelperService authHelperService, IMailService mailService, IConsumerService consumerService)
         {
             _dbContext = dbContext;
             _timeService = timeService;
@@ -40,6 +42,8 @@ namespace SmartEnergy.Service.Services
             _callService = callService;
             _mapper = mapper;
             _authHelperService = authHelperService;
+            _mailService = mailService;
+            _consumerService = consumerService;
 
 
         }
@@ -729,18 +733,52 @@ namespace SmartEnergy.Service.Services
 
         public void AssignIncidetToUser(int incidentId, int userId)
         {
-            Incident incident = _dbContext.Incidents.Find(incidentId);
+            //Incident incident = _dbContext.Incidents.Find(incidentId);
 
+            //if (incident == null)
+            //    throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
+
+
+            Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
+                                                 .ThenInclude(p => p.Device)
+                                                 .ThenInclude(o => o.Location)
+                                                 .FirstOrDefault(x => x.ID == incidentId);
             if (incident == null)
                 throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
 
+          
+
+          
+
+
             User user = _dbContext.Users.Find(userId);
-
-
             if (user == null)
                 throw new UserNotFoundException($"User with id {userId} does not exist.");
 
             incident.UserID = userId;
+
+
+            int locationId = -1;
+
+            if(incident.IncidentDevices.Count != 0)
+            {
+                locationId = incident.IncidentDevices[0].Device.LocationID;
+            }
+
+            List<Consumer> consumers = _dbContext.Consumers.Include(x => x.User).Where(x => x.LocationID == locationId).ToList();
+
+            foreach(Consumer c in consumers)
+            {
+                _mailService.SendMail(c.User.Email, "Solving incident", "Problem will be solved as soon as possible. We are working!");
+            }
+
+
+           
+
+          
+
+
+
 
             _dbContext.SaveChanges();
 

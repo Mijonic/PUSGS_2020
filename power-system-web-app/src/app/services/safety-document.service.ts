@@ -1,5 +1,5 @@
 import { IMultimediaService } from './../shared/interfaces/multimedia-service';
-import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpParams, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Checklist } from 'app/shared/models/checklist.model';
 import { SafetyDocument } from 'app/shared/models/safety-document.model';
@@ -53,8 +53,19 @@ export class SafetyDocumentService implements IMultimediaService{
 
   
   getAllSafetyDocuments():Observable<SafetyDocument[]>{
-    let requestUrl = environment.serverURL.concat("safety-documents");
+    let requestUrl = environment.serverURL.concat("safety-documents/all");
     return this.http.get<SafetyDocument[]>(requestUrl);
+  }
+
+  getAllMineSafetyDocuments(documentOwner?: string):Observable<SafetyDocument[]>{
+   
+    let requestUrl = environment.serverURL.concat("safety-documents");
+    let params = new HttpParams();
+
+    if(documentOwner)
+     params = params.append('owner', documentOwner);
+
+    return this.http.get<SafetyDocument[]>(requestUrl, {params:params});
   }
 
   getSafetyDocumentById(id:number):Observable<SafetyDocument>{
