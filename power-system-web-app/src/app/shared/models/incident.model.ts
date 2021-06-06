@@ -14,4 +14,5 @@ export class Incident{
     crewId:number;
     workType:string;
     incidentStatus:string;
+    timestamp:Date;
 }

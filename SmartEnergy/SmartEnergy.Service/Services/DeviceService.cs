@@ -139,8 +139,7 @@ namespace SmartEnergy.Service.Services
             Device oldDevice = _dbContext.Devices.FirstOrDefault(x => x.ID.Equals(updatedDevice.ID));
 
 
-            if (updatedDevice.Timestamp < oldDevice.Timestamp)
-                throw new InvalidDeviceException("You have tried to modify outdated device. Please, try again.");
+           
 
 
             updatedDevice.Location = null;
@@ -149,6 +148,9 @@ namespace SmartEnergy.Service.Services
 
             if (oldDevice == null)
                 throw new DeviceNotFoundException($"Device with Id = {updatedDevice.ID} does not exists!");
+
+            if (updatedDevice.Timestamp < oldDevice.Timestamp)
+                throw new InvalidDeviceException("You have tried to modify outdated device. Please, try again.");
 
             //if (updatedDevice.Name.Trim().Equals("") || updatedDevice.Name == null)
             //    throw new InvalidDeviceException("You have to enter device name!");

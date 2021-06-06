@@ -144,10 +144,10 @@ namespace SmartEnergy.Service.Services
             incident.ID = 0;
             incident.MultimediaAnchor = mAnchor;
             incident.NotificationAnchor = nAnchor;
+            incident.Timestamp = DateTime.Now;
 
 
-
-            if(incident.ETR != null)
+            if (incident.ETR != null)
                 incident.ETR = incident.ETR.Value.AddHours(2);
 
 
@@ -181,8 +181,11 @@ namespace SmartEnergy.Service.Services
 
 
             Incident entityIncident = _mapper.Map<Incident>(entity);
-            
-            if(entityIncident.ETR != null)
+
+            if (entityIncident.Timestamp < oldIncident.Timestamp)
+                throw new InvalidIncidentException("You have tried to modify outdated incident. Please, try again.");
+
+            if (entityIncident.ETR != null)
                 entityIncident.ETR = entityIncident.ETR.Value.AddHours(2);
 
             oldIncident.Update(_mapper.Map<Incident>(entityIncident));

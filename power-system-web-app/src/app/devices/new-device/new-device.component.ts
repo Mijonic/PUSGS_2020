@@ -136,6 +136,7 @@ export class NewDeviceComponent implements OnInit {
       {
           this.device.deviceType = this.newDeviceForm.value.deviceTypeControl;
           this.device.locationId = +this.newDeviceForm.value.deviceLocationControl;
+          this.device.timestamp = this.timestamp;
 
           this.deviceService.updateDevice(this.device).subscribe(
               data => {

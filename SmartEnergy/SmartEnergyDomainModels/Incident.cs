@@ -33,6 +33,8 @@ namespace SmartEnergyDomainModels
         public WorkType WorkType { get; set; }
         public IncidentStatus IncidentStatus { get; set; }
 
+        public DateTime Timestamp { get; set; }
+
         public void Update(Incident newData)
         {
             Priority = newData.Priority;
@@ -46,6 +48,7 @@ namespace SmartEnergyDomainModels
             IncidentStatus = newData.IncidentStatus;
             Description = newData.Description;
             VoltageLevel = newData.VoltageLevel;
+            Timestamp = DateTime.Now;
         }
 
     }

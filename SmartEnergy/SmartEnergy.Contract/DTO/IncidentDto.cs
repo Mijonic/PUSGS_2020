@@ -31,5 +31,7 @@ namespace SmartEnergy.Contract.DTO
         //public WorkRequest WorkRequest { get; set; }
         public string WorkType { get; set; }
         public string IncidentStatus { get; set; }
+
+        public DateTime Timestamp { get; set; }
     }
 }

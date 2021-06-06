@@ -63,6 +63,7 @@ export class BasicInformationComponent implements OnInit {
   isNew = true;
   isLoading:boolean = false;
   incidentId:number;
+  timestamp: Date;
 
   incident: Incident = new Incident();
   
@@ -103,6 +104,7 @@ export class BasicInformationComponent implements OnInit {
           this.isLoading = false;
           this.incident = data;
           this.priority = this.incident.priority;
+          this.timestamp = this.incident.timestamp;
           this.populateControls(this.incident);
         } ,
         error =>{
@@ -231,6 +233,7 @@ export class BasicInformationComponent implements OnInit {
     if(this.incidentForm.valid)
     {
         this.populateModelFromFields();
+        this.incident.timestamp = this.timestamp;
         this.isLoading = true;
        
         if(this.isNew)
