@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SmartEnergy.Contract.CustomExceptions;
@@ -49,6 +50,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpGet("all")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<IncidentDto>))]
         public IActionResult Get()
         {
@@ -57,7 +59,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet]
-        //[Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<IncidentDto>))]
         public IActionResult GetIncidentsPaged([FromQuery] string searchParam, [FromQuery] IncidentFields sortBy, [FromQuery] SortingDirection direction,
@@ -69,6 +71,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet("unassigned")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<IncidentDto>))]
         public IActionResult GetUnassignedIncidents()
         {
@@ -76,6 +79,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpGet("unresolved")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<IncidentMapDisplayDto>))]
         public IActionResult GetUnresolvedIncidents()
         {
@@ -83,6 +87,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER ", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IncidentDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetById(int id)
@@ -100,6 +105,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "DISPATCHER ", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IncidentDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -123,6 +129,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER ", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IncidentDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -147,6 +154,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER ", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult DeleteIncident(int id)
@@ -166,6 +174,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPut("{incidentId}/crew/{crewId}")]
+        [Authorize(Roles = "DISPATCHER ", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IncidentDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)] 
         public IActionResult AddCrewToIncident(int incidentId, int crewId)
@@ -191,6 +200,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPut("{incidentId}/assign/{userId}")]
+        [Authorize(Roles = "CREW_MEMBER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult AssignIncidetToUser(int incidentId, int userId)
@@ -216,6 +226,7 @@ namespace SmartEnergyAPI.Controllers
         
 
         [HttpGet("{incidentId}/crew")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
         public IActionResult GetIncidentCrew(int incidentId)
         {
@@ -235,6 +246,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPut("{incidentId}/remove-crew")]
+        [Authorize(Roles = "DISPATCHER ", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IncidentDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult RemoveCrewFromIncidet(int incidentId)
@@ -263,6 +275,7 @@ namespace SmartEnergyAPI.Controllers
 
         
         [HttpPost("{incidentId}/device/{deviceId}")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER ", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -301,6 +314,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPut("{incidentId}/remove-device/device/{deviceId}")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER ", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -332,6 +346,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet("{incidentId}/calls")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER ", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<IncidentDto>))]
         public IActionResult GetIncidentCalls(int incidentId)
         {
@@ -340,6 +355,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPost("{incidentId}/calls")]
+        [Authorize(Roles = "DISPATCHER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CallDto))]
        // [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -383,6 +399,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet("{incidentId}/calls-counter")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER ", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         public IActionResult GetNumberOfIncidentCalls(int incidentId)
         {
@@ -390,6 +407,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpGet("{incidentId}/affected-consumers")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER ", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         public IActionResult GetNumberOfAffectedConsumers(int incidentId)
         {
@@ -405,6 +423,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet("{incidentId}/devices")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER ", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
         public IActionResult GetIncidentDevices(int incidentId)
         {
@@ -424,6 +443,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet("{incidentId}/unrelated-devices")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER ", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
         public IActionResult GetUnrelatedDevices(int incidentId)
         {
@@ -442,6 +462,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPut("{incidentId}/set-priority")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER ", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult SetIncidentPriority(int incidentId)
@@ -464,6 +485,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPost("{id}/attachments")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -491,6 +513,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpGet("{id}/attachments/{filename}")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -512,6 +535,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet("{id}/attachments")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<MultimediaAttachmentDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -529,6 +553,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpDelete("{id}/attachments/{filename}")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

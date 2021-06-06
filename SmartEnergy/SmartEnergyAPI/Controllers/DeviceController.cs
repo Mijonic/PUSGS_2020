@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -26,6 +27,7 @@ namespace SmartEnergyAPI.Controllers
 
        
         [HttpGet("all")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER, ADMIN", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
         public IActionResult GetAllDevices()
         {
@@ -34,7 +36,8 @@ namespace SmartEnergyAPI.Controllers
         }
 
 
-        [HttpGet]      
+        [HttpGet]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
         public IActionResult GetDevicesPaged([FromQuery] DeviceField sortBy, [FromQuery] SortingDirection direction,
@@ -44,6 +47,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpGet("search")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER, ADMIN", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
         public IActionResult GetSearchDevicesPaged([FromQuery] DeviceField sortBy, [FromQuery] SortingDirection direction,
@@ -57,6 +61,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER, ADMIN", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DeviceDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetDeviceById(int id)
@@ -70,6 +75,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "ADMIN", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -93,6 +99,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "ADMIN", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DeviceDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -121,6 +128,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "ADMIN", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult RemoveDevice(int id)

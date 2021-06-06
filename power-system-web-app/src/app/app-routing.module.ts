@@ -97,41 +97,73 @@ const routes: Routes = [
       roles: ['ADMIN', 'CREW_MEMBER', 'DISPATCHER', 'WORKER']
     }
   },
-  { path: 'incidents', component: IncidentsComponent, outlet: "primary"},
+  { path: 'incidents', component: IncidentsComponent, outlet: "primary",
+    canActivate: [AuthGuardService, AuthGuardApprovedService],
+    data:{
+      roles: ['CREW_MEMBER', 'DISPATCHER', 'WORKER']
+    }
+  },
   { path: 'incident',  redirectTo: '/incident/basic-info', pathMatch: 'full', outlet: "primary"},
   { path: 'incident', component: IncidentComponent, outlet: "primary",
   children:
   [
     {
       path: 'basic-info',
-      component: BasicInformationComponent, 
+      component: BasicInformationComponent,
+      canActivate: [AuthGuardService, AuthGuardApprovedService],
+      data:{
+        roles: ['DISPATCHER']
+      }
     },
     {
       path: 'basic-info/:id',
       component: BasicInformationComponent, 
+      canActivate: [AuthGuardService, AuthGuardApprovedService],
+      data:{
+        roles: ['CREW_MEMBER', 'DISPATCHER', 'WORKER']
+      }
     },
     {
       path: 'multimedia/:id',
       component: MultimediaAttachmentsComponent, 
+      canActivate: [AuthGuardService, AuthGuardApprovedService],
       data:{
         requiredService: INCIDENT_SERVICE_TOKEN,
+        roles: ['CREW_MEMBER', 'DISPATCHER', 'WORKER']
       }
+     
     },
     {
       path: 'calls/:id',
       component: CallsComponent, 
+      canActivate: [AuthGuardService, AuthGuardApprovedService],
+      data:{
+        roles: ['CREW_MEMBER', 'DISPATCHER' , 'WORKER']
+      }
     },
     {
       path: 'crew/:id',
       component: IncidentCrewComponent,
+      canActivate: [AuthGuardService, AuthGuardApprovedService],
+      data:{
+        roles: ['CREW_MEMBER', 'DISPATCHER', 'WORKER']
+      }
     },
     {
       path: 'devices/:id',
       component: IncidentDevicesComponent,
+      canActivate: [AuthGuardService, AuthGuardApprovedService],
+      data:{
+        roles: ['CREW_MEMBER', 'DISPATCHER', 'WORKER']
+      }
     },
     {
       path: 'resolution/:id',
       component: ResolutionComponent,
+      canActivate: [AuthGuardService, AuthGuardApprovedService],
+      data:{
+        roles: ['CREW_MEMBER', 'DISPATCHER', 'WORKER']
+      }
     },
   ],},
   { path: 'work-plan',  redirectTo: '/work-plan/basic-info', pathMatch: 'full', outlet: "primary"},
@@ -170,7 +202,12 @@ const routes: Routes = [
     },
   ],
 },
-  { path: 'safety-documents', component: SafetyDocumentsComponent, outlet: "primary"},
+  { path: 'safety-documents', component: SafetyDocumentsComponent, outlet: "primary",
+    canActivate: [AuthGuardService, AuthGuardApprovedService],
+    data:{
+      roles: ['CREW_MEMBER', 'DISPATCHER', 'WORKER']
+    }
+  },
   { path: 'safety-document', redirectTo: '/safety-document/basic-info', pathMatch: 'full', outlet: "primary"},
   { path: 'safety-document', component: SafetyDocumentComponent, outlet: "primary",
   children:
@@ -178,30 +215,54 @@ const routes: Routes = [
     {
       path: 'basic-info',
       component: SafetyDocumentBasicInformationComponent, 
+      canActivate: [AuthGuardService, AuthGuardApprovedService],
+      data:{
+        roles: ['DISPATCHER']
+      }
     },
 
     {
       path: 'basic-info/:id',
       component: SafetyDocumentBasicInformationComponent, 
+      canActivate: [AuthGuardService, AuthGuardApprovedService],
+      data:{
+        roles: ['CREW_MEMBER', 'DISPATCHER', 'WORKER']
+      }
     },
     {
       path: 'multimedia/:id',
       component: MultimediaAttachmentsComponent, 
+      canActivate: [AuthGuardService, AuthGuardApprovedService],
       data:{
         requiredService: SAFETY_DOCUMENTS_SERVICE_TOKEN,
+        roles: ['CREW_MEMBER', 'DISPATCHER', 'WORKER']
       }
+
+     
     },
     {
       path: 'state-changes/:id',
       component: SafetyDocumentStateChangesComponent, 
+      canActivate: [AuthGuardService, AuthGuardApprovedService],
+      data:{
+        roles: ['CREW_MEMBER', 'DISPATCHER', 'WORKER']
+      }
     },
     {
       path: 'equipment/:id',
       component: SafetyDocumentEquipmentComponent,
+      canActivate: [AuthGuardService, AuthGuardApprovedService],
+      data:{
+        roles: ['CREW_MEMBER', 'DISPATCHER', 'WORKER']
+      }
     },
     {
       path: 'checklist/:id',
       component: SafetyDocumentChecklistComponent,
+      canActivate: [AuthGuardService, AuthGuardApprovedService],
+      data:{
+        roles: ['CREW_MEMBER', 'DISPATCHER', 'WORKER']
+      }
     },
   ],
 },
@@ -253,9 +314,24 @@ const routes: Routes = [
       },
     ],
   },
-  { path: 'devices', component: DevicesComponent, outlet: "primary"},
-  { path: 'new-device', component: NewDeviceComponent, outlet: "primary"},
-  { path: 'new-device/:id', component: NewDeviceComponent, outlet: "primary"},
+  { path: 'devices', component: DevicesComponent, outlet: "primary",
+    canActivate: [AuthGuardService, AuthGuardApprovedService],
+    data:{
+      roles: ['DISPATCHER', 'WORKER', 'CREW_MEMBER', 'ADMIN']
+    }
+  },
+  { path: 'new-device', component: NewDeviceComponent, outlet: "primary",
+    canActivate: [AuthGuardService, AuthGuardApprovedService],
+    data:{
+      roles: ['ADMIN']
+    }
+  },
+  { path: 'new-device/:id', component: NewDeviceComponent, outlet: "primary",
+    canActivate: [AuthGuardService, AuthGuardApprovedService],
+    data:{
+      roles: ['DISPATCHER', 'WORKER', 'CREW_MEMBER', 'ADMIN']
+    }
+  },
 
   { path: 'global-settings', redirectTo: '/global-settings/change-password', pathMatch:"full", outlet: "primary",},
   { path: 'global-settings', component: GlobalSettingsComponent,  outlet: "primary",
