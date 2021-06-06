@@ -5,16 +5,18 @@
             <div class="col-md-4 mt-3">
                 <div class="content dashboard-container">
                     <a href="" class="nav-item nav-link d-flex align-items-center justify-content-left text-edit ">&nbsp;<mat-icon class="mat-icon-styled">warning</mat-icon> &nbsp;My Incidents</a>
+                    <mat-spinner style="margin-left: 35%; margin-top: 8%;" [diameter]="'100'" *ngIf="isLoadingWorkReq"></mat-spinner> 
+
                    <div class="dashboard-div-p-l">
-                        <p><b>0</b> Drafts</p>
-                        <p><b>3</b> Canceled</p>
-                        <p><b>2</b> Executing</p>
-                        <p><b>1</b> Completed</p>
+                        <p><b>{{incidentStats.planned}}</b> Planned</p>
+                        <p><b>{{incidentStats.unplanned}}</b> Unplanned</p>
+                        <p><b>{{incidentStats.resolved}}</b> Resolved</p>
+                        <p><b>{{incidentStats.unresolved}}</b> Unresolved</p>
                    </div>
 
                    <div class="dashboard-div-p-r">
                     <p style="text-align: center;">Total Incidents</p>
-                    <p style="text-align: center; font-weight: bold; font-size: 30px; color: #cc0000;">6</p>
+                    <p style="text-align: center; font-weight: bold; font-size: 30px; color: #cc0000;">{{incidentStats.total}}</p>
                     
                    </div>
 

@@ -10,6 +10,7 @@ import { Crew } from 'app/shared/models/crew.model';
 import { Call } from 'app/shared/models/call.model';
 import { MultimediaAttachment } from 'app/shared/models/multimedia-attachment.model';
 import { IncidentList } from 'app/shared/models/incident-list.model';
+import { IncidentsStatistics } from 'app/shared/models/incident-statistics.mode';
 
 @Injectable({
   providedIn: 'root'
@@ -191,7 +192,10 @@ export class IncidentService implements IMultimediaService {
 
 
 
-
+  getIncidentsStatistics(userId:number):Observable<IncidentsStatistics>{
+    let requestUrl = environment.serverURL.concat(`incidents/statistics/${userId}`);
+    return this.http.get<IncidentsStatistics>(requestUrl);
+  }
  
  
   //done

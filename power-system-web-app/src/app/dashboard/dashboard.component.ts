@@ -2,6 +2,8 @@ import { WorkRequestService } from './../services/work-request.service';
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { WorkRequestStatistics } from 'app/shared/models/work-request-statistics.model';
 import { ChartComponent } from 'ng-apexcharts';
+import { IncidentsStatistics } from 'app/shared/models/incident-statistics.mode';
+import { IncidentService } from 'app/services/incident.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,8 +20,10 @@ export class DashboardComponent implements OnInit {
 
   public shouldReset: boolean = true;
   isLoadingWorkReq:boolean = true;
+  isLoadingIncident:boolean = true;
 
   workReqStats:WorkRequestStatistics =  new WorkRequestStatistics();
+  incidentStats:IncidentsStatistics = new IncidentsStatistics();
 
   public generateData(baseval: any, count: any, yrange: any) {
     var i = 0;
@@ -38,7 +42,7 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, private workReqService:WorkRequestService) {
+  constructor(private changeDetectorRef: ChangeDetectorRef, private workReqService:WorkRequestService, private incidentService: IncidentService) {
 
    }
 
@@ -56,6 +60,20 @@ export class DashboardComponent implements OnInit {
      )
    }
 
+   loadIncidentsStats()
+   {
+     this.isLoadingIncident = true;
+     let userId:number = +JSON.parse(localStorage.getItem("user")!).id;
+
+     this.incidentService.getIncidentsStatistics(userId).subscribe(
+       data=>{
+         this.incidentStats = data;
+         this.isLoadingIncident = false;
+         this.initAreaChart("100%");
+       }
+     )
+   }
+
   
 
     resetCharts() {
@@ -67,8 +85,8 @@ export class DashboardComponent implements OnInit {
 
     initAreaChart(width: any) {
       this.chartOptionsPie = {
-        series: [55, this.workReqStats.total, 10],
-        labels:  ['WP', 'WR', 'RD'],
+        series: [55, this.workReqStats.total, this.incidentStats.total],
+        labels:  ['WP', 'WR', 'INC'],
         title: {
           text: 'DOCUMENTS',
           align: 'center',
@@ -186,6 +204,7 @@ export class DashboardComponent implements OnInit {
 
     window.dispatchEvent(new Event('resize'));
     this.loadWorkRequestStats();
+    this.loadIncidentsStats();
     this.initAreaChart(700);
     this.initPieChar(400);
 

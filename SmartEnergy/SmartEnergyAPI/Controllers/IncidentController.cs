@@ -26,11 +26,13 @@ namespace SmartEnergyAPI.Controllers
     {
         private readonly IIncidentService _incidentService;
         private readonly IMultimediaService _multimediaService;
+        private readonly IAuthHelperService _authHelperService;
 
-        public IncidentController(IIncidentService incidentService, IMultimediaService multimediaService)
+        public IncidentController(IIncidentService incidentService, IMultimediaService multimediaService, IAuthHelperService authHelperService)
         {
             _incidentService = incidentService;
             _multimediaService = multimediaService;
+            _authHelperService = authHelperService;
         }
 
         [HttpGet("{id}/location")]
@@ -47,6 +49,20 @@ namespace SmartEnergyAPI.Controllers
             {
                 return NotFound(lnf.Message);
             }
+        }
+
+
+        [HttpGet("statistics/{userId}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestStatisticsDto))]
+        public IActionResult GetWorkRequestStatisticsForUser(int userId)
+        {
+            if (_authHelperService.GetUserIDFromPrincipal(User) != userId)
+                return Unauthorized("You can view statitics only for yourself");
+
+            return Ok(_incidentService.GetStatisticsForUser(userId));
+
         }
 
         [HttpGet("all")]

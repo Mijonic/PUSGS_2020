@@ -924,12 +924,21 @@ namespace SmartEnergy.Service.Services
             return incidents;
         }
 
+        public IncidentStatisticsDto GetStatisticsForUser(int userId)
+        {
+            IQueryable<Incident> incidents = _dbContext.Incidents.Where(x => x.UserID == userId);
 
-        
+            IncidentStatisticsDto statistics = new IncidentStatisticsDto()
+            {
+                Total = incidents.Count(),
+                Planned = incidents.Where(x => x.WorkType == WorkType.PLANNED).Count(),
+                Unplanned = incidents.Where(x => x.WorkType == WorkType.UNPLANNED).Count(),
+                Resolved = incidents.Where(x => x.IncidentStatus == IncidentStatus.RESOLVED).Count(),
+                Unresolved = incidents.Where(x => x.IncidentStatus == IncidentStatus.UNRESOLVED).Count(),
+            };
 
+            return statistics;
 
-
-
-
+        }
     }
 }

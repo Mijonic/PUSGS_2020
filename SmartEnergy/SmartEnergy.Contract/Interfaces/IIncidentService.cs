@@ -44,7 +44,9 @@ namespace SmartEnergy.Contract.Interfaces
         IncidentListDto GetIncidentsPaged(IncidentFields sortBy, SortingDirection direction, int page,
                                int perPage, IncidentFilter filter, OwnerFilter owner,
                                string searchParam, ClaimsPrincipal user);
-      
+
+         IncidentStatisticsDto GetStatisticsForUser(int userId);
+
 
 
 
