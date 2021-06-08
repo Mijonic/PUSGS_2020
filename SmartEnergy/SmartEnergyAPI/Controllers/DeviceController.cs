@@ -37,7 +37,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER, ADMIN", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
         public IActionResult GetDevicesPaged([FromQuery] DeviceField sortBy, [FromQuery] SortingDirection direction,

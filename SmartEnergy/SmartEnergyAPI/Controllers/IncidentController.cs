@@ -87,7 +87,7 @@ namespace SmartEnergyAPI.Controllers
 
 
         [HttpGet("unassigned")]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER, ADMIN, CONSUMER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<IncidentDto>))]
         public IActionResult GetUnassignedIncidents()
         {
@@ -95,7 +95,7 @@ namespace SmartEnergyAPI.Controllers
         }
 
         [HttpGet("unresolved")]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER, ADMIN, CONSUMER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<IncidentMapDisplayDto>))]
         public IActionResult GetUnresolvedIncidents()
         {
