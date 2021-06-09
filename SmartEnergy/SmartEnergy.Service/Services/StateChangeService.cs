@@ -19,9 +19,9 @@ namespace SmartEnergy.Service.Services
     {
         private readonly SmartEnergyDbContext _dbContext;
         private readonly IMapper _mapper;
-        private readonly IAuthHelperService _authHelperService;
+        private readonly IAuthService _authHelperService;
 
-        public StateChangeService(SmartEnergyDbContext dbContext, IMapper mapper, IAuthHelperService authHelperService)
+        public StateChangeService(SmartEnergyDbContext dbContext, IMapper mapper, IAuthService authHelperService)
         {
             _dbContext = dbContext;
             _mapper = mapper;

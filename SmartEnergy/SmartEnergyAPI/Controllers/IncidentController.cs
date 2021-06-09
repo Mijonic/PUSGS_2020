@@ -18,7 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SmartEnergyAPI.Controllers
+namespace SmartEnergy.Documents.Controllers
 {
     [Route("api/incidents")]
     [ApiController]
@@ -26,9 +26,9 @@ namespace SmartEnergyAPI.Controllers
     {
         private readonly IIncidentService _incidentService;
         private readonly IMultimediaService _multimediaService;
-        private readonly IAuthHelperService _authHelperService;
+        private readonly IAuthService _authHelperService;
 
-        public IncidentController(IIncidentService incidentService, IMultimediaService multimediaService, IAuthHelperService authHelperService)
+        public IncidentController(IIncidentService incidentService, IMultimediaService multimediaService, IAuthService authHelperService)
         {
             _incidentService = incidentService;
             _multimediaService = multimediaService;

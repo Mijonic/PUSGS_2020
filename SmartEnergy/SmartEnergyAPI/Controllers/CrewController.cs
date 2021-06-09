@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SmartEnergyAPI.Controllers
+namespace SmartEnergy.Documents.Controllers
 {
     [Route("api/crews")]
     [ApiController]

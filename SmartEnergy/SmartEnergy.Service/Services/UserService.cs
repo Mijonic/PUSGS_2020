@@ -27,9 +27,9 @@ namespace SmartEnergy.Service.Services
         private readonly IConfiguration _configuration;
         private readonly IMailService _mailService;
         private readonly IMapper _mapper;
-        private readonly IAuthHelperService _authHelperService;
+        private readonly IAuthService _authHelperService;
 
-        public UserService(SmartEnergyDbContext dbContext, IConfiguration configuration, IMailService mailService, IMapper mapper, IAuthHelperService authHelperService)
+        public UserService(SmartEnergyDbContext dbContext, IConfiguration configuration, IMailService mailService, IMapper mapper, IAuthService authHelperService)
         {
             _dbContext = dbContext;
             _configuration = configuration;

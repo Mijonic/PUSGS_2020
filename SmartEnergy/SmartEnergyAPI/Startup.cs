@@ -15,7 +15,7 @@ using Microsoft.OpenApi.Models;
 using SmartEnergy.Contract.Interfaces;
 using SmartEnergy.Infrastructure;
 using SmartEnergy.Service.Services;
-using SmartEnergyAPI.Mapping;
+using SmartEnergy.Documents.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +23,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace SmartEnergyAPI
+namespace SmartEnergy.Documents
 {
     public class Startup
     {
@@ -106,7 +106,7 @@ namespace SmartEnergyAPI
             services.AddScoped<IDeviceUsageService, DeviceUsageService>();
             services.AddScoped<ICallService, CallService>();
             services.AddScoped<IMailService, MailingService>();
-            services.AddScoped<IAuthHelperService, AuthHelperService>();
+            services.AddScoped<IAuthService, AuthHelperService>();
             services.AddScoped<IConsumerService, ConsumerService>();
             services.AddScoped<ISafetyDocumentService, SafetyDocumentService>();
 

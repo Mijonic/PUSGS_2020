@@ -1,0 +1,36 @@
+version: '3.4'
+
+services:
+
+  physical-database:
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=1Secure*Password1
+    ports: 
+      - "3306"
+
+  users-database:
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=1Secure*Password1
+    ports: 
+      - "1433"
+
+  smartenergy.users:
+    image: ${DOCKER_REGISTRY-}smartenergyusers
+    build:
+      context: .
+      dockerfile: SmartEnergy.Users/Dockerfile
+    depends_on:
+      - users-database
+
+  smartenergy.physical:
+    image: ${DOCKER_REGISTRY-}smartenergyphysical
+    build:
+      context: .
+      dockerfile: SmartEnergy.Physical/Dockerfile
+    depends_on:
+      - physical-database
+

@@ -28,13 +28,13 @@ namespace SmartEnergy.Service.Services
         private readonly IDeviceUsageService _deviceUsageService;
         private readonly ICallService _callService;
         private readonly IMapper _mapper;
-        private readonly IAuthHelperService _authHelperService;
+        private readonly IAuthService _authHelperService;
         private readonly IMailService _mailService;
         private readonly IConsumerService _consumerService;
 
 
 
-        public IncidentService(SmartEnergyDbContext dbContext, ITimeService timeService, IDeviceUsageService deviceUsageService,  IMapper mapper, ICallService callService, IAuthHelperService authHelperService, IMailService mailService, IConsumerService consumerService)
+        public IncidentService(SmartEnergyDbContext dbContext, ITimeService timeService, IDeviceUsageService deviceUsageService,  IMapper mapper, ICallService callService, IAuthService authHelperService, IMailService mailService, IConsumerService consumerService)
         {
             _dbContext = dbContext;
             _timeService = timeService;

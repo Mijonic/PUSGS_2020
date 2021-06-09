@@ -11,10 +11,6 @@ namespace SmartEnergy.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<Call> builder)
         {
-            //Set table name mapping
-            // builder.ToTable("ListItems");
-
-            //Set FK
             builder.HasKey(i => i.ID);
 
             builder.Property(i => i.ID)
@@ -39,13 +35,13 @@ namespace SmartEnergy.Infrastructure.Configurations
                 .WithMany(p => p.Calls)
                 .HasForeignKey(i => i.ConsumerID)
                 .IsRequired(false)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasOne(i => i.Incident)
               .WithMany(p => p.Calls)
               .HasForeignKey(i => i.IncidentID)
               .IsRequired(false)
-              .OnDelete(DeleteBehavior.ClientSetNull);
+              .OnDelete(DeleteBehavior.SetNull);
 
         }
     }

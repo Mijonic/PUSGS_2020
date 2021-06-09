@@ -25,10 +25,10 @@ namespace SmartEnergy.Service.Services
         private readonly SmartEnergyDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IDeviceUsageService _deviceUsageService;
-        private readonly IAuthHelperService _authHelperService;
+        private readonly IAuthService _authHelperService;
 
 
-        public SafetyDocumentService(SmartEnergyDbContext dbContext, IMapper mapper, IDeviceUsageService deviceUsageService, IAuthHelperService authHelperService)
+        public SafetyDocumentService(SmartEnergyDbContext dbContext, IMapper mapper, IDeviceUsageService deviceUsageService, IAuthService authHelperService)
         {
             _dbContext = dbContext;
             _mapper = mapper;

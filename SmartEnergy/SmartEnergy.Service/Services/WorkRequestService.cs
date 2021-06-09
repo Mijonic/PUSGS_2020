@@ -24,12 +24,12 @@ namespace SmartEnergy.Service.Services
         private readonly IMapper _mapper;
         private readonly IIncidentService _incidentService;
         private readonly IDeviceUsageService _deviceUsageService;
-        private readonly IAuthHelperService _authHelperService;
+        private readonly IAuthService _authHelperService;
         private readonly IMultimediaService _multimediaService;
 
         public WorkRequestService(SmartEnergyDbContext dbContext, IMapper mapper,
             IIncidentService incidentService, IDeviceUsageService deviceUsageService,
-            IAuthHelperService authHelperService, IMultimediaService multimedia)
+            IAuthService authHelperService, IMultimediaService multimedia)
         {
             _dbContext = dbContext;
             _mapper = mapper;

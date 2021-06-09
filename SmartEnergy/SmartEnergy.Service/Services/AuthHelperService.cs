@@ -16,7 +16,7 @@ using Newtonsoft.Json.Linq;
 
 namespace SmartEnergy.Service.Services
 {
-    public class AuthHelperService : IAuthHelperService
+    public class AuthHelperService : IAuthService
     {
         private readonly IConfigurationSection _googleSettings;
         private readonly IConfigurationSection _facebookSettings;

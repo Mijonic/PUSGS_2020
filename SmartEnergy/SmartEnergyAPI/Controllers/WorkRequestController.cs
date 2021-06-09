@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace SmartEnergyAPI.Controllers
+namespace SmartEnergy.Documents.Controllers
 {
     [Route("api/work-requests")]
     [ApiController]
@@ -25,10 +25,10 @@ namespace SmartEnergyAPI.Controllers
         private readonly IWorkRequestService _workRequestService;
         private readonly IMultimediaService _multimediaService;
         private readonly IStateChangeService _stateChangeService;
-        private readonly IAuthHelperService _authHelperService;
+        private readonly IAuthService _authHelperService;
 
         public WorkRequestController(IWorkRequestService workRequestService, IMultimediaService multimediaService,
-            IStateChangeService stateChangeService, IAuthHelperService authHelperService)
+            IStateChangeService stateChangeService, IAuthService authHelperService)
         {
             _workRequestService = workRequestService;
             _multimediaService = multimediaService;

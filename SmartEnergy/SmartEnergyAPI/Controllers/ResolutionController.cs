@@ -9,7 +9,7 @@ using SmartEnergy.Contract.CustomExceptions.Resolution;
 using SmartEnergy.Contract.DTO;
 using SmartEnergy.Contract.Interfaces;
 
-namespace SmartEnergyAPI.Controllers
+namespace SmartEnergy.Documents.Controllers
 {
     [Route("api/resolution")]
     [ApiController]

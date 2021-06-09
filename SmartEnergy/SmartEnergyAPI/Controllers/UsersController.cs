@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SmartEnergyAPI.Controllers
+namespace SmartEnergy.Documents.Controllers
 { 
     [Route("api/users")]
     [ApiController]
@@ -22,9 +22,9 @@ namespace SmartEnergyAPI.Controllers
     {
         private readonly IUserService _userService;
         private readonly IMultimediaService _multimediaService;
-        private readonly IAuthHelperService _authHelperService;
+        private readonly IAuthService _authHelperService;
 
-        public UsersController(IUserService userService, IMultimediaService multimediaService, IAuthHelperService authHelperService)
+        public UsersController(IUserService userService, IMultimediaService multimediaService, IAuthService authHelperService)
         {
             _userService = userService;
             _multimediaService = multimediaService;
