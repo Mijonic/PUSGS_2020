@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SmartEnergy.Physical
@@ -96,6 +98,15 @@ namespace SmartEnergy.Physical
 
         }
 
+        public void InitDb(PhysicalDbContext context)
+        {
+            if (!context.Exists())
+            {
+
+                context.Database.Migrate();
+            }
+        }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -126,8 +137,23 @@ namespace SmartEnergy.Physical
 
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                var context = serviceScope.ServiceProvider.GetService<PhysicalDbContext>();
-                context.Database.Migrate();
+
+                
+                try
+                {
+                    var context = serviceScope.ServiceProvider.GetService<PhysicalDbContext>();
+                    Thread.Sleep(60000);
+                    InitDb(context);
+                }catch //Catch if too soon initing
+                {
+                    var context = serviceScope.ServiceProvider.GetService<PhysicalDbContext>();
+                    Thread.Sleep(120000);
+                    InitDb(context);
+
+                    //Give up on life if this doesn't work 
+
+
+                }
             }
         }
     }

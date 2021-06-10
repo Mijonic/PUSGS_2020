@@ -1,36 +1,46 @@
 version: '3.4'
 
 services:
+  antivirus:
+    image: mkodockx/docker-clamav:alpine
 
-  physical-database:
-    image: "mcr.microsoft.com/mssql/server:2019-latest"
+  users-db:
+    image: mcr.microsoft.com/mssql/server
+    ports:
+      - "1401:1433"
     environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=1Secure*Password1
-    ports: 
-      - "3306"
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Your+password123"
 
-  users-database:
-    image: "mcr.microsoft.com/mssql/server:2019-latest"
+  physical-db:
+    image: mcr.microsoft.com/mssql/server
+    ports:
+      - "1402:1433"
     environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=1Secure*Password1
-    ports: 
-      - "1433"
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Your+password123"
+
 
   smartenergy.users:
     image: ${DOCKER_REGISTRY-}smartenergyusers
     build:
       context: .
       dockerfile: SmartEnergy.Users/Dockerfile
+    ports:
+      - "6969:80"
+      - "44372:443"
     depends_on:
-      - users-database
+      - users-db
+
 
   smartenergy.physical:
     image: ${DOCKER_REGISTRY-}smartenergyphysical
     build:
       context: .
       dockerfile: SmartEnergy.Physical/Dockerfile
+    ports:
+      - "6970:80"
+      - "44373:443"
     depends_on:
-      - physical-database
+      - physical-db
 

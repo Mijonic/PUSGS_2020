@@ -3,7 +3,7 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>43dda1b6-75aa-4654-8713-463c0ca41402</ProjectGuid>
+    <ProjectGuid>56f2a7a3-8a77-4578-8db6-339de804690e</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
     <DockerServiceName>smartenergy.users</DockerServiceName>

@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartEnergy.Physical", "Sma
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartEnergy.Documents", "SmartEnergy.Documents\SmartEnergy.Documents.csproj", "{BECCC54F-8012-4093-9EBC-D077B5EC73C3}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{43DDA1B6-75AA-4654-8713-463C0CA41402}"
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{56F2A7A3-8A77-4578-8DB6-339DE804690E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,10 +59,10 @@ Global
 		{BECCC54F-8012-4093-9EBC-D077B5EC73C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BECCC54F-8012-4093-9EBC-D077B5EC73C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BECCC54F-8012-4093-9EBC-D077B5EC73C3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{43DDA1B6-75AA-4654-8713-463C0CA41402}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{43DDA1B6-75AA-4654-8713-463C0CA41402}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{43DDA1B6-75AA-4654-8713-463C0CA41402}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{43DDA1B6-75AA-4654-8713-463C0CA41402}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56F2A7A3-8A77-4578-8DB6-339DE804690E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56F2A7A3-8A77-4578-8DB6-339DE804690E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56F2A7A3-8A77-4578-8DB6-339DE804690E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56F2A7A3-8A77-4578-8DB6-339DE804690E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
