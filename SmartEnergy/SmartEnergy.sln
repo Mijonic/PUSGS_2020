@@ -9,9 +9,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartEnergyDomainModels", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartEnergy.Infrastructure", "SmartEnergy.Infrastructure\SmartEnergy.Infrastructure.csproj", "{6DEB16E7-6169-4B89-B770-9C7879AE8A22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartEnergy.Contract", "SmartEnergy.Contract\SmartEnergy.Contract.csproj", "{508360BE-4332-4D95-BA2D-63C096ECCF17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartEnergy.Contract", "SmartEnergy.Contract\SmartEnergy.Contract.csproj", "{508360BE-4332-4D95-BA2D-63C096ECCF17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartEnergy.Service", "SmartEnergy.Service\SmartEnergy.Service.csproj", "{EBBCD583-D9E0-427F-92CC-7DE7426F7D12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartEnergy.Service", "SmartEnergy.Service\SmartEnergy.Service.csproj", "{EBBCD583-D9E0-427F-92CC-7DE7426F7D12}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartEnergy.DevicesAPI", "SmartEnergy.DevicesAPI\SmartEnergy.DevicesAPI.csproj", "{A0455221-A405-41AB-A6BA-C130543CD32A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartEnergy.LocationAPI", "SmartEnergy.LocationAPI\SmartEnergy.LocationAPI.csproj", "{56FA6B6E-1BC7-4D71-9932-FFEC5DBE89AD}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{C9F17D86-9830-4572-99D0-1D28230BFDC9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +45,18 @@ Global
 		{EBBCD583-D9E0-427F-92CC-7DE7426F7D12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBBCD583-D9E0-427F-92CC-7DE7426F7D12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBBCD583-D9E0-427F-92CC-7DE7426F7D12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0455221-A405-41AB-A6BA-C130543CD32A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0455221-A405-41AB-A6BA-C130543CD32A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0455221-A405-41AB-A6BA-C130543CD32A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0455221-A405-41AB-A6BA-C130543CD32A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56FA6B6E-1BC7-4D71-9932-FFEC5DBE89AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56FA6B6E-1BC7-4D71-9932-FFEC5DBE89AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56FA6B6E-1BC7-4D71-9932-FFEC5DBE89AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56FA6B6E-1BC7-4D71-9932-FFEC5DBE89AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9F17D86-9830-4572-99D0-1D28230BFDC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9F17D86-9830-4572-99D0-1D28230BFDC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9F17D86-9830-4572-99D0-1D28230BFDC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9F17D86-9830-4572-99D0-1D28230BFDC9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

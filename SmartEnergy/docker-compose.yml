@@ -1,0 +1,41 @@
+version: '3.4'
+
+services:
+  smartenergy.devicesapi:
+    image: ${DOCKER_REGISTRY-}smartenergydevicesapi
+    build:
+      context: .
+      dockerfile: SmartEnergy.DevicesAPI/Dockerfile
+    ports:
+        - "52000:50001"
+        - "44373:80"
+    depends_on:
+        - device-db
+   
+  smartenergdevice-dapr:
+    image: "daprio/daprd:latest"
+    command: [ "./daprd", "-app-id", "smartenergydevice", "-app-port", "80" ]
+    depends_on:
+      - smartenergy.devicesapi
+    network_mode: "service:smartenergy.devicesapi"
+
+ 
+  antivirus:
+    image: mkodockx/docker-clamav:alpine
+
+
+
+
+  device-db:
+    image: mcr.microsoft.com/mssql/server
+    ports:
+      - "1401:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Your+password123"
+ 
+  
+
+  
+
+
