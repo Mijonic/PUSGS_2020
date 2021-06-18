@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SmartEnergyAPI.Mapping
+namespace SmartEnergy.DevicesAPI.Mapping
 {
     public class MappingProfile : Profile
     {

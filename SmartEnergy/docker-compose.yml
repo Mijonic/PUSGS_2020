@@ -1,6 +1,8 @@
 version: '3.4'
 
 services:
+
+  #devices 
   smartenergy.devicesapi:
     image: ${DOCKER_REGISTRY-}smartenergydevicesapi
     build:
@@ -19,7 +21,7 @@ services:
       - smartenergy.devicesapi
     network_mode: "service:smartenergy.devicesapi"
 
- 
+  #antivirus 
   antivirus:
     image: mkodockx/docker-clamav:alpine
 
@@ -38,4 +40,33 @@ services:
 
   
 
+     
+  #location 
+  smartenergy.locationapi:
+    image: ${DOCKER_REGISTRY-}smartenergylocationapi
+    build:
+      context: .
+      dockerfile: SmartEnergy.LocationAPI/Dockerfile
+    ports:
+        - "51000:50001"
+        - "44374:80"
+    depends_on:
+        - location-db
+
+
+  smartenergylocation-dapr:
+    image: "daprio/daprd:latest"
+    command: [ "./daprd", "-app-id", "smartenergylocation", "-app-port", "80" ]
+    depends_on:
+      - smartenergy.locationapi
+    network_mode: "service:smartenergy.locationapi"
+
+  
+  location-db:
+    image: mcr.microsoft.com/mssql/server
+    ports:
+      - "1402:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Your+password123"
 

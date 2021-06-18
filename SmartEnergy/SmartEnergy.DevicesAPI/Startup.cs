@@ -12,8 +12,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SmartEnergy.Contract.Interfaces;
 using SmartEnergy.DevicesAPI.Infrastructure;
+using SmartEnergy.DevicesAPI.Mapping;
 using SmartEnergy.DevicesAPI.Service;
-using SmartEnergyAPI.Mapping;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,8 +54,8 @@ namespace SmartEnergy.DevicesAPI
                    ValidateAudience = true,
                    ValidateLifetime = true,
                    ValidateIssuerSigningKey = true,
-                   ValidIssuer = "http://localhost:44372",
-                   ValidAudience = "http://localhost:44372",
+                   ValidIssuer = "http://localhost:44373",
+                   ValidAudience = "http://localhost:44373",
                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SecretKey"]))
                };
            });
