@@ -51,15 +51,15 @@ namespace SmartEnergy.DevicesAPI
                options.TokenValidationParameters = new TokenValidationParameters
                {
                    ValidateIssuer = true,
-                   ValidateAudience = true,
+                   ValidateAudience = false,
                    ValidateLifetime = true,
                    ValidateIssuerSigningKey = true,
-                   ValidIssuer = "http://localhost:44373",
-                   ValidAudience = "http://localhost:44373",
+                   ValidIssuer = "http://localhost:44372",
+                   //ValidAudience = "http://localhost:44372",
                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SecretKey"]))
                };
            });
-            services.AddControllers().AddJsonOptions(options =>
+            services.AddControllers().AddDapr().AddJsonOptions(options =>
                                      options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
             services.AddDbContext<DeviceDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DeviceDatabase")));

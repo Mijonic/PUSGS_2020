@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Dapr.Client;
 using SmartEnergy.Contract.CustomExceptions.Device;
+using SmartEnergy.Contract.CustomExceptions.Location;
 using SmartEnergy.Contract.DTO;
 using SmartEnergy.Contract.Enums;
 using SmartEnergy.Contract.Interfaces;
@@ -8,6 +10,7 @@ using SmartEnergy.DevicesAPI.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace SmartEnergy.DevicesAPI.Service
@@ -17,11 +20,13 @@ namespace SmartEnergy.DevicesAPI.Service
 
         private readonly DeviceDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly DaprClient _daprClient;
 
-        public DeviceService(DeviceDbContext dbContext, IMapper mapper)
+        public DeviceService(DeviceDbContext dbContext, IMapper mapper, DaprClient daprClient)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _daprClient = daprClient;
         }
 
 
@@ -37,20 +42,69 @@ namespace SmartEnergy.DevicesAPI.Service
             _dbContext.SaveChanges();
         }
 
-        public DeviceDto Get(int id)
+        public async Task<DeviceDto> GetById(int id)
         {
-           // return _mapper.Map<DeviceDto>(_dbContext.Devices.Include("Location").FirstOrDefault(x => x.ID == id));
-            return _mapper.Map<DeviceDto>(_dbContext.Devices.FirstOrDefault(x => x.ID == id));
+            // return _mapper.Map<DeviceDto>(_dbContext.Devices.Include("Location").FirstOrDefault(x => x.ID == id));
+
+            Device device = _dbContext.Devices.FirstOrDefault(x => x.ID == id);
+            DeviceDto deviceDto = new DeviceDto();
+            
+            if(device != null)
+            {
+                deviceDto = _mapper.Map<DeviceDto>(device);
+
+                try
+                {
+                    LocationDto location = await _daprClient.InvokeMethodAsync<LocationDto>(HttpMethod.Get, "smartenergylocation", $"/api/locations/{device.LocationID}");
+                    deviceDto.Location = location;
+                    
+                }
+                catch(Exception e)
+                {
+                    throw new LocationNotFoundException("Location service is unavailable right now.");
+                }
+            }
+
+
+            return deviceDto;
         }
 
-        public List<DeviceDto> GetAll()
+        public async Task<List<DeviceDto>> GetAllDevices()
         {
             //return _mapper.Map<List<DeviceDto>>(_dbContext.Devices.Include("Location").ToList());
-            return _mapper.Map<List<DeviceDto>>(_dbContext.Devices.ToList());
+            //return _mapper.Map<List<DeviceDto>>(_dbContext.Devices.ToList());
+
+            List<Device> devices = _dbContext.Devices.ToList();
+            List<DeviceDto> returnDevices = new List<DeviceDto>();
+
+            LocationDto locationDto = new LocationDto();
+            DeviceDto deviceDto = new DeviceDto();
+
+            foreach(Device d in devices)
+            {
+                deviceDto = _mapper.Map<DeviceDto>(d);
+
+                try
+                {
+                    locationDto = await _daprClient.InvokeMethodAsync<LocationDto>(HttpMethod.Get, "smartenergylocation", $"/api/locations/{d.LocationID}");
+                    deviceDto.Location = locationDto;
+
+                }
+                catch (Exception e)
+                {
+                    throw new LocationNotFoundException("Location service is unavailable right now.");
+                }
+
+                returnDevices.Add(deviceDto);
+
+
+            }
+
+            return returnDevices; 
 
         }
 
-        public DeviceListDto GetDevicesPaged(DeviceField sortBy, SortingDirection direction, int page, int perPage)
+        public async Task<DeviceListDto> GetDevicesPaged(DeviceField sortBy, SortingDirection direction, int page, int perPage)
         {
             // IQueryable<Device> devicesPaged = _dbContext.Devices.Include(x => x.Location).AsQueryable();
             IQueryable<Device> devicesPaged = _dbContext.Devices.AsQueryable();
@@ -62,16 +116,35 @@ namespace SmartEnergy.DevicesAPI.Service
             devicesPaged = devicesPaged.Skip(page * perPage)
                                     .Take(perPage);
 
+
+            List<DeviceDto> pagedDevices = _mapper.Map<List<DeviceDto>>(devicesPaged.ToList());
+            LocationDto locationDto = new LocationDto();
+            
+            foreach(DeviceDto device in pagedDevices)
+            {
+                try
+                {
+                    locationDto = await _daprClient.InvokeMethodAsync<LocationDto>(HttpMethod.Get, "smartenergylocation", $"/api/locations/{device.LocationID}");
+                    device.Location = locationDto;
+
+                }
+                catch (Exception e)
+                {
+                    device.Location = new LocationDto();
+                    throw new LocationNotFoundException("Location service is unavailable right now.");
+                }
+            }
+
             DeviceListDto returnValue = new DeviceListDto()
             {
-                Devices = _mapper.Map<List<DeviceDto>>(devicesPaged.ToList()),
+                Devices = pagedDevices,
                 TotalCount = resourceCount
             };
 
             return returnValue;
         }
 
-        public DeviceListDto GetSearchDevicesPaged(DeviceField sortBy, SortingDirection direction, int page, int perPage, DeviceFilter type, DeviceField field, string searchParam)
+        public async Task<DeviceListDto> GetSearchDevicesPaged(DeviceField sortBy, SortingDirection direction, int page, int perPage, DeviceFilter type, DeviceField field, string searchParam)
         {
             // IQueryable<Device> devices = _dbContext.Devices.Include(x => x.Location).AsQueryable();
             IQueryable<Device> devices = _dbContext.Devices.AsQueryable();
@@ -84,16 +157,34 @@ namespace SmartEnergy.DevicesAPI.Service
             devices = devices.Skip(page * perPage)
                                     .Take(perPage);
 
+            List<DeviceDto> searchedDevices = _mapper.Map<List<DeviceDto>>(devices.ToList());
+            LocationDto locationDto = new LocationDto();
+
+            foreach (DeviceDto device in searchedDevices)
+            {
+                try
+                {
+                    locationDto = await _daprClient.InvokeMethodAsync<LocationDto>(HttpMethod.Get, "smartenergylocation", $"/api/locations/{device.LocationID}");
+                    device.Location = locationDto;
+
+                }
+                catch (Exception e)
+                {
+                    device.Location = new LocationDto();
+                    throw new LocationNotFoundException("Location service is unavailable right now.");
+                }
+            }
+
             DeviceListDto returnValue = new DeviceListDto()
             {
-                Devices = _mapper.Map<List<DeviceDto>>(devices.ToList()),
+                Devices = searchedDevices,
                 TotalCount = resourceCount
             };
 
             return returnValue;
         }
 
-        public DeviceDto Insert(DeviceDto entity)
+        public async Task<DeviceDto> InsertDevice(DeviceDto entity)
         {
             Device newDevice = _mapper.Map<Device>(entity);
 
@@ -109,6 +200,20 @@ namespace SmartEnergy.DevicesAPI.Service
 
             //if (_dbContext.Location.Any(x => x.ID == entity.LocationID) == false)
             //    throw new LocationNotFoundException($"Location with id = {entity.LocationID} does not exists!");
+
+           
+            try
+            {
+                LocationDto locationDto = await _daprClient.InvokeMethodAsync<LocationDto>(HttpMethod.Get, "smartenergylocation", $"/api/locations/{entity.LocationID}");
+                if (locationDto == null)
+                    throw new LocationNotFoundException($"Location with id = {entity.LocationID} does not exists!");
+
+            }
+            catch (Exception e)
+            {
+
+                throw new LocationNotFoundException("Location service is unavailable right now.");
+            }
 
             Device deviceWithMaxCounter = _dbContext.Devices.FirstOrDefault(x => x.DeviceCounter == _dbContext.Devices.Max(y => y.DeviceCounter));
 
@@ -134,7 +239,7 @@ namespace SmartEnergy.DevicesAPI.Service
 
         }
 
-        public DeviceDto Update(DeviceDto entity)
+        public async  Task<DeviceDto> UpdateDevice(DeviceDto entity)
         {
 
             Device updatedDevice = _mapper.Map<Device>(entity);
@@ -159,6 +264,19 @@ namespace SmartEnergy.DevicesAPI.Service
 
             //if (_dbContext.Location.Where(x => x.ID.Equals(updatedDevice.LocationID)) == null)
             //    throw new LocationNotFoundException($"Location with id = {updatedDevice.LocationID} does not exists!");
+
+            try
+            {
+                LocationDto locationDto = await _daprClient.InvokeMethodAsync<LocationDto>(HttpMethod.Get, "smartenergylocation", $"/api/locations/{entity.LocationID}");
+                if (locationDto == null)
+                    throw new LocationNotFoundException($"Location with id = {entity.LocationID} does not exists!");
+
+            }
+            catch (Exception e)
+            {
+
+                throw new LocationNotFoundException("Location service is unavailable right now.");
+            }
 
 
             updatedDevice.Name = $"{updatedDevice.DeviceType.ToString().Substring(0, 3)}{updatedDevice.DeviceCounter}";
@@ -278,11 +396,24 @@ namespace SmartEnergy.DevicesAPI.Service
 
         }
 
+        public List<DeviceDto> GetAll()
+        {
+            throw new NotImplementedException();
+        }
 
+        public DeviceDto Get(int id)
+        {
+            throw new NotImplementedException();
+        }
 
+        public DeviceDto Insert(DeviceDto entity)
+        {
+            throw new NotImplementedException();
+        }
 
-
-
-
+        public DeviceDto Update(DeviceDto entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

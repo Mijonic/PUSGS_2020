@@ -25,6 +25,9 @@ namespace SmartEnergy.LocationAPI.Service
             return _mapper.Map<List<LocationDto>>(_dbContext.Location.ToList());
         }
 
-
+        public LocationDto GetLocationById(int locationId)
+        {
+            return _mapper.Map<LocationDto>(_dbContext.Location.FirstOrDefault(x => x.ID == locationId));
+        }
     }
 }

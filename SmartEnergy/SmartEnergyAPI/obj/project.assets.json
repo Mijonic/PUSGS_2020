@@ -1711,8 +1711,7 @@
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "8.1.1",
           "Microsoft.EntityFrameworkCore": "5.0.5",
           "Microsoft.EntityFrameworkCore.Relational": "5.0.5",
-          "Microsoft.EntityFrameworkCore.SqlServer": "5.0.5",
-          "SmartEnergyDomainModels": "1.0.0"
+          "Microsoft.EntityFrameworkCore.SqlServer": "5.0.5"
         },
         "compile": {
           "bin/placeholder/SmartEnergy.Infrastructure.dll": {}
@@ -1740,19 +1739,6 @@
         },
         "runtime": {
           "bin/placeholder/SmartEnergy.Service.dll": {}
-        }
-      },
-      "SmartEnergyDomainModels/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v3.1",
-        "dependencies": {
-          "SmartEnergy.Contract": "1.0.0"
-        },
-        "compile": {
-          "bin/placeholder/SmartEnergyDomainModels.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/SmartEnergyDomainModels.dll": {}
         }
       }
     }
@@ -6323,11 +6309,6 @@
       "type": "project",
       "path": "../SmartEnergy.Service/SmartEnergy.Service.csproj",
       "msbuildProject": "../SmartEnergy.Service/SmartEnergy.Service.csproj"
-    },
-    "SmartEnergyDomainModels/1.0.0": {
-      "type": "project",
-      "path": "../SmartEnergyDomainModels/SmartEnergyDomainModels.csproj",
-      "msbuildProject": "../SmartEnergyDomainModels/SmartEnergyDomainModels.csproj"
     }
   },
   "projectFileDependencyGroups": {

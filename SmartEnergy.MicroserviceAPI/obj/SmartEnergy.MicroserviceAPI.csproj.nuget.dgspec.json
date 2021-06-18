@@ -60,6 +60,14 @@
               "target": "Package",
               "version": "[4.0.2, )"
             },
+            "Dapr.AspNetCore": {
+              "target": "Package",
+              "version": "[1.2.0, )"
+            },
+            "Dapr.Client": {
+              "target": "Package",
+              "version": "[1.2.0, )"
+            },
             "FacebookCore": {
               "target": "Package",
               "version": "[2.1.13, )"

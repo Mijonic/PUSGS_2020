@@ -19,6 +19,7 @@ namespace SmartEnergy.DevicesAPI.Controllers
     public class DeviceController : ControllerBase
     {
         private readonly IDeviceService _deviceService;
+      
 
         public DeviceController(IDeviceService deviceService)
         {
@@ -27,63 +28,103 @@ namespace SmartEnergy.DevicesAPI.Controllers
 
 
         [HttpGet("all")]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER, ADMIN", Policy = "ApprovedOnly")]
+        //[Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER, ADMIN", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
-        public IActionResult GetAllDevices()
+        public async Task<IActionResult> GetAllDevices()
         {
-            return Ok(_deviceService.GetAll());
+            try
+            {
+                List<DeviceDto> allDevices = await _deviceService.GetAllDevices();
+
+                return Ok(allDevices);
+
+            }catch(LocationNotFoundException locnf)
+            {
+                return NotFound(locnf.Message);
+            }
 
         }
 
 
         [HttpGet]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER, ADMIN", Policy = "ApprovedOnly")]
+       // [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER, ADMIN", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
-        public IActionResult GetDevicesPaged([FromQuery] DeviceField sortBy, [FromQuery] SortingDirection direction,
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DeviceListDto))]
+        public async Task<IActionResult> GetDevicesPaged([FromQuery] DeviceField sortBy, [FromQuery] SortingDirection direction,
                                   [FromQuery][BindRequired] int page, [FromQuery][BindRequired] int perPage)
         {
-            return Ok(_deviceService.GetDevicesPaged(sortBy, direction, page, perPage));
+            try
+            {
+                DeviceListDto devicesPaged = await _deviceService.GetDevicesPaged(sortBy, direction, page, perPage);
+
+                return Ok(devicesPaged);
+            }
+            catch(LocationNotFoundException lnf)
+            {
+                return NotFound(lnf.Message);
+            }
         }
 
         [HttpGet("search")]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER, ADMIN", Policy = "ApprovedOnly")]
+       // [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER, ADMIN", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
-        public IActionResult GetSearchDevicesPaged([FromQuery] DeviceField sortBy, [FromQuery] SortingDirection direction,
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DeviceListDto))]
+        public async Task<IActionResult> GetSearchDevicesPaged([FromQuery] DeviceField sortBy, [FromQuery] SortingDirection direction,
                                  [FromQuery][BindRequired] int page, [FromQuery][BindRequired] int perPage, [FromQuery] DeviceFilter type,
                                  [FromQuery] DeviceField field, [FromQuery] string searchParam)
         {
-            return Ok(_deviceService.GetSearchDevicesPaged(sortBy, direction, page, perPage, type, field, searchParam));
+
+            try
+            {
+                DeviceListDto searchedDevices = await _deviceService.GetSearchDevicesPaged(sortBy, direction, page, perPage, type, field, searchParam);
+
+                return Ok(searchedDevices);
+
+            }
+            catch(LocationNotFoundException lnf)
+            {
+                return NotFound(lnf.Message);
+            }
         }
 
 
 
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER, ADMIN", Policy = "ApprovedOnly")]
+       // [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER, ADMIN", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DeviceDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult GetDeviceById(int id)
+        public async Task<IActionResult> GetDeviceById(int id)
         {
-            DeviceDto device = _deviceService.Get(id);
-            if (device == null)
-                return NotFound();
+            try
+            {
+                DeviceDto device = await _deviceService.GetById(id);
 
-            return Ok(device);
+                if (device == null)
+                    return NotFound();
+
+                return Ok(device);
+            }
+            catch (LocationNotFoundException locnf)
+            {
+                return NotFound(locnf.Message);
+            }
+
+          
         }
 
 
         [HttpPost]
-        [Authorize(Roles = "ADMIN", Policy = "ApprovedOnly")]
+        //[Authorize(Roles = "ADMIN", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult AddDevice([FromBody] DeviceDto newDevice)
+        public async Task<IActionResult> AddDevice([FromBody] DeviceDto newDevice)
         {
             try
             {
-                DeviceDto device = _deviceService.Insert(newDevice);
+                DeviceDto device = await _deviceService.InsertDevice(newDevice);
+
                 return CreatedAtAction(nameof(GetDeviceById), new { id = device.ID }, device);
             }
             catch (InvalidDeviceException invalidDevice)
@@ -99,15 +140,15 @@ namespace SmartEnergy.DevicesAPI.Controllers
 
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "ADMIN", Policy = "ApprovedOnly")]
+        //[Authorize(Roles = "ADMIN", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DeviceDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult UpdateDevice(int id, [FromBody] DeviceDto modifiedDevice)
+        public async Task<IActionResult> UpdateDevice(int id, [FromBody] DeviceDto modifiedDevice)
         {
             try
             {
-                DeviceDto device = _deviceService.Update(modifiedDevice);
+                DeviceDto device =  await _deviceService.UpdateDevice(modifiedDevice);
                 return Ok(device);
             }
             catch (InvalidDeviceException invalidDevice)
@@ -128,7 +169,7 @@ namespace SmartEnergy.DevicesAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "ADMIN", Policy = "ApprovedOnly")]
+        //[Authorize(Roles = "ADMIN", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult RemoveDevice(int id)

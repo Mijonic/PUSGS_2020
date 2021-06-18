@@ -25,6 +25,9 @@ namespace SmartEnergy.Service.Services
             return _mapper.Map<List<LocationDto>>(_dbContext.Location.ToList());
         }
 
-      
+        public LocationDto GetLocationById(int locationId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
