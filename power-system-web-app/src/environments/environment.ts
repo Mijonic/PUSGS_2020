@@ -4,7 +4,10 @@
 
 export const environment = {
   production: false,
-  serverURL : "https://localhost:44372/api/",
+  //serverURL : "https://localhost:44372/api/",
+  serverURL : "http://localhost:44372/api/",
+  deviceServerURL : "http://localhost:44373/api/",
+  locationServerURL : "http://localhost:44374/api/",
 };
 
 /*

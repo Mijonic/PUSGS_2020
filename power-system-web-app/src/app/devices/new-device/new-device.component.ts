@@ -128,7 +128,8 @@ export class NewDeviceComponent implements OnInit {
               this.router.navigate(['devices']);
               },
               error=>{
-                this.toastr.error(error.error);
+                this.router.navigate(['devices']);
+                this.toastr.error(error.error,"", {positionClass: 'toast-bottom-left'});
               
               }
           );

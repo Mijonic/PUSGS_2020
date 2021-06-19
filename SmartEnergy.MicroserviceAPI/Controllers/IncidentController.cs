@@ -235,18 +235,44 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
         }
 
 
+        [HttpGet("{incidentId}/unrelated-devices")]
+        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER ", Policy = "ApprovedOnly")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
+        public async Task<IActionResult> GetUnrelatedDevices(int incidentId)
+        {
+            try
+            {
+                List<DeviceDto> unrelated = await _incidentService.GetUnrelatedDevices(incidentId);
+
+                return Ok(unrelated);
+            }
+            catch (IncidentNotFoundException incidentNotFound)
+            {
+                return NotFound(incidentNotFound.Message);
+            }
+            catch (DeviceNotFoundException dnf)
+            {
+                return NotFound(dnf.Message);
+            }
+            catch (LocationNotFoundException lnf)
+            {
+                return NotFound(lnf.Message);
+            }
+        }
+
+
 
         [HttpPut("{incidentId}/assign/{userId}")]
         [Authorize(Roles = "CREW_MEMBER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult AssignIncidetToUser(int incidentId, int userId)
+        public async Task<IActionResult> AssignIncidetToUser(int incidentId, int userId)
         {
 
             try
             {
 
-                _incidentService.AssignIncidetToUser(incidentId, userId);
+                bool condition = await _incidentService.AssignIncidetToUser(incidentId, userId);
 
                 return Ok();
             }
@@ -316,11 +342,11 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult AddDeviceToIncident(int incidentId, int deviceId)
+        public async Task<IActionResult> AddDeviceToIncident(int incidentId, int deviceId)
         {
             try
             {
-                _incidentService.AddDeviceToIncident(incidentId, deviceId);
+                 bool condition = await _incidentService.AddDeviceToIncident(incidentId, deviceId);
                
                 return Ok();
             }
@@ -343,6 +369,7 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
             catch(InvalidDeviceException invalidDevice)
             {
                 return BadRequest(invalidDevice.Message);
+
             }catch(LocationNotFoundException lnf)
             {
                 return NotFound(lnf.Message);
@@ -358,11 +385,11 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult RemoveDeviceFromIncindet(int incidentId, int deviceId)
+        public async Task<IActionResult> RemoveDeviceFromIncindet(int incidentId, int deviceId)
         {
             try
             {
-                _incidentService.RemoveDeviceFromIncindet(incidentId, deviceId);
+                bool condition = await _incidentService.RemoveDeviceFromIncindet(incidentId, deviceId);
 
                 return Ok();
             }
@@ -419,11 +446,11 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
        // [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult AddIncidentCall(int incidentId, CallDto newCall)
+        public async Task<IActionResult> AddIncidentCall(int incidentId, CallDto newCall)
         {
             try
             {
-                _incidentService.AddIncidentCall(incidentId, newCall);
+                CallDto call = await _incidentService.AddIncidentCall(incidentId, newCall);
 
                 return Ok();
             }
@@ -534,21 +561,7 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
         
 
 
-        [HttpGet("{incidentId}/unrelated-devices")]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER ", Policy = "ApprovedOnly")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
-        public IActionResult GetUnrelatedDevices(int incidentId)
-        {
-            try
-            {
-                return Ok(_incidentService.GetUnrelatedDevices(incidentId));
-            }
-            catch (IncidentNotFoundException incidentNotFound)
-            {
-                return NotFound(incidentNotFound.Message);
-            }
-        }
-
+  
 
 
 
@@ -557,13 +570,13 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
         [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER ", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult SetIncidentPriority(int incidentId)
+        public async  Task<IActionResult> SetIncidentPriority(int incidentId)
         {
 
             try
             {
 
-                 _incidentService.RemoveCrewFromIncidet(incidentId);
+                 bool condition = await _incidentService.SetIncidentPriority(incidentId);
 
                 return Ok("Updated incident priority.");
             }

@@ -14,12 +14,12 @@ export class DeviceService {
   constructor(private http: HttpClient) { }
   
   getAllDevices():Observable<Device[]>{
-    let requestUrl = environment.serverURL.concat("devices/all");
+    let requestUrl = environment.deviceServerURL.concat("devices/all");
     return this.http.get<Device[]>(requestUrl);
   }
 
   getDevicesPaged( page: number, perPage:number,sort?: string, order?: string):Observable<DeviceList>{
-    let requestUrl = environment.serverURL.concat("devices");
+    let requestUrl = environment.deviceServerURL.concat("devices");
     
    
     
@@ -38,7 +38,7 @@ export class DeviceService {
 
 
   getSearchDevicesPaged( page: number, perPage:number,sort?: string, order?: string, type?: string, field?:string, searchParam?: string ):Observable<DeviceList>{
-    let requestUrl = environment.serverURL.concat("devices/search");
+    let requestUrl = environment.deviceServerURL.concat("devices/search");
       
     let params = new HttpParams();
     if(sort)
@@ -64,23 +64,23 @@ export class DeviceService {
 
 
   getDeviceById(id:number):Observable<Device>{
-    let requestUrl = environment.serverURL.concat(`devices/${id}`);
+    let requestUrl = environment.deviceServerURL.concat(`devices/${id}`);
     return this.http.get<Device>(requestUrl);
   }
 
   createNewDevice(device:Device):Observable<Device>{
     console.log(device)
-    let requestUrl = environment.serverURL.concat("devices");
+    let requestUrl = environment.deviceServerURL.concat("devices");
     return this.http.post<Device>(requestUrl, device);
   }
 
   updateDevice(device: Device):Observable<Device>{
-    let requestUrl = environment.serverURL.concat(`devices/${device.id}`);
+    let requestUrl = environment.deviceServerURL.concat(`devices/${device.id}`);
     return this.http.put<Device>(requestUrl, device);
   }
 
   deleteDevice(id:number):Observable<{}>{
-    let requestUrl = environment.serverURL.concat(`devices/${id}`);
+    let requestUrl = environment.deviceServerURL.concat(`devices/${id}`);
     return this.http.delete(requestUrl);
   }
 

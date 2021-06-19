@@ -19,9 +19,9 @@ namespace SmartEnergy.Contract.Interfaces
 
         List<IncidentDto> GetUnassignedIncidents();
 
-        void AddDeviceToIncident(int incidentId, int deviceId);
+        Task<bool> AddDeviceToIncident(int incidentId, int deviceId);
 
-        void RemoveDeviceFromIncindet(int incidentId, int deviceId);
+        Task<bool> RemoveDeviceFromIncindet(int incidentId, int deviceId);
         Task<List<IncidentMapDisplayDto>> GetUnresolvedIncidentsForMap();
 
         Task<List<CallDto>> GetIncidentCalls(int incidentId);
@@ -32,15 +32,15 @@ namespace SmartEnergy.Contract.Interfaces
 
         Task<List<DeviceDto>> GetIncidentDevices(int incidentId);
 
-        void SetIncidentPriority(int incidentId);
+        Task<bool> SetIncidentPriority(int incidentId);
 
         Task<List<DeviceDto>> GetUnrelatedDevices(int incidentId);
 
         CrewDto GetIncidentCrew(int incidentId);
 
-        CallDto AddIncidentCall(int incidentId, CallDto newCall);
+        Task<CallDto> AddIncidentCall(int incidentId, CallDto newCall);
 
-        void AssignIncidetToUser(int incidentId, int userId);
+        Task<bool> AssignIncidetToUser(int incidentId, int userId);
 
 
         IncidentListDto GetIncidentsPaged(IncidentFields sortBy, SortingDirection direction, int page,

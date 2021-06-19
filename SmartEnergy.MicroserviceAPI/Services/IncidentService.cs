@@ -483,7 +483,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
             return _mapper.Map<List<IncidentDto>>(unassignedIcidents);
         }
 
-        public async void AddDeviceToIncident(int incidentId, int deviceId)
+        public async Task<bool> AddDeviceToIncident(int incidentId, int deviceId)
         {
 
             //Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
@@ -570,7 +570,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
                 if (CompareLocation(c.Location, device.Location))
                 {
                     c.IncidentID = incidentId;
-                    _callService.Update(_mapper.Map<CallDto>(c));
+                    CallDto callic = await _callService.UpdateCall(_mapper.Map<CallDto>(c));
                 }
 
             }
@@ -593,7 +593,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
             _dbContext.SaveChanges();
 
 
-          
+            return true;
 
 
 
@@ -616,7 +616,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
             return _mapper.Map<IncidentDto>(incident);
         }
 
-        public async void RemoveDeviceFromIncindet(int incidentId, int deviceId)
+        public async Task<bool> RemoveDeviceFromIncindet(int incidentId, int deviceId)
         {
             //Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
             //                                       .ThenInclude(p => p.Device)
@@ -673,6 +673,8 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
 
             _dbContext.SaveChanges();
+
+            return true;
 
           
         }
@@ -732,7 +734,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
                     if (c.IncidentID == null && CompareLocation(c.Location, incidentDevices[0].Location))
                     {
                         c.IncidentID = incidentId;
-                        _callService.Update(_mapper.Map<CallDto>(c));
+                        await _callService.UpdateCall(_mapper.Map<CallDto>(c));
                     }
 
 
@@ -821,7 +823,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
         }
 
-        public async void SetIncidentPriority(int incidentId)
+        public async Task<bool> SetIncidentPriority(int incidentId)
         {
             int incidentPriority = await GetIncidentPriority(incidentId);
 
@@ -829,6 +831,8 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
             incident.Priority = incidentPriority;
             _dbContext.SaveChanges();
+
+            return true;
 
         }
 
@@ -859,7 +863,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
             try
             {
-                allDevices = await _daprClient.InvokeMethodAsync<List<DeviceDto>>(HttpMethod.Get, "smartenergydevice", $"/api/devices");
+                allDevices = await _daprClient.InvokeMethodAsync<List<DeviceDto>>(HttpMethod.Get, "smartenergydevice", $"/api/devices/all");
 
             }
             catch (Exception e)
@@ -924,7 +928,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
      
 
-        public CallDto AddIncidentCall(int incidentId, CallDto newCall)
+        public async Task<CallDto> AddIncidentCall(int incidentId, CallDto newCall)
         {
 
             Incident incident = _dbContext.Incidents.Include(x => x.Crew)
@@ -938,7 +942,10 @@ namespace SmartEnergy.MicroserviceAPI.Services
             ValidateCall(newCall);
 
             newCall.IncidentID = incidentId;
-            return _callService.Insert(newCall);
+
+            CallDto call = await _callService.InsertCall(newCall);
+
+            return call;
         }
 
 
@@ -964,7 +971,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
             }
         }
 
-        public async void AssignIncidetToUser(int incidentId, int userId)
+        public async Task<bool> AssignIncidetToUser(int incidentId, int userId)
         {
             //Incident incident = _dbContext.Incidents.Find(incidentId);
 
@@ -1018,7 +1025,8 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
             _dbContext.SaveChanges();
 
-           
+
+            return true;
 
 
 

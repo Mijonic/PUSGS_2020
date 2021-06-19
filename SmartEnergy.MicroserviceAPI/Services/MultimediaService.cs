@@ -39,7 +39,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
         public async Task AttachFileToIncidentAsync(IFormFile formFile, int incidentId)
         {
-            await ScanAttachmentAsync(formFile);
+           // await ScanAttachmentAsync(formFile);
             Incident inc = _dbContext.Incidents.Find(incidentId);
 
             if (inc == null)
@@ -69,7 +69,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
         public async Task AttachFileToSafetyDocumentAsync(IFormFile formFile, int safetyDocId)
         {
-            await ScanAttachmentAsync(formFile);
+           // await ScanAttachmentAsync(formFile);
             SafetyDocument sd = _dbContext.SafetyDocuments.Find(safetyDocId);
 
             if (sd == null)
@@ -102,7 +102,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
         public async Task AttachFileToWorkRequestAsync(IFormFile formFile, int workRequestId)
         {
-            await ScanAttachmentAsync(formFile);
+            //await ScanAttachmentAsync(formFile);
             WorkRequest wr = _dbContext.WorkRequests.Find(workRequestId);
 
             if (wr == null)
@@ -136,7 +136,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
         public async Task AttachUserAvatar(IFormFile formFile, int userId)
         {
-            await ScanAttachmentAsync(formFile);
+            //await ScanAttachmentAsync(formFile);
 
             User user = _dbContext.Users.Find(userId);
 
