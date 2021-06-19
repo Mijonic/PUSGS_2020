@@ -11,7 +11,7 @@ namespace SmartEnergy.Contract.Interfaces
     {
         public List<UserDto> GetAllUnassignedCrewMembers();
 
-        public UsersListDto GetUsersPaged(UserField sortBy, SortingDirection direction, int page,
+        public Task<UsersListDto> GetUsersPaged(UserField sortBy, SortingDirection direction, int page,
                                           int perPage, UserStatusFilter status, UserTypeFilter type,
                                           string searchParam);
         public UserDto ApproveUser(int userId);
@@ -19,5 +19,9 @@ namespace SmartEnergy.Contract.Interfaces
 
         public string Login(LoginDto userInfo, out UserDto user);
         public Task<LoginResponseDto> LoginExternal(ExternalLoginDto userInfo);
+
+        Task<List<UserDto>> GetAllUsers();
+
+        Task<UserDto> InsertNew(UserDto entity);
     }
 }

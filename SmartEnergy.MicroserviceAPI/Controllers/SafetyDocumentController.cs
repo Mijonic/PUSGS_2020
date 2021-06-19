@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartEnergy.Contract.CustomExceptions;
+using SmartEnergy.Contract.CustomExceptions.Device;
+using SmartEnergy.Contract.CustomExceptions.Location;
 using SmartEnergy.Contract.CustomExceptions.Multimedia;
 using SmartEnergy.Contract.CustomExceptions.SafetyDocument;
 using SmartEnergy.Contract.CustomExceptions.WorkPlan;
@@ -55,16 +57,26 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
         [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult GetSafetyDocumentDevices(int id)
+        public async Task<IActionResult> GetSafetyDocumentDevices(int id)
         {
             try
             {
-                return Ok( _safetyDocumentService.GetSafetyDocumentDevices(id));
+                List<DeviceDto> devices = await _safetyDocumentService.GetSafetyDocumentDevices(id);
+
+                return Ok(devices);
 
             }
             catch (SafetyDocumentNotFoundException sfnf)
             {
                 return NotFound(sfnf.Message);
+            }
+            catch(DeviceNotFoundException dnf)
+            {
+                return NotFound(dnf.Message);
+            }
+            catch (LocationNotFoundException lnf)
+            {
+                return NotFound(lnf.Message);
             }
 
 

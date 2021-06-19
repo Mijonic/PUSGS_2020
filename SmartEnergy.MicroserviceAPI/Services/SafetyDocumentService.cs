@@ -15,6 +15,10 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using SmartEnergy.MicroserviceAPI.Infrastructure;
 using SmartEnergy.MicroserviceAPI.DomainModels;
+using Dapr.Client;
+using System.Net.Http;
+using SmartEnergy.Contract.CustomExceptions.Device;
+using System.Threading.Tasks;
 
 namespace SmartEnergy.MicroserviceAPI.Services
 {
@@ -27,14 +31,16 @@ namespace SmartEnergy.MicroserviceAPI.Services
         private readonly IMapper _mapper;
         private readonly IDeviceUsageService _deviceUsageService;
         private readonly IAuthHelperService _authHelperService;
+        private readonly DaprClient _daprClient;
 
 
-        public SafetyDocumentService(MicroserviceDbContext dbContext, IMapper mapper, IDeviceUsageService deviceUsageService, IAuthHelperService authHelperService)
+        public SafetyDocumentService(MicroserviceDbContext dbContext, IMapper mapper, IDeviceUsageService deviceUsageService, IAuthHelperService authHelperService, DaprClient daprClient)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _deviceUsageService = deviceUsageService;
             _authHelperService = authHelperService;
+            _daprClient = daprClient;
         }
 
         public void Delete(int id)
@@ -125,26 +131,48 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
 
         //SREDITI OVO
-        public List<DeviceDto> GetSafetyDocumentDevices(int safetyDocumentId)
+        public async Task<List<DeviceDto>> GetSafetyDocumentDevices(int safetyDocumentId)
         {
-            ////SafetyDocument sf = _dbContext.SafetyDocuments.Include(x => x.DeviceUsages)
-            ////                                                 .ThenInclude(x => x.Device)
-            ////                                                 .ThenInclude(x => x.Location)
-            ////                                                 .FirstOrDefault(x => x.ID == safetyDocumentId);
-
-            //SafetyDocument sf = _dbContext.SafetyDocuments.Include(x => x.DeviceUsages)                                         
+            //SafetyDocument sf = _dbContext.SafetyDocuments.Include(x => x.DeviceUsages)
+            //                                                 .ThenInclude(x => x.Device)
+            //                                                 .ThenInclude(x => x.Location)
             //                                                 .FirstOrDefault(x => x.ID == safetyDocumentId);
 
-            //if (sf == null)
-            //    throw new SafetyDocumentNotFoundException($"Safety document with id {safetyDocumentId} does not exist.");
+            SafetyDocument sf = _dbContext.SafetyDocuments.Include(x => x.DeviceUsages).FirstOrDefault(x => x.ID == safetyDocumentId);
+
+            if (sf == null)
+                throw new SafetyDocumentNotFoundException($"Safety document with id {safetyDocumentId} does not exist.");
+
+            List<DeviceDto> safetyDocumentDevices = new List<DeviceDto>();
+            DeviceDto deviceDto = new DeviceDto();
+
+
+            foreach (DeviceUsage deviceUsage in sf.DeviceUsages)
+            {
+                try
+                {
+                    deviceDto = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergdevice", $"/api/devices/{deviceUsage.DeviceID}");
+                    safetyDocumentDevices.Add(deviceDto);
+
+                }
+                catch (Exception e)
+                {
+                    throw new DeviceNotFoundException("Device service is unavailable right now.");
+                }
+
+                
+            }
+
 
             //List<Device> devices = new List<Device>();
+
             //foreach (DeviceUsage d in sf.DeviceUsages)
             //    devices.Add(d.Device);
 
-            //return _mapper.Map<List<DeviceDto>>(devices);
+            return safetyDocumentDevices;
 
-            return new List<DeviceDto>();
+
+
         }
 
         public SafetyDocumentDto Insert(SafetyDocumentDto entity)

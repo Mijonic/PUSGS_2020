@@ -4,12 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SmartEnergy.Contract.Interfaces
 {
     public interface IWorkRequestService :IGenericService<WorkRequestDto>
     {
-        public List<DeviceDto> GetWorkRequestDevices(int workRequestId);
+        public Task<List<DeviceDto>> GetWorkRequestDevices(int workRequestId);
         public WorkRequestsListDto GetWorkRequestsPaged(WorkRequestField sortBy, SortingDirection direction, int page,
                                   int perPage, DocumentStatusFilter status, OwnerFilter owner,
                                   string searchParam, ClaimsPrincipal user);

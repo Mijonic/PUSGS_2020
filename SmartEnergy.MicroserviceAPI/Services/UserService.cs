@@ -21,6 +21,9 @@ using static Google.Apis.Auth.GoogleJsonWebSignature;
 using SmartEnergy.MicroserviceAPI.Infrastructure;
 using SmartEnergy.MicroserviceAPI.DomainModels;
 using Org.BouncyCastle.Crypto.Generators;
+using Dapr.Client;
+using System.Net.Http;
+using SmartEnergy.Contract.CustomExceptions.Location;
 
 namespace SmartEnergy.MicroserviceAPI.Services
 {
@@ -31,14 +34,18 @@ namespace SmartEnergy.MicroserviceAPI.Services
         private readonly IMailService _mailService;
         private readonly IMapper _mapper;
         private readonly IAuthHelperService _authHelperService;
+        private readonly DaprClient _daprClient;
 
-        public UserService(MicroserviceDbContext dbContext, IConfiguration configuration, IMailService mailService, IMapper mapper, IAuthHelperService authHelperService)
+
+        public UserService(MicroserviceDbContext dbContext, IConfiguration configuration, IMailService mailService, IMapper mapper, IAuthHelperService authHelperService, DaprClient daprClient)
         {
             _dbContext = dbContext;
             _configuration = configuration;
             _mailService = mailService;
             _mapper = mapper;
             _authHelperService = authHelperService;
+            _daprClient = daprClient;
+
         }
 
         public UserDto ApproveUser(int userId)
@@ -85,10 +92,42 @@ namespace SmartEnergy.MicroserviceAPI.Services
         }
 
         //SREDITI OVO
-        public List<UserDto> GetAll()
+        public async Task<List<UserDto>> GetAllUsers()
         {
             //return _mapper.Map<List<UserDto>>(_dbContext.Users.Include(x => x.Location).ToList());
+
+            List<User> users = _dbContext.Users.ToList();
+            List<UserDto> allUsers = new List<UserDto>();
+            UserDto newUser = new UserDto();
+
+            foreach(User user in users)
+            {
+                newUser = _mapper.Map<UserDto>(user);
+                try
+                {
+                    LocationDto location = await _daprClient.InvokeMethodAsync<LocationDto>(HttpMethod.Get, "smartenergylocation", $"/api/locations/{user.LocationID}");
+                    newUser.Location = location;
+
+                }
+                catch (Exception e)
+                {
+                    throw new LocationNotFoundException("Location service is unavailable right now.");
+                }
+                allUsers.Add(newUser);
+
+            }
+
+
+
+
+            return allUsers;
+        }
+
+
+        public List<UserDto> GetAll()
+        {
             return _mapper.Map<List<UserDto>>(_dbContext.Users.ToList());
+
         }
 
         public List<UserDto> GetAllUnassignedCrewMembers()
@@ -97,7 +136,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
         }
 
         //SREDITI OVO
-        public UsersListDto GetUsersPaged(UserField sortBy, SortingDirection direction, int page, int perPage, UserStatusFilter status, UserTypeFilter type, string searchParam)
+        public async Task<UsersListDto> GetUsersPaged(UserField sortBy, SortingDirection direction, int page, int perPage, UserStatusFilter status, UserTypeFilter type, string searchParam)
         {
             //IQueryable<User> usersPaged = _dbContext.Users.Include(x => x.Location).AsQueryable();
             IQueryable<User> usersPaged = _dbContext.Users.AsQueryable();
@@ -111,9 +150,35 @@ namespace SmartEnergy.MicroserviceAPI.Services
             usersPaged = usersPaged.Skip(page * perPage)
                                     .Take(perPage);
 
+            List<User> pagedUsers = usersPaged.ToList();
+
+            LocationDto locationDto = new LocationDto();
+            UserDto newUser = new UserDto();
+
+            List<UserDto> returnPagedUsers = new List<UserDto>();
+
+            foreach (User user in pagedUsers)
+            {
+                newUser = _mapper.Map<UserDto>(user);
+
+                try
+                {
+                    locationDto = await _daprClient.InvokeMethodAsync<LocationDto>(HttpMethod.Get, "smartenergylocation", $"/api/locations/{user.LocationID}");
+                    newUser.Location = locationDto;
+
+                }
+                catch (Exception e)
+                {
+                    newUser.Location = new LocationDto();
+                    throw new LocationNotFoundException("Location service is unavailable right now.");
+                }
+
+                returnPagedUsers.Add(newUser);
+            }
+
             UsersListDto returnValue = new UsersListDto()
             {
-                Users = _mapper.Map<List<UserDto>>(usersPaged.ToList()),
+                Users = returnPagedUsers,
                 TotalCount = resourceCount
             };
 
@@ -158,6 +223,64 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
             _dbContext.Users.Add(user);
             
+
+            _mailService.SendMail(user.Email, "Registration status", "Your registration to our site is pending, when admins approve you you will have full access.");
+            _dbContext.SaveChanges();
+            return _mapper.Map<UserDto>(user).StripConfidentialData();
+
+        }
+
+
+        public async Task<UserDto> InsertNew(UserDto entity)
+        {
+            //Location userLocation = _dbContext.Location.Find(entity.Location.ID);
+            //if(userLocation == null)
+            //{ 
+            //    throw new Exception();
+            //}
+
+            LocationDto userLocation = new LocationDto();
+
+            try
+            {
+                userLocation = await _daprClient.InvokeMethodAsync<LocationDto>(HttpMethod.Get, "smartenergylocation", $"/api/locations/{entity.Location.ID}");
+                
+
+            }
+            catch (Exception e)
+            {
+                userLocation = new LocationDto();
+                throw new LocationNotFoundException("Location service is unavailable right now.");
+            }
+
+            User user = _mapper.Map<User>(entity);
+
+
+            if (_dbContext.Users.FirstOrDefault(x => x.Email == user.Email) != null)
+                throw new InvalidUserDataException($"User with email address {user.Email} already exists.");
+
+            if (user.UserType == UserType.ADMIN)
+                throw new InvalidUserDataException("User cannot register as admin!");
+
+            if (user.UserType != UserType.CREW_MEMBER && user.Crew != null)
+                throw new InvalidUserDataException("User can be part of a crew only if he is a crew member!");
+
+            if (user.Crew != null)
+            {
+                Crew crew = _dbContext.Crews.Find(user.Crew.ID);
+                if (crew == null)
+                    throw new CrewNotFoundException("Selected user crew does not exist.");
+
+            }
+
+            user.ID = 0;
+            user.UserStatus = UserStatus.PENDING;//Just in case
+            user.LocationID = userLocation.ID;
+         
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+
+            _dbContext.Users.Add(user);
+
 
             _mailService.SendMail(user.Email, "Registration status", "Your registration to our site is pending, when admins approve you you will have full access.");
             _dbContext.SaveChanges();

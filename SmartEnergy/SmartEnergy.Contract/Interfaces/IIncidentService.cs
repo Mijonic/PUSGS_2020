@@ -4,13 +4,15 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SmartEnergy.Contract.Interfaces
 {
     public interface IIncidentService : IGenericService<IncidentDto>
     {
-        LocationDto GetIncidentLocation(int incidentId);
+        Task<LocationDto> GetIncidentLocation(int incidentId);
 
+     
         IncidentDto AddCrewToIncident(int incidentId, int crewId);
 
         IncidentDto RemoveCrewFromIncidet(int incidentId);
@@ -20,19 +22,19 @@ namespace SmartEnergy.Contract.Interfaces
         void AddDeviceToIncident(int incidentId, int deviceId);
 
         void RemoveDeviceFromIncindet(int incidentId, int deviceId);
-        List<IncidentMapDisplayDto> GetUnresolvedIncidentsForMap();
+        Task<List<IncidentMapDisplayDto>> GetUnresolvedIncidentsForMap();
 
-        List<CallDto> GetIncidentCalls(int incidentId);
+        Task<List<CallDto>> GetIncidentCalls(int incidentId);
 
-        int GetNumberOfCalls(int incidentId);
+        Task<int> GetNumberOfCalls(int incidentId);
 
-        int GetNumberOfAffectedConsumers(int incidentId);
+        Task<int> GetNumberOfAffectedConsumers(int incidentId);
 
-        List<DeviceDto> GetIncidentDevices(int incidentId);
+        Task<List<DeviceDto>> GetIncidentDevices(int incidentId);
 
         void SetIncidentPriority(int incidentId);
 
-        List<DeviceDto> GetUnrelatedDevices(int incidentId);
+        Task<List<DeviceDto>> GetUnrelatedDevices(int incidentId);
 
         CrewDto GetIncidentCrew(int incidentId);
 

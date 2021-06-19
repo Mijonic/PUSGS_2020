@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SmartEnergy.Contract.Interfaces
 {
@@ -14,7 +15,7 @@ namespace SmartEnergy.Contract.Interfaces
 
         ChecklistDto UpdateSafetyDocumentChecklist(ChecklistDto checklistDto);
 
-        List<DeviceDto> GetSafetyDocumentDevices(int safetyDocumentId);
+        Task<List<DeviceDto>> GetSafetyDocumentDevices(int safetyDocumentId);
 
         List<SafetyDocumentDto> GetAllMineSafetyDocuments(OwnerFilter owner, ClaimsPrincipal user);
      

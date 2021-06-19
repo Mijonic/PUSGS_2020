@@ -37,17 +37,25 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
 
         [HttpGet("{id}/location")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LocationDto))]
-        public IActionResult GetIncidentLocation(int id)
+        public async Task<IActionResult> GetIncidentLocation(int id)
         {
             try
             {
-                return Ok(_incidentService.GetIncidentLocation(id));
+                LocationDto location =  await _incidentService.GetIncidentLocation(id);
+
+                return Ok(location);
+
             }catch(IncidentNotFoundException inf)
             {
                 return BadRequest(inf.Message);
+
             }catch(LocationNotFoundException lnf)
             {
                 return NotFound(lnf.Message);
+            }
+            catch (DeviceNotFoundException dnf)
+            {
+                return NotFound(dnf.Message);
             }
         }
 
@@ -97,9 +105,22 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
         [HttpGet("unresolved")]
         [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER, ADMIN, CONSUMER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<IncidentMapDisplayDto>))]
-        public IActionResult GetUnresolvedIncidents()
+        public async Task<IActionResult> GetUnresolvedIncidents()
         {
-            return Ok(_incidentService.GetUnresolvedIncidentsForMap());
+            try
+            {
+                List<IncidentMapDisplayDto> incidents = await _incidentService.GetUnresolvedIncidentsForMap();
+
+                return Ok(incidents);
+            }
+            catch (LocationNotFoundException lnf)
+            {
+                return NotFound(lnf.Message);
+            }
+            catch (DeviceNotFoundException dnf)
+            {
+                return NotFound(dnf.Message);
+            }
         }
 
         [HttpGet("{id}")]
@@ -322,6 +343,9 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
             catch(InvalidDeviceException invalidDevice)
             {
                 return BadRequest(invalidDevice.Message);
+            }catch(LocationNotFoundException lnf)
+            {
+                return NotFound(lnf.Message);
             }
 
 
@@ -354,6 +378,11 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
             {
                 return NotFound(invalidDeviceUsage.Message);
             }
+            catch (LocationNotFoundException lnf)
+            {
+                return NotFound(lnf.Message);
+            }
+
 
 
 
@@ -363,10 +392,24 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
 
         [HttpGet("{incidentId}/calls")]
         [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER ", Policy = "ApprovedOnly")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<IncidentDto>))]
-        public IActionResult GetIncidentCalls(int incidentId)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<CallDto>))]
+        public async Task<IActionResult> GetIncidentCalls(int incidentId)
         {
-            return Ok(_incidentService.GetIncidentCalls(incidentId));
+            try
+            {
+                List<CallDto> incidentCalls = await _incidentService.GetIncidentCalls(incidentId);
+
+                return Ok(incidentCalls);
+
+            }catch(DeviceNotFoundException dnf)
+            {
+                return NotFound(dnf.Message);
+            }
+            catch (LocationNotFoundException lnf)
+            {
+                return NotFound(lnf.Message);
+            }
+
         }
 
 
@@ -417,23 +460,46 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
         [HttpGet("{incidentId}/calls-counter")]
         [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER ", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
-        public IActionResult GetNumberOfIncidentCalls(int incidentId)
+        public async Task<IActionResult> GetNumberOfIncidentCalls(int incidentId)
         {
-            return Ok(_incidentService.GetNumberOfCalls(incidentId));
+            try
+            {
+                int numberOfCalls = await _incidentService.GetNumberOfCalls(incidentId);
+
+                return Ok(numberOfCalls);
+            }
+            catch (DeviceNotFoundException dnf)
+            {
+                return NotFound(dnf.Message);
+            }
+            catch (LocationNotFoundException lnf)
+            {
+                return NotFound(lnf.Message);
+            }
         }
 
         [HttpGet("{incidentId}/affected-consumers")]
         [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER ", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
-        public IActionResult GetNumberOfAffectedConsumers(int incidentId)
+        public async Task<IActionResult> GetNumberOfAffectedConsumers(int incidentId)
         {
             try
             {
-                return Ok(_incidentService.GetNumberOfAffectedConsumers(incidentId));
+                int numberOfAffected = await _incidentService.GetNumberOfAffectedConsumers(incidentId);
+
+                return Ok(numberOfAffected);
             }
             catch (IncidentNotFoundException incidentNotFound)
             {
                 return NotFound(incidentNotFound.Message);
+            }
+            catch (DeviceNotFoundException dnf)
+            {
+                return NotFound(dnf.Message);
+            }
+            catch (LocationNotFoundException lnf)
+            {
+                return NotFound(lnf.Message);
             }
         }
 
@@ -441,15 +507,25 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
         [HttpGet("{incidentId}/devices")]
         [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER ", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
-        public IActionResult GetIncidentDevices(int incidentId)
+        public async Task<IActionResult> GetIncidentDevices(int incidentId)
         {
             try
             {
-                return Ok(_incidentService.GetIncidentDevices(incidentId));
+                List<DeviceDto> devices = await _incidentService.GetIncidentDevices(incidentId);
+
+                return Ok(devices);
             }
             catch (IncidentNotFoundException incidentNotFound)
             {
                 return NotFound(incidentNotFound.Message);
+            }
+            catch (DeviceNotFoundException dnf)
+            {
+                return NotFound(dnf.Message);
+            }
+            catch (LocationNotFoundException lnf)
+            {
+                return NotFound(lnf.Message);
             }
         }
 

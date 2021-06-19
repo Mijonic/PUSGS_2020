@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SmartEnergy.Contract.CustomExceptions.Location;
 using SmartEnergy.Contract.DTO;
 using SmartEnergy.Contract.Interfaces;
 
@@ -24,9 +25,19 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
         [HttpGet]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ConsumerDto>))]
-        public IActionResult GetConsumers()
+        public async Task<IActionResult> GetConsumers()
         {
-            return Ok(_consumerService.GetAll());
+            try
+            {
+                List<ConsumerDto> consumers = await _consumerService.GetAllConsumers();
+
+                return Ok(consumers);
+
+            }
+            catch(LocationNotFoundException lnf)
+            {
+                return NotFound(lnf.Message);
+            }
 
         }
     }

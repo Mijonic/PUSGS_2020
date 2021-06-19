@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SmartEnergy.Contract.CustomExceptions;
 using SmartEnergy.Contract.CustomExceptions.Auth;
+using SmartEnergy.Contract.CustomExceptions.Device;
+using SmartEnergy.Contract.CustomExceptions.Location;
 using SmartEnergy.Contract.CustomExceptions.Multimedia;
 using SmartEnergy.Contract.CustomExceptions.User;
 using SmartEnergy.Contract.DTO;
@@ -35,11 +37,24 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
         [Authorize(Roles = "ADMIN, DISPATCHER, WORKER, CREW_MEMBER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<UserDto>))]     
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            List<UserDto> users = _userService.GetAll();
-            foreach (UserDto u in users) u.StripConfidentialData();
-            return Ok(users);
+            try
+            {
+                List<UserDto> users = await _userService.GetAllUsers();
+
+                foreach (UserDto u in users) u.StripConfidentialData();
+
+                return Ok(users);
+
+            }catch(LocationNotFoundException lnf)
+            {
+                return NotFound(lnf.Message);
+            }
+            catch (DeviceNotFoundException dnf)
+            {
+                return NotFound(dnf.Message);
+            }
 
         }
 
@@ -47,13 +62,25 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
         [Authorize(Roles = "ADMIN, DISPATCHER, WORKER, CREW_MEMBER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsersListDto))]
-        public IActionResult GetAllPaged([FromQuery] string searchParam, [FromQuery] UserField sortBy, [FromQuery] SortingDirection direction,
+        public async Task<IActionResult> GetAllPaged([FromQuery] string searchParam, [FromQuery] UserField sortBy, [FromQuery] SortingDirection direction,
                                     [FromQuery][BindRequired] int page, [FromQuery][BindRequired] int perPage, [FromQuery] UserStatusFilter status,
                                     [FromQuery] UserTypeFilter type)
         {
-            UsersListDto users = _userService.GetUsersPaged(sortBy, direction, page, perPage, status, type, searchParam);
-            users.StripConfidentialData();
-            return Ok(users);
+            try
+            {
+                UsersListDto users = await _userService.GetUsersPaged(sortBy, direction, page, perPage, status, type, searchParam);
+                users.StripConfidentialData();
+
+                return Ok(users);
+            }
+            catch (LocationNotFoundException lnf)
+            {
+                return NotFound(lnf.Message);
+            }
+            catch (DeviceNotFoundException dnf)
+            {
+                return NotFound(dnf.Message);
+            }
 
         }
 
@@ -168,11 +195,13 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult CreateUser([FromBody] UserDto newUser)
+        public async Task<IActionResult> CreateUser([FromBody] UserDto newUser)
         {
             try
             {
-                UserDto user = _userService.Insert(newUser).StripConfidentialData();
+                UserDto user = await _userService.InsertNew(newUser);
+                user.StripConfidentialData();
+                
                 return CreatedAtAction(nameof(GetUserById), new { id = user.ID}, user);
             }
             catch (CrewNotFoundException unf)
@@ -183,6 +212,11 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
             {
                 return BadRequest(ius.Message);
             }
+            catch (LocationNotFoundException lnf)
+            {
+                return NotFound(lnf.Message);
+            }
+           
 
         }
 

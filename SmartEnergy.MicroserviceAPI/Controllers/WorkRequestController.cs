@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SmartEnergy.Contract.CustomExceptions;
+using SmartEnergy.Contract.CustomExceptions.Device;
 using SmartEnergy.Contract.CustomExceptions.Incident;
+using SmartEnergy.Contract.CustomExceptions.Location;
 using SmartEnergy.Contract.CustomExceptions.Multimedia;
 using SmartEnergy.Contract.CustomExceptions.WorkRequest;
 using SmartEnergy.Contract.DTO;
@@ -92,15 +94,26 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DeviceDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult GetWorkRequestDevices(int id)
+        public async Task<IActionResult> GetWorkRequestDevices(int id)
         {
             try
             {
-                return Ok(_workRequestService.GetWorkRequestDevices(id));
+
+                List<DeviceDto> devices = await _workRequestService.GetWorkRequestDevices(id);
+
+                return Ok(devices);
             }
             catch (WorkRequestNotFound wnf)
             {
                 return NotFound(wnf.Message);
+            }
+            catch (LocationNotFoundException lnf)
+            {
+                return NotFound(lnf.Message);
+            }
+            catch (DeviceNotFoundException dnf)
+            {
+                return NotFound(dnf.Message);
             }
         }
 

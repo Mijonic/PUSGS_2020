@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Dapr.Client;
 using Microsoft.EntityFrameworkCore;
 using SmartEnergy.Contract.CustomExceptions;
 using SmartEnergy.Contract.CustomExceptions.Call;
@@ -15,8 +16,10 @@ using SmartEnergy.MicroserviceAPI.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SmartEnergy.MicroserviceAPI.Services
 {
@@ -31,10 +34,12 @@ namespace SmartEnergy.MicroserviceAPI.Services
         private readonly IAuthHelperService _authHelperService;
         private readonly IMailService _mailService;
         private readonly IConsumerService _consumerService;
+        private readonly DaprClient _daprClient;
 
 
 
-        public IncidentService(MicroserviceDbContext dbContext, ITimeService timeService, IDeviceUsageService deviceUsageService,  IMapper mapper, ICallService callService, IAuthHelperService authHelperService, IMailService mailService, IConsumerService consumerService)
+
+        public IncidentService(MicroserviceDbContext dbContext, ITimeService timeService, IDeviceUsageService deviceUsageService,  IMapper mapper, ICallService callService, IAuthHelperService authHelperService, IMailService mailService, IConsumerService consumerService, DaprClient daprClient)
         {
             _dbContext = dbContext;
             _timeService = timeService;
@@ -44,6 +49,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
             _authHelperService = authHelperService;
             _mailService = mailService;
             _consumerService = consumerService;
+            _daprClient = daprClient;
 
 
         }
@@ -94,54 +100,109 @@ namespace SmartEnergy.MicroserviceAPI.Services
         /// </summary>
         /// <param name="incidentId"></param>
         /// <returns>LocationDto</returns>
-        public LocationDto GetIncidentLocation(int incidentId)
+        public async Task<LocationDto> GetIncidentLocation(int incidentId)
         {
-            //TODO:
+
             //Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
             //                                        .ThenInclude(p => p.Device)
             //                                        .ThenInclude(o => o.Location)
             //                                        .FirstOrDefault(x => x.ID == incidentId);
 
-            //Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
-            //                                       .ThenInclude(p => p.Device)
-            //                                       .ThenInclude(o => o.Location)
-            //                                       .FirstOrDefault(x => x.ID == incidentId);
+            Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices).FirstOrDefault(x => x.ID == incidentId);
 
-            //if (incident == null)
-            //    throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
+            if (incident == null)
+                throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
 
-            //DayPeriod currentDayPeriod = _timeService.GetCurrentDayPeriod();
 
-            ////Try getting location from devices
-            //List<DeviceUsage> devices = new List<DeviceUsage>();
-            //if (currentDayPeriod == DayPeriod.MORNING)
-            //    devices = incident.IncidentDevices.OrderByDescending(x => x.Device.Location.MorningPriority).ToList();
-            //else if (currentDayPeriod == DayPeriod.NOON)
-            //    devices = incident.IncidentDevices.OrderByDescending(x => x.Device.Location.NoonPriority).ToList();
-            //else
-            //    devices = incident.IncidentDevices.OrderByDescending(x => x.Device.Location.NightPriority).ToList();
+            List<DeviceDto> incidentDevices = new List<DeviceDto>();
+            DeviceDto deviceDto = new DeviceDto();
 
-            //foreach (DeviceUsage d in devices)
-            //{
-            //    return _mapper.Map<LocationDto>(d.Device.Location);
-            //}
+
+            foreach(DeviceUsage deviceUsage in incident.IncidentDevices)
+            {
+                try
+                {
+                     deviceDto = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergdevice", $"/api/devices/{deviceUsage.DeviceID}");        
+
+                }
+                catch (Exception e)
+                {
+                    throw new DeviceNotFoundException("Device service is unavailable right now.");
+                }
+
+                try
+                {
+                    LocationDto location = await _daprClient.InvokeMethodAsync<LocationDto>(HttpMethod.Get, "smartenergylocation", $"/api/locations/{deviceDto.LocationID}");
+                    deviceDto.Location = location;
+
+                }
+                catch (Exception e)
+                {
+                    throw new LocationNotFoundException("Location service is unavailable right now.");
+                }
+
+                incidentDevices.Add(deviceDto);
+
+
+
+            }
+
+            DayPeriod currentDayPeriod = _timeService.GetCurrentDayPeriod();
+
+            //Try getting location from devices
+            List<DeviceDto> devices = new List<DeviceDto>();
+            if (currentDayPeriod == DayPeriod.MORNING)
+                devices = incidentDevices.OrderByDescending(x => x.Location.MorningPriority).ToList();
+            else if (currentDayPeriod == DayPeriod.NOON)
+                devices = incidentDevices.OrderByDescending(x => x.Location.NoonPriority).ToList();
+            else
+                devices = incidentDevices.OrderByDescending(x => x.Location.NightPriority).ToList();
+
+            foreach (DeviceDto d in devices)
+            {
+                return _mapper.Map<LocationDto>(d.Location);
+            }
+
+
+
 
             //incident = _dbContext.Incidents.Include(x => x.Calls)
             //                                        .ThenInclude(p => p.Location)
             //                                        .FirstOrDefault(x => x.ID == incidentId);
 
-            //if (incident == null)
-            //    throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
 
-            ////Try getting location from calls
-            //foreach (Call c in incident.Calls)
-            //{
-            //    return _mapper.Map<LocationDto>(c.Location);
-            //}
+            incident = _dbContext.Incidents.Include(x => x.Calls).FirstOrDefault(x => x.ID == incidentId);
 
-            //throw new LocationNotFoundException($"Location does not exist for incident with id {incidentId}");
+            if (incident == null)
+                throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
 
-            return new LocationDto();
+
+            List<CallDto> callsDto = _mapper.Map<List<CallDto>>(incident.Calls);
+
+            foreach (CallDto call in callsDto)
+            {
+                try
+                {
+                    LocationDto location = await _daprClient.InvokeMethodAsync<LocationDto>(HttpMethod.Get, "smartenergylocation", $"/api/locations/{deviceDto.LocationID}");
+                    call.Location = location;
+                    
+
+                }
+                catch (Exception e)
+                {
+                    throw new LocationNotFoundException("Location service is unavailable right now.");
+                }
+            }
+
+            //Try getting location from calls
+            foreach (CallDto c in callsDto)
+            {
+                return _mapper.Map<LocationDto>(c.Location);
+            }
+
+            throw new LocationNotFoundException($"Location does not exist for incident with id {incidentId}");
+
+           
         }
 
         public IncidentDto Insert(IncidentDto entity)
@@ -181,6 +242,9 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
             return _mapper.Map<IncidentDto>(incident);
         }
+
+
+      
 
         public IncidentDto Update(IncidentDto entity)
         {
@@ -251,53 +315,94 @@ namespace SmartEnergy.MicroserviceAPI.Services
         /// </summary>
         /// <param name="incidentId"></param>
         /// <returns>Integer priority</returns>
-        private int GetIncidentPriority(int incidentId)
+        private async Task<int> GetIncidentPriority(int incidentId)
         {
 
-            //int priority = -1;
+            int priority = -1;
 
             //Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
             //                                         .ThenInclude(p => p.Device)
             //                                         .ThenInclude(o => o.Location)
             //                                         .FirstOrDefault(x => x.ID == incidentId);
-            //if (incident == null)
-            //    throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
 
 
-            //List<int> allPriorities = new List<int>();
+            Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices).FirstOrDefault(x => x.ID == incidentId);
 
-            //DayPeriod currentDayPeriod = _timeService.GetCurrentDayPeriod();
-
-
+            if (incident == null)
+                throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
 
 
 
-            ////Try getting location from devices
-            //foreach (DeviceUsage d in incident.IncidentDevices)
-            //{
-            //    if (currentDayPeriod == DayPeriod.MORNING)
-            //        allPriorities.Add(d.Device.Location.MorningPriority);
-            //    else if(currentDayPeriod == DayPeriod.NOON)
-            //        allPriorities.Add(d.Device.Location.NoonPriority);
-            //    else
-            //        allPriorities.Add(d.Device.Location.NightPriority);
-
-            //}
 
 
-            //if (allPriorities.Count != 0)
-            //    priority = allPriorities.Max();
-            //else
-            //    priority = 0;
+            List<int> allPriorities = new List<int>();
 
 
 
-            //if (priority != -1)
-            //    return priority;
-            //else
-            //    return 0;
+            DayPeriod currentDayPeriod = _timeService.GetCurrentDayPeriod();
 
-            return 0;
+            List<DeviceDto> incidentDevices = new List<DeviceDto>();
+            DeviceDto deviceDto = new DeviceDto();
+
+
+            foreach (DeviceUsage deviceUsage in incident.IncidentDevices)
+            {
+                try
+                {
+                    deviceDto = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergdevice", $"/api/devices/{deviceUsage.DeviceID}");
+
+                }
+                catch (Exception e)
+                {
+                    throw new DeviceNotFoundException("Device service is unavailable right now.");
+                }
+
+                try
+                {
+                    LocationDto location = await _daprClient.InvokeMethodAsync<LocationDto>(HttpMethod.Get, "smartenergylocation", $"/api/locations/{deviceDto.LocationID}");
+                    deviceDto.Location = location;
+
+                }
+                catch (Exception e)
+                {
+                    throw new LocationNotFoundException("Location service is unavailable right now.");
+                }
+
+                incidentDevices.Add(deviceDto);
+
+
+
+            }
+
+
+
+
+            //Try getting location from devices
+            foreach (DeviceDto d in incidentDevices)
+            {
+                if (currentDayPeriod == DayPeriod.MORNING)
+                    allPriorities.Add(d.Location.MorningPriority);
+                else if (currentDayPeriod == DayPeriod.NOON)
+                    allPriorities.Add(d.Location.NoonPriority);
+                else
+                    allPriorities.Add(d.Location.NightPriority);
+
+            }
+
+
+            if (allPriorities.Count != 0)
+                priority = allPriorities.Max();
+            else
+                priority = 0;
+
+
+
+            if (priority != -1)
+                return priority;
+            else
+                return 0;
+
+         
           
 
           
@@ -378,63 +483,117 @@ namespace SmartEnergy.MicroserviceAPI.Services
             return _mapper.Map<List<IncidentDto>>(unassignedIcidents);
         }
 
-        public void AddDeviceToIncident(int incidentId, int deviceId)
+        public async void AddDeviceToIncident(int incidentId, int deviceId)
         {
 
             //Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
             //                                        .ThenInclude(p => p.Device)
             //                                        .ThenInclude(o => o.Location)
             //                                        .FirstOrDefault(x => x.ID == incidentId);
-            //if (incident == null)
-            //    throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
 
-            //Device device = _dbContext.Devices.Include(x => x.Location).FirstOrDefault( x => x.ID == deviceId);
 
-            //if (device == null)
-            //    throw new DeviceNotFoundException($"Device with id = { deviceId} does not exists!");
+            Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices).FirstOrDefault(x => x.ID == incidentId);
 
-            //// ako je vec dodat device u incident   
-            //// proverim da li se adresa novog poklapa (city, street, zip)
-            //if (incident.IncidentDevices.Count != 0)                                                    
-            //{                                        
-            //    foreach(DeviceUsage du in incident.IncidentDevices)
-            //    {
-            //        if (!CompareLocation(du.Device.Location, device.Location))
-            //            throw new InvalidDeviceException($"Device has to be on {du.Device.Location.Street}, {du.Device.Location.City}, {du.Device.Location.Zip}!");
-            //    }
-            //}
+            
+
+            if (incident == null)
+                throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
+
+            List<DeviceDto> incidentDevices = await FindAllIncidentDevicesWithLocation(incident);
+
+            //Device device = _dbContext.Devices.Include(x => x.Location).FirstOrDefault(x => x.ID == deviceId);
+
+            DeviceDto device;
+
+            try
+            {
+                device = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergdevice", $"/api/devices/{deviceId}");
+
+            }
+            catch (Exception e)
+            {
+                throw new DeviceNotFoundException("Device service is unavailable right now.");
+            }
+
+
+            if (device == null)
+                throw new DeviceNotFoundException($"Device with id = { deviceId} does not exists!");
+
+            try
+            {
+                LocationDto location = await _daprClient.InvokeMethodAsync<LocationDto>(HttpMethod.Get, "smartenergylocation", $"/api/locations/{device.LocationID}");
+                device.Location = location;
+
+            }
+            catch (Exception e)
+            {
+                throw new LocationNotFoundException("Location service is unavailable right now.");
+            }
+
+
+
+            // ako je vec dodat device u incident   
+            // proverim da li se adresa novog poklapa (city, street, zip)
+            if (incidentDevices.Count != 0)
+            {
+
+                foreach (DeviceDto d in incidentDevices)
+                {
+                    if (!CompareLocation(d.Location, device.Location))
+                        throw new InvalidDeviceException($"Device has to be on {d.Location.Street}, {d.Location.City}, {d.Location.Zip}!");
+                }
+
+            
+            }
 
             //List<Call> callWithoutIncident = _dbContext.Calls.Include("Location").Where(x => x.IncidentID == null).ToList();
 
-            //foreach(Call c in callWithoutIncident)
-            //{
-            //    if(CompareLocation(c.Location, device.Location))
-            //    {
-            //        c.IncidentID = incidentId;
-            //        _callService.Update(_mapper.Map<CallDto>(c));
-            //    }
+            List<CallDto> callWithoutIncident = _mapper.Map<List<CallDto>>(_dbContext.Calls.Where(x => x.IncidentID == null).ToList());
 
-            //}
+            foreach(CallDto callDto in callWithoutIncident)
+            {
+                try
+                {
+                    LocationDto location = await _daprClient.InvokeMethodAsync<LocationDto>(HttpMethod.Get, "smartenergylocation", $"/api/locations/{callDto.LocationID}");
+                    callDto.Location = location;
+
+                }
+                catch (Exception e)
+                {
+                    throw new LocationNotFoundException("Location service is unavailable right now.");
+                }
+
+            }
+
+            foreach (CallDto c in callWithoutIncident)
+            {
+                if (CompareLocation(c.Location, device.Location))
+                {
+                    c.IncidentID = incidentId;
+                    _callService.Update(_mapper.Map<CallDto>(c));
+                }
+
+            }
 
 
 
-            //if (incident.IncidentDevices.Find(x => x.DeviceID == deviceId) != null)
-            //    throw new InvalidDeviceUsageException($"Device with id = {deviceId} is already added to incident!");
+            if (incidentDevices.Find(x => x.ID == deviceId) != null)
+                throw new InvalidDeviceUsageException($"Device with id = {deviceId} is already added to incident!");
 
 
 
-            //_deviceUsageService.Insert(new DeviceUsageDto { IncidentID = incidentId, DeviceID = deviceId });
+            _deviceUsageService.Insert(new DeviceUsageDto { IncidentID = incidentId, DeviceID = deviceId });
 
-            //incident.Priority = GetIncidentPriority(incident.ID);
+            incident.Priority = await GetIncidentPriority(incident.ID);
 
-            //if(incident.IncidentStatus == IncidentStatus.INITIAL)
-            //    incident.IncidentStatus = IncidentStatus.UNRESOLVED;
-
-
-            //_dbContext.SaveChanges();
+            if (incident.IncidentStatus == IncidentStatus.INITIAL)
+                incident.IncidentStatus = IncidentStatus.UNRESOLVED;
 
 
-            throw new NotImplementedException();
+            _dbContext.SaveChanges();
+
+
+          
 
 
 
@@ -457,38 +616,68 @@ namespace SmartEnergy.MicroserviceAPI.Services
             return _mapper.Map<IncidentDto>(incident);
         }
 
-        public void RemoveDeviceFromIncindet(int incidentId, int deviceId)
+        public async void RemoveDeviceFromIncindet(int incidentId, int deviceId)
         {
             //Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
             //                                       .ThenInclude(p => p.Device)
             //                                       .ThenInclude(o => o.Location)
             //                                       .FirstOrDefault(x => x.ID == incidentId);
-            //if (incident == null)
-            //    throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
 
-            //Device device = _dbContext.Devices.Find(deviceId);
+            Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices).FirstOrDefault(x => x.ID == incidentId);
 
-            //if (device == null)
-            //    throw new DeviceNotFoundException($"Device with id = { deviceId} does not exists!");
+            if (incident == null)
+                throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
+
+            List<DeviceDto> incidentDevices = await FindAllIncidentDevicesWithLocation(incident);
+
+            DeviceDto device;
+
+            try
+            {
+                device = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergdevice", $"/api/devices/{deviceId}");
+
+            }
+            catch (Exception e)
+            {
+                throw new DeviceNotFoundException("Device service is unavailable right now.");
+            }
 
 
-            //DeviceUsage toRemove = incident.IncidentDevices.Find(x => x.DeviceID == deviceId);
+            if (device == null)
+                throw new DeviceNotFoundException($"Device with id = { deviceId} does not exists!");
 
-            //if ( toRemove == null)
-            //    throw new InvalidDeviceUsageException($"Device with id = {deviceId} is not connected with incident with id = {incidentId}");
+            try
+            {
+                LocationDto location = await _daprClient.InvokeMethodAsync<LocationDto>(HttpMethod.Get, "smartenergylocation", $"/api/locations/{device.LocationID}");
+                device.Location = location;
+
+            }
+            catch (Exception e)
+            {
+                throw new LocationNotFoundException("Location service is unavailable right now.");
+            }
+
+
+          
+
+
+            DeviceUsage toRemove = incident.IncidentDevices.Find(x => x.DeviceID == deviceId);
+
+            if (toRemove == null)
+                throw new InvalidDeviceUsageException($"Device with id = {deviceId} is not connected with incident with id = {incidentId}");
 
 
 
-            //_deviceUsageService.Delete(toRemove.ID);
-            //incident.Priority = GetIncidentPriority(incident.ID);
+            _deviceUsageService.Delete(toRemove.ID);
+            incident.Priority = await GetIncidentPriority(incident.ID);
 
 
-            //_dbContext.SaveChanges();
+            _dbContext.SaveChanges();
 
-            throw new NotImplementedException();
+          
         }
 
-        public List<IncidentMapDisplayDto> GetUnresolvedIncidentsForMap()
+        public async Task<List<IncidentMapDisplayDto>> GetUnresolvedIncidentsForMap()
         {
             List<Incident> incidents = _dbContext.Incidents.Include(x => x.Crew)
                                                            .Where(x => x.IncidentStatus == IncidentStatus.UNRESOLVED).ToList();
@@ -503,7 +692,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
                         ID = incident.ID,
                         IncidentDateTime = incident.IncidentDateTime,
                         Priority = incident.Priority,
-                        Location = GetIncidentLocation(incident.ID),
+                        Location = await GetIncidentLocation(incident.ID),
                         Crew = _mapper.Map<CrewDto>(incident.Crew)
                     }) ;
                 }catch
@@ -522,107 +711,119 @@ namespace SmartEnergy.MicroserviceAPI.Services
      /// </summary>
      /// <param name="incidentId"></param>
      /// <returns></returns>
-        public List<CallDto> GetIncidentCalls(int incidentId)
+        public async Task<List<CallDto>> GetIncidentCalls(int incidentId)
         {
 
-            //List<DeviceDto> incidentDevices = GetIncidentDevices(incidentId);
-            //List<CallDto> allCalls = _callService.GetAll();
+            Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices).FirstOrDefault(x => x.ID == incidentId);
+
+            if (incident == null)
+                throw new IncidentNotFoundException($"Incidents with id = {incidentId} doesn not exists!");
+
+            List<DeviceDto> incidentDevices = await FindAllIncidentDevicesWithLocation(incident);
+            List<CallDto> allCalls = await _callService.GetAllCalls();
 
 
 
-            //if(incidentDevices.Count != 0)
-            //{
+            if (incidentDevices.Count != 0)
+            {
 
-            //    foreach(CallDto c in allCalls)
-            //    {
-            //        if(c.IncidentID == null && CompareLocation(_mapper.Map<Location>(c.Location), _mapper.Map<Location>( incidentDevices[0].Location)))
-            //        {
-            //            c.IncidentID = incidentId;
-            //            _callService.Update(_mapper.Map<CallDto>(c));
-            //        }
-
-
-            //    }
+                foreach (CallDto c in allCalls)
+                {
+                    if (c.IncidentID == null && CompareLocation(c.Location, incidentDevices[0].Location))
+                    {
+                        c.IncidentID = incidentId;
+                        _callService.Update(_mapper.Map<CallDto>(c));
+                    }
 
 
-            //}
+                }
 
-            //return _callService.GetAll().FindAll(x => x.IncidentID == incidentId).ToList();
 
-            throw new NotImplementedException();
+            }
+
+            List<CallDto> incidentCalls = await _callService.GetAllCalls();
+            incidentCalls = incidentCalls.FindAll(x => x.IncidentID == incidentId);
+
+            return incidentCalls;
+
+
+
 
 
         }
 
-        public int GetNumberOfCalls(int incidentId)
+        public async Task<int> GetNumberOfCalls(int incidentId)
         {
-            return _callService.GetAll().Where(x => x.IncidentID == incidentId).Count();
+
+            List<CallDto> calls = await _callService.GetAllCalls();
+            calls = calls.FindAll(x => x.IncidentID == incidentId);
+
+            return calls.Count();
         }
 
-        public int GetNumberOfAffectedConsumers(int incidentId)
+        public async Task<int> GetNumberOfAffectedConsumers(int incidentId)
         {
-            //int affectedConsumers = 0;
+            int affectedConsumers = 0;
 
-            //Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
-            //                                       .ThenInclude(p => p.Device)
-            //                                       .ThenInclude(o => o.Location)
-            //                                       .FirstOrDefault(x => x.ID == incidentId);
-            //if (incident == null)
-            //    throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
-
-            //List<string> deviceStreets = new List<string>();
-
-            //foreach (DeviceUsage device in incident.IncidentDevices)
-            //{
-            //    if (!deviceStreets.Contains(device.Device.Location.Street.ToLower().Trim()))
-            //        deviceStreets.Add(device.Device.Location.Street.ToLower().Trim());
-
-            //}
-
-            //List<Consumer> consumers = _dbContext.Consumers.Include("Location").ToList();
-
-            //foreach(string deviceStreet in deviceStreets)
-            //{
-            //    foreach(Consumer consumer in consumers)
-            //    {
-            //        if (consumer.Location.Street.ToLower().Trim().Equals(deviceStreet))
-            //            affectedConsumers++;
-            //    }
-            //}
+            Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices).FirstOrDefault(x => x.ID == incidentId);
 
 
+            if (incident == null)
+                throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
+
+            List<DeviceDto> incidentDevices = await FindAllIncidentDevicesWithLocation(incident);
+
+            List<string> deviceStreets = new List<string>();
+
+            foreach (DeviceDto device in incidentDevices)
+            {
+                if (!deviceStreets.Contains(device.Location.Street.ToLower().Trim()))
+                    deviceStreets.Add(device.Location.Street.ToLower().Trim());
+
+            }
+
+            List<ConsumerDto> consumers = await _consumerService.GetAllConsumers();
+
+            foreach (string deviceStreet in deviceStreets)
+            {
+                foreach (ConsumerDto consumer in consumers)
+                {
+                    if (consumer.Location.Street.ToLower().Trim().Equals(deviceStreet))
+                        affectedConsumers++;
+                }
+            }
 
 
 
-            //return affectedConsumers;
 
-            return 0;
+
+            return affectedConsumers;
+
+           
             
         }
 
-        public List<DeviceDto> GetIncidentDevices(int incidentId)
+        public async Task<List<DeviceDto>> GetIncidentDevices(int incidentId)
         {
-            //Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
-            //                                       .ThenInclude(p => p.Device)
-            //                                       .ThenInclude(o => o.Location)
-            //                                       .FirstOrDefault(x => x.ID == incidentId);
-            //if (incident == null)
-            //    throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
+            Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices).FirstOrDefault(x => x.ID == incidentId);
 
-            //List<Device> incidentDevices = new List<Device>();
+            if (incident == null)
+                throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
 
-            //foreach (DeviceUsage deviceUsage in incident.IncidentDevices)
-            //    incidentDevices.Add(deviceUsage.Device);
+            List<DeviceDto> incidentDevices = await FindAllIncidentDevicesWithLocation(incident);
 
-            //return _mapper.Map<List<DeviceDto>>(incidentDevices);
 
-            throw new NotImplementedException();
+
+            return incidentDevices;
+
+
+
 
         }
 
-        public void SetIncidentPriority(int incidentId)
+        public async void SetIncidentPriority(int incidentId)
         {
-            int incidentPriority = GetIncidentPriority(incidentId);
+            int incidentPriority = await GetIncidentPriority(incidentId);
 
             Incident incident = _dbContext.Incidents.Find(incidentId);
 
@@ -631,57 +832,67 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
         }
 
-        public List<DeviceDto> GetUnrelatedDevices(int incidentId)
+        public async Task<List<DeviceDto>> GetUnrelatedDevices(int incidentId)
         {
 
-            
-            //Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
-            //                                      .ThenInclude(p => p.Device)
-            //                                      .ThenInclude(o => o.Location)
-            //                                      .FirstOrDefault(x => x.ID == incidentId);
-            //if (incident == null)
-            //    throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
+
+            Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices).FirstOrDefault(x => x.ID == incidentId);
+            if (incident == null)
+                throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
 
 
-            //List<int> incidentDeviceIds = new List<int>();
 
-            
+            List<int> incidentDeviceIds = new List<int>();
 
 
-            //foreach(DeviceUsage deviceUsage in _dbContext.DeviceUsages.ToList())
-            //{
-            //    if (deviceUsage.IncidentID == incidentId)
-            //        incidentDeviceIds.Add(deviceUsage.DeviceID);
-            //}
+            foreach (DeviceUsage deviceUsage in _dbContext.DeviceUsages.ToList())
+            {
+                if (deviceUsage.IncidentID == incidentId)
+                    incidentDeviceIds.Add(deviceUsage.DeviceID);
+            }
 
-            //bool condition = true;
-            //List<Device> devicesToReturn = new List<Device>();
+            bool condition = true;
 
-            //List<Device> allDevices = _dbContext.Devices.Include("Location").ToList();
+            List<DeviceDto> devicesToReturn = new List<DeviceDto>();
 
-            //foreach(Device d in allDevices)
-            //{
-            //    condition = true;
-            //    foreach(int deviceId in incidentDeviceIds)
-            //    {
-            //        if(d.ID == deviceId)
-            //        {
-            //            condition = false;
-            //            break;
- 
-            //        }
+            List<DeviceDto> allDevices = new List<DeviceDto>();
 
-            //    }
+            try
+            {
+                allDevices = await _daprClient.InvokeMethodAsync<List<DeviceDto>>(HttpMethod.Get, "smartenergdevice", $"/api/devices");
 
-            //    if(condition)
-            //        devicesToReturn.Add(d);
-            //}
+            }
+            catch (Exception e)
+            {
+                throw new DeviceNotFoundException("Device service is unavailable right now.");
+            }
 
-           
 
-            //return _mapper.Map<List<DeviceDto>>(devicesToReturn);
 
-            throw new NotImplementedException();
+            foreach (DeviceDto d in allDevices)
+            {
+                condition = true;
+                foreach (int deviceId in incidentDeviceIds)
+                {
+                    if (d.ID == deviceId)
+                    {
+                        condition = false;
+                        break;
+
+                    }
+
+                }
+
+                if (condition)
+                    devicesToReturn.Add(d);
+            }
+
+
+
+            return devicesToReturn;
+
+
+
         }
 
         public CrewDto GetIncidentCrew(int incidentId)
@@ -696,19 +907,22 @@ namespace SmartEnergy.MicroserviceAPI.Services
             return _mapper.Map<CrewDto>(incident.Crew);
         }
 
-        //private bool CompareLocation(Location location1, Location location2)
-        //{
-        //    if( (location1.Zip == location2.Zip) &&
-        //        (location1.Street.Equals(location2.Street))
-        //        && (location1.City.Equals(location2.City)))
-        //    {
-        //        return true;
-        //    }else
-        //    {
-        //        return false;
-        //    }
-                    
-        //}
+        private bool CompareLocation(LocationDto location1, LocationDto location2)
+        {
+            if ((location1.Zip == location2.Zip) &&
+                (location1.Street.Equals(location2.Street))
+                && (location1.City.Equals(location2.City)))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+     
 
         public CallDto AddIncidentCall(int incidentId, CallDto newCall)
         {
@@ -750,58 +964,61 @@ namespace SmartEnergy.MicroserviceAPI.Services
             }
         }
 
-        public void AssignIncidetToUser(int incidentId, int userId)
+        public async void AssignIncidetToUser(int incidentId, int userId)
         {
-            ////Incident incident = _dbContext.Incidents.Find(incidentId);
+            //Incident incident = _dbContext.Incidents.Find(incidentId);
 
-            ////if (incident == null)
-            ////    throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
-
-
-            //Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices)
-            //                                     .ThenInclude(p => p.Device)
-            //                                     .ThenInclude(o => o.Location)
-            //                                     .FirstOrDefault(x => x.ID == incidentId);
             //if (incident == null)
             //    throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
 
 
+            Incident incident = _dbContext.Incidents.Include(x => x.IncidentDevices).FirstOrDefault(x => x.ID == incidentId);
+
+            if (incident == null)
+                throw new IncidentNotFoundException($"Incident with id {incidentId} does not exist.");
+
+
+            List<DeviceDto> incidentDevices = await FindAllIncidentDevicesWithLocation(incident);
 
 
 
 
-            //User user = _dbContext.Users.Find(userId);
-            //if (user == null)
-            //    throw new UserNotFoundException($"User with id {userId} does not exist.");
+            User user = _dbContext.Users.Find(userId);
 
-            //incident.UserID = userId;
+            if (user == null)
+                throw new UserNotFoundException($"User with id {userId} does not exist.");
 
-
-            //int locationId = -1;
-
-            //if(incident.IncidentDevices.Count != 0)
-            //{
-            //    locationId = incident.IncidentDevices[0].Device.LocationID;
-            //}
-
-            //List<Consumer> consumers = _dbContext.Consumers.Include(x => x.User).Where(x => x.LocationID == locationId).ToList();
-
-            //foreach(Consumer c in consumers)
-            //{
-            //    _mailService.SendMail(c.User.Email, "Solving incident", "Problem will be solved as soon as possible. We are working!");
-            //}
+            incident.UserID = userId;
 
 
+            int locationId = -1;
+
+            if (incidentDevices.Count != 0)
+            {
+                locationId = incidentDevices[0].LocationID;
+            }
 
 
+          
 
+            List<Consumer> consumers = _dbContext.Consumers.Include(x => x.User).Where(x => x.LocationID == locationId).ToList();
 
+            foreach (Consumer c in consumers)
+            {
+                _mailService.SendMail(c.User.Email, "Solving incident", "Problem will be solved as soon as possible. We are working!");
+            }
 
 
 
-            //_dbContext.SaveChanges();
 
-            throw new NotImplementedException();
+
+
+
+
+
+            _dbContext.SaveChanges();
+
+           
 
 
 
@@ -960,6 +1177,44 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
             return statistics;
 
+        }
+
+        private async Task<List<DeviceDto>> FindAllIncidentDevicesWithLocation(Incident incident)
+        {
+            List<DeviceDto> incidentDevices = new List<DeviceDto>();
+            DeviceDto deviceDto = new DeviceDto();
+
+
+            foreach (DeviceUsage deviceUsage in incident.IncidentDevices)
+            {
+                try
+                {
+                    deviceDto = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergdevice", $"/api/devices/{deviceUsage.DeviceID}");
+
+                }
+                catch (Exception e)
+                {
+                    throw new DeviceNotFoundException("Device service is unavailable right now.");
+                }
+
+                try
+                {
+                    LocationDto location = await _daprClient.InvokeMethodAsync<LocationDto>(HttpMethod.Get, "smartenergylocation", $"/api/locations/{deviceDto.LocationID}");
+                    deviceDto.Location = location;
+
+                }
+                catch (Exception e)
+                {
+                    throw new LocationNotFoundException("Location service is unavailable right now.");
+                }
+
+                incidentDevices.Add(deviceDto);
+
+
+
+            }
+
+            return incidentDevices;
         }
     }
 }
