@@ -122,7 +122,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
             {
                 try
                 {
-                     deviceDto = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergdevice", $"/api/devices/{deviceUsage.DeviceID}");        
+                     deviceDto = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergydevice", $"/api/devices/{deviceUsage.DeviceID}");                
 
                 }
                 catch (Exception e)
@@ -349,7 +349,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
             {
                 try
                 {
-                    deviceDto = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergdevice", $"/api/devices/{deviceUsage.DeviceID}");
+                    deviceDto = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergydevice", $"/api/devices/{deviceUsage.DeviceID}");
 
                 }
                 catch (Exception e)
@@ -507,7 +507,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
             try
             {
-                device = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergdevice", $"/api/devices/{deviceId}");
+                device = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergydevice", $"/api/devices/{deviceId}");
 
             }
             catch (Exception e)
@@ -634,7 +634,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
             try
             {
-                device = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergdevice", $"/api/devices/{deviceId}");
+                device = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergydevice", $"/api/devices/{deviceId}");
 
             }
             catch (Exception e)
@@ -859,7 +859,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
             try
             {
-                allDevices = await _daprClient.InvokeMethodAsync<List<DeviceDto>>(HttpMethod.Get, "smartenergdevice", $"/api/devices");
+                allDevices = await _daprClient.InvokeMethodAsync<List<DeviceDto>>(HttpMethod.Get, "smartenergydevice", $"/api/devices");
 
             }
             catch (Exception e)
@@ -1189,7 +1189,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
             {
                 try
                 {
-                    deviceDto = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergdevice", $"/api/devices/{deviceUsage.DeviceID}");
+                    deviceDto = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergydevice", $"/api/devices/{deviceUsage.DeviceID}");
 
                 }
                 catch (Exception e)

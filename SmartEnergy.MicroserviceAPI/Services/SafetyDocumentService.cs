@@ -151,7 +151,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
             {
                 try
                 {
-                    deviceDto = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergdevice", $"/api/devices/{deviceUsage.DeviceID}");
+                    deviceDto = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergydevice", $"/api/devices/{deviceUsage.DeviceID}");
                     safetyDocumentDevices.Add(deviceDto);
 
                 }

@@ -14,7 +14,7 @@ services:
     depends_on:
         - device-db
    
-  smartenergdevice-dapr:
+  smartenergydevice-dapr:
     image: "daprio/daprd:latest"
     command: [ "./daprd", "-app-id", "smartenergydevice", "-app-port", "80" ]
     depends_on:

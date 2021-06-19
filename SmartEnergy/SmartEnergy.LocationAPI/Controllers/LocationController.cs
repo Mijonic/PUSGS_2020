@@ -30,6 +30,7 @@ namespace SmartEnergy.LocationAPI.Controllers
         public async Task<IActionResult> GetAll()
         {
             var test = await _daprClient.InvokeMethodAsync<List<DeviceDto>>(HttpMethod.Get, "smartenergydevice", "/api/devices/all");
+         
             return Ok(_locationService.GetAllLocations());
         }
 
@@ -39,6 +40,7 @@ namespace SmartEnergy.LocationAPI.Controllers
         public IActionResult GetLocationById(int id)
         {
             LocationDto location = _locationService.GetLocationById(id);
+
             if (location == null)
                 return NotFound();
 
