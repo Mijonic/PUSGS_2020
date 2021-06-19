@@ -75,7 +75,7 @@ services:
     image: ${DOCKER_REGISTRY-}smartenergymicroserviceapi
     build:
       context: .
-      dockerfile: ../SmartEnergy.MicroserviceAPI/Dockerfile
+      dockerfile: SmartEnergy.MicroserviceAPI/Dockerfile
     ports:
         - "53000:50001"
         - "44372:80"

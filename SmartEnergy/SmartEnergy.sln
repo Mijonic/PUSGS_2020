@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartEnergy.LocationAPI", "
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{C9F17D86-9830-4572-99D0-1D28230BFDC9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartEnergy.MicroserviceAPI", "..\SmartEnergy.MicroserviceAPI\SmartEnergy.MicroserviceAPI.csproj", "{51825460-27D4-4FBA-847B-B08D80AF4D96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartEnergy.MicroserviceAPI", "SmartEnergy.MicroserviceAPI\SmartEnergy.MicroserviceAPI.csproj", "{51825460-27D4-4FBA-847B-B08D80AF4D96}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

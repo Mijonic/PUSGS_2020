@@ -6,11 +6,11 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
 WORKDIR /src
-COPY ["../SmartEnergy.MicroserviceAPI/SmartEnergy.MicroserviceAPI.csproj", "../SmartEnergy.MicroserviceAPI/"]
+COPY ["SmartEnergy.MicroserviceAPI/SmartEnergy.MicroserviceAPI.csproj", "SmartEnergy.MicroserviceAPI/"]
 COPY ["SmartEnergy.Contract/SmartEnergy.Contract.csproj", "SmartEnergy.Contract/"]
-RUN dotnet restore "../SmartEnergy.MicroserviceAPI/SmartEnergy.MicroserviceAPI.csproj"
+RUN dotnet restore "SmartEnergy.MicroserviceAPI/SmartEnergy.MicroserviceAPI.csproj"
 COPY . .
-WORKDIR "/src/../SmartEnergy.MicroserviceAPI"
+WORKDIR "/src/SmartEnergy.MicroserviceAPI"
 RUN dotnet build "SmartEnergy.MicroserviceAPI.csproj" -c Release -o /app/build
 
 FROM build AS publish

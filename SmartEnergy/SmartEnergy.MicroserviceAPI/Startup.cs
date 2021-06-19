@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SmartEnergy.MicroserviceAPI
@@ -139,8 +140,25 @@ namespace SmartEnergy.MicroserviceAPI
 
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                var context = serviceScope.ServiceProvider.GetService<MicroserviceDbContext>();
-                context.Database.Migrate();
+               
+
+                bool migrated = false;
+                int attempts = 3;
+                while (!migrated && attempts > 0)
+                {
+
+                    try
+                    {
+                        var context = serviceScope.ServiceProvider.GetService<MicroserviceDbContext>();
+                        context.Database.Migrate();
+                        migrated = true;
+                    }
+                    catch //Catch if too soon initing
+                    {
+                        Thread.Sleep(50000);
+                        attempts--;
+                    }
+                }
             }
         }
     }

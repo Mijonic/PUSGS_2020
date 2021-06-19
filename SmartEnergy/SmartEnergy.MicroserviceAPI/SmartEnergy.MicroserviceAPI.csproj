@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SmartEnergy\SmartEnergy.Contract\SmartEnergy.Contract.csproj" />
+    <ProjectReference Include="..\SmartEnergy.Contract\SmartEnergy.Contract.csproj" />
   </ItemGroup>
 
 
