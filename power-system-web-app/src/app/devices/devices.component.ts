@@ -86,6 +86,7 @@ export class DevicesComponent implements OnInit, AfterViewInit {
         }),
         catchError(() => {
           this.isLoading = false;
+          this.toastr.error("Device service is unavailable right now. Please, try later.","", {positionClass: 'toast-bottom-left'});
           return of([]);
         })
       );

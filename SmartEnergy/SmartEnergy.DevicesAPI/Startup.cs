@@ -142,7 +142,7 @@ namespace SmartEnergy.DevicesAPI
 
                         migrated = true;
                     }
-                    catch //Catch if too soon initing
+                    catch 
                     {
                         Thread.Sleep(50000);
                         attempts--;
